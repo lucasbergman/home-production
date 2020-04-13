@@ -1,0 +1,170 @@
+version: '3.3'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.17.0
+    container_name: prometheus
+    # TODO run as user other than nobody?
+    volumes:
+      - type: bind
+        source: '/config/cluster/prometheus.yml'
+        target: '/etc/prometheus/prometheus.yml'
+        read_only: true
+      - type: bind
+        source: '/config/cluster/node.rules'
+        target: '/etc/prometheus/node.rules'
+        read_only: true
+      - type: bind
+        source: '/config/cluster/prober.rules'
+        target: '/etc/prometheus/prober.rules'
+        read_only: true
+      - type: volume
+        source: prometheus
+        target: '/prometheus'
+    networks:
+      home:
+        ipv4_address: 10.6.0.5
+    restart: unless-stopped
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.16.0
+    container_name: blackbox-exporter
+    volumes:
+      - type: bind
+        source: '/config/cluster/blackbox.yml'
+        target: '/etc/blackbox_exporter/config.yml'
+        read_only: true
+    networks:
+      home:
+        ipv4_address: 10.6.0.6
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.20.0
+    container_name: alertmanager
+    volumes:
+      - type: bind
+        source: '/config/cluster/alertmanager.yml'
+        target: '/etc/alertmanager/alertmanager.yml'
+        read_only: true
+      - type: volume
+        source: alertmanager
+        target: '/alertmanager'
+    networks:
+      home:
+        ipv4_address: 10.6.0.8
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:6.7.1
+    container_name: grafana
+    # TODO run as user other than nobody?
+    volumes:
+      - type: bind
+        source: '/config/cluster/grafana.ini'
+        target: '/etc/grafana/grafana.ini'
+        read_only: true
+      - type: volume
+        source: grafana
+        target: '/var/lib/grafana'
+    networks:
+      home:
+        ipv4_address: 10.6.0.7
+    restart: unless-stopped
+
+  synapse:
+    image: matrixdotorg/synapse:v1.12.0-py3
+    container_name: synapse
+    environment:
+      - UID={{ getent_passwd['matrix'][1] }}
+      - GID={{ getent_group['matrix'][1] }}
+      - SYNAPSE_SERVER_NAME=bergman.house
+      - SYNAPSE_REPORT_STATS=yes
+      - SYNAPSE_ENABLE_REGISTRATION=no
+      - SYNAPSE_LOG_LEVEL=INFO
+      - SYNAPSE_NO_TLS=yes
+    ports:
+      - '3478:3478/tcp'
+      - '8008:8008/tcp'
+    volumes:
+      - type: bind
+        source: '/storage/matrix'
+        target: '/data'
+      - type: bind
+        source: '/storage/tls'
+        target: '/tls'
+        read_only: true
+    networks:
+      home:
+        ipv4_address: 10.6.0.9
+    restart: unless-stopped
+
+  plex:
+    image: plexinc/pms-docker:1.19.1.2645-ccb6eb67e
+    container_name: plex
+    ports:
+      - '3005:3005/tcp'
+      - '8324:8324/tcp'
+      - '32400:32400/tcp'
+      - '32469:32469/tcp'
+      - '1900:1900/udp'
+      - '32410:32410/udp'
+      - '32412:32412/udp'
+      - '32413:32413/udp'
+      - '32414:32414/udp'
+    environment:
+      - 'HOSTNAME=plex.bergman.house'
+      - 'TZ=America/Chicago'
+      - 'PLEX_CLAIM=TODO'
+      - 'ADVERTISE_IP=http://plex.bergman.house:32400/'
+      - 'PLEX_UID={{ getent_passwd["idiotbox"][1] }}'
+      - 'PLEX_GID={{ getent_group["idiotbox"][1] }}'
+    hostname: plex.bergman.house
+    volumes:
+      - type: bind
+        source: '/storage/media/plex-system'
+        target: '/config'
+      - type: bind
+        source: '/storage/media/plex-transcode'
+        target: '/transcode'
+      - type: bind
+        source: '/storage/media/plex'
+        target: '/storage/media/plex'
+    network_mode: host
+    restart: unless-stopped
+
+  moneydance:
+    image: 'dorowu/ubuntu-desktop-lxde-vnc:bionic'
+    container_name: moneydance
+    environment:
+      - 'HTTP_PASSWORD={{ moneydance_http_password }}'
+      - 'MONEYDANCE_UID={{ getent_passwd["moneydance"][1] }}'
+    volumes:
+      - type: bind
+        source: '/dev/shm'
+        target: '/dev/shm'
+      - type: bind
+        source: '/storage/users/moneydance'
+        target: '/moneydance'
+    networks:
+      home:
+        ipv4_address: 10.6.0.10
+    restart: unless-stopped
+
+networks:
+  home:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.6.0.0/16
+
+volumes:
+  alertmanager:
+    external:
+      name: alertmanager
+  grafana:
+    external:
+      name: grafana
+  prometheus:
+    external:
+      name: prometheus

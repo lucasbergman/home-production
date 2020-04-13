@@ -1,4 +1,16 @@
 ##############################
+# Gather host data
+##############################
+
+- name: Get user database
+  getent:
+    database: passwd
+
+- name: Get group database
+  getent:
+    database: group
+
+##############################
 # Configure networking and basic stats collection
 ##############################
 
@@ -386,3 +398,17 @@
     path: /etc/apache2/sites-enabled/moneydance.conf
     src: ../sites-available/moneydance.conf
     state: link
+
+##############################
+# Turn on docker-compose for services
+##############################
+
+- name: Install docker-compose config
+  template:
+    src: docker-compose.yml
+    dest: /config/cluster/docker-compose.yml
+    owner: root
+    group: adm
+    mode: '644'
+    # TODO: Enable handler to pull new images?
+    # TODO: Enable handler to restart containers
