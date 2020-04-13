@@ -1,0 +1,11 @@
+[Unit]
+Description=Runs gencerts every day
+Requires=gencerts.service
+
+[Timer]
+Unit=gencerts.service
+OnUnitInactiveSec=24h
+RandomizedDelaySec=1h
+
+[Install]
+WantedBy=timers.target

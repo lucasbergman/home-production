@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+# TODO: Clean this up (build, container, test, etc)
+CERTBOT_VERSION=v0.38.0
+
+hosts=(bergman.house
+       deluge.bergman.house
+       grafana.bergman.house
+       matrix.bergman.house
+       mon.bergman.house
+       moneydance.bergman.house
+       plex.bergman.house)
+
+for host in ${hosts[@]}; do
+  docker run --rm                                 \
+     -v /storage/tls/letsencrypt:/etc/letsencrypt \
+     -v /var/www/html:/webroot                    \
+     certbot/certbot:"$CERTBOT_VERSION" certonly  \
+     --non-interactive                            \
+     --agree-tos                                  \
+     --email lucas@bergmans.us                    \
+     --keep-until-expiring                        \
+     --webroot                                    \
+     --webroot-path /webroot                      \
+     --domain ${host}
+done
