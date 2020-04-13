@@ -1,0 +1,6 @@
+modules:
+  http_head:
+    prober: http
+    timeout: 5s
+    http:
+      method: HEAD

@@ -105,14 +105,6 @@
   with_items: '{{ docker_users }}'
   when: docker_users | length > 0
 
-- name: Make server config root
-  file:
-    path: /config/cluster
-    state: directory
-    owner: root
-    group: adm
-    mode: '751'
-
 ##############################
 # Configure letsencrypt support
 ##############################
@@ -158,3 +150,88 @@
     mode: '644'
   notify:
     - 'enable letsencrypt gencerts timer'
+
+##############################
+# Turn on prometheus
+##############################
+
+- name: Make prometheus storage volume
+  docker_volume:
+    name: prometheus
+
+- name: Make prometheus config directory
+  file:
+    path: /config/prometheus
+    state: directory
+    owner: root
+    group: adm
+    mode: '751'
+
+- name: Install prometheus config files
+  copy:
+    src: 'prometheus/{{ item }}'
+    dest: /config/prometheus
+    owner: root
+    group: adm
+    mode: '644'
+  with_items:
+    - prometheus.yml
+    - node.rules
+    - prober.rules
+    - blackbox.yml
+
+- name: Install prometheus httpd config
+  copy:
+    src: httpd/mon.conf
+    dest: /etc/apache2/sites-available
+    mode: '644'
+
+- name: Enable prometheus httpd config
+  file:
+    path: /etc/apache2/sites-enabled/mon.conf
+    src: ../sites-available/mon.conf
+    state: link
+
+##############################
+# Turn on alertmanager
+##############################
+
+- name: Make alertmanager storage volume
+  docker_volume:
+    name: alertmanager
+
+- name: Install alertmanager config
+  copy:
+    src: prometheus/alertmanager.yml
+    dest: /config/prometheus
+    owner: root
+    group: nogroup  # alertmanager is hard-coded to run as nobody:nogroup
+    mode: '640'
+
+##############################
+# Turn on grafana
+##############################
+
+- name: Make grafana storage volume
+  docker_volume:
+    name: grafana
+
+- name: Install grafana config
+  copy:
+    src: grafana.ini
+    dest: /config/grafana
+    owner: root
+    group: adm
+    mode: '644'
+
+- name: Install grafana httpd config
+  copy:
+    src: httpd/grafana.conf
+    dest: /etc/apache2/sites-available
+    mode: '644'
+
+- name: Enable grafana httpd config
+  file:
+    path: /etc/apache2/sites-enabled/grafana.conf
+    src: ../sites-available/grafana.conf
+    state: link

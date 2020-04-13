@@ -1,0 +1,36 @@
+groups:
+  - name: node_net
+    rules:
+      - record: node:receive_bytes
+        expr: node_network_receive_bytes{device=~"en.*"}
+      - record: node:transmit_bytes
+        expr: node_network_transmit_bytes{device=~"en.*"}
+      - record: node:receive_bytes:rate5m
+        expr: rate(node:receive_bytes[5m])
+      - record: node:transmit_bytes:rate5m
+        expr: rate(node:transmit_bytes[5m])
+
+  - name: node_fs
+    rules:
+      - record: node:filesystem_avail
+        expr: node_filesystem_avail
+      - record: node:filesystem_avail:fraction
+        expr: node_filesystem_avail / node_filesystem_size
+
+  - name: node_cpu
+    rules:
+      - record: node:cpu:rate1m
+        expr: sum(rate(node_cpu[1m])) by (host, mode)
+      - record: node:cpu:rate5m
+        expr: sum(rate(node_cpu[5m])) by (host, mode)
+
+  - name: node_router
+    rules:
+    - record: router:edge:receive_bytes
+      expr: node_network_receive_bytes{device="eth0",host="router"}
+    - record: router:edge:transmit_bytes
+      expr: node_network_transmit_bytes{device="eth0",host="router"}
+    - record: router:edge:receive_bytes:rate5m
+      expr: rate(router:edge:receive_bytes[5m])
+    - record: router:edge:transmit_bytes:rate5m
+      expr: rate(router:edge:transmit_bytes[5m])
