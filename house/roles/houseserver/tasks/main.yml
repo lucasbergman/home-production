@@ -283,3 +283,69 @@
     path: /etc/apache2/sites-enabled/matrix.conf
     src: ../sites-available/matrix.conf
     state: link
+
+##############################
+# Turn on Plex
+##############################
+
+- name: Create video server group
+  group:
+    name: idiotbox
+    state: present
+    system: true
+
+- name: Create video server user
+  user:
+    name: idiotbox
+    group: idiotbox
+    create_home: false
+    password_lock: true
+    system: true
+    home: /storage/media/plex
+
+- name: Make video server storage directory
+  file:
+    path: /storage/media/plex
+    state: directory
+    owner: idiotbox
+    group: idiotbox
+    mode: '2775'
+
+- name: Make video server work directories
+  file:
+    path: /storage/media/{{ item }}
+    state: directory
+    owner: idiotbox
+    group: idiotbox
+    mode: '2770'
+  with_items:
+    - 'plex-system'
+    - 'plex-transcode'
+
+- name: Install video server httpd config
+  copy:
+    src: httpd/plex.conf
+    dest: /etc/apache2/sites-available
+    mode: '644'
+
+- name: Enable video server httpd config
+  file:
+    path: /etc/apache2/sites-enabled/plex.conf
+    src: ../sites-available/plex.conf
+    state: link
+
+##############################
+# Pass through connections to Deluge
+##############################
+
+- name: Install deluge httpd config
+  copy:
+    src: httpd/deluge.conf
+    dest: /etc/apache2/sites-available
+    mode: '644'
+
+- name: Enable deluge httpd config
+  file:
+    path: /etc/apache2/sites-enabled/deluge.conf
+    src: ../sites-available/deluge.conf
+    state: link
