@@ -349,3 +349,40 @@
     path: /etc/apache2/sites-enabled/deluge.conf
     src: ../sites-available/deluge.conf
     state: link
+
+##############################
+# Turn on Moneydance VNC server
+##############################
+
+- name: Create Moneydance group
+  group:
+    name: moneydance
+    state: present
+
+- name: Create Moneydance user
+  user:
+    name: moneydance
+    group: moneydance
+    create_home: false
+    password_lock: true
+    home: /storage/users/moneydance
+
+- name: Make Moneydance storage directory
+  file:
+    path: /storage/users/moneydance
+    state: directory
+    owner: moneydance
+    group: moneydance
+    mode: '2770'
+
+- name: Install moneydance httpd config
+  copy:
+    src: httpd/moneydance.conf
+    dest: /etc/apache2/sites-available
+    mode: '644'
+
+- name: Enable moneydance httpd config
+  file:
+    path: /etc/apache2/sites-enabled/moneydance.conf
+    src: ../sites-available/moneydance.conf
+    state: link
