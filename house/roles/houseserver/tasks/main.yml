@@ -235,3 +235,51 @@
     path: /etc/apache2/sites-enabled/grafana.conf
     src: ../sites-available/grafana.conf
     state: link
+
+##############################
+# Turn on matrix/synapse
+##############################
+
+- name: Create matrix server group
+  group:
+    name: matrix
+    state: present
+    system: true
+
+- name: Create matrix server user
+  user:
+    name: matrix
+    group: matrix
+    groups: ['www-data']
+    create_home: false
+    password_lock: true
+    system: true
+    home: /storage/matrix
+
+- name: Make matrix server storage directory
+  file:
+    path: /storage/matrix
+    state: directory
+    owner: matrix
+    group: matrix
+    mode: '700'
+
+- name: Install matrix server config
+  copy:
+    src: synapse.yml
+    dest: /storage/matrix/homeserver.yaml
+    owner: matrix
+    group: matrix
+    mode: '600'
+
+- name: Install matrix httpd config
+  copy:
+    src: httpd/matrix.conf
+    dest: /etc/apache2/sites-available
+    mode: '644'
+
+- name: Enable matrix httpd config
+  file:
+    path: /etc/apache2/sites-enabled/matrix.conf
+    src: ../sites-available/matrix.conf
+    state: link
