@@ -1,0 +1,2 @@
+- name: hostname
+  shell: 'hostname --file /etc/hostname'

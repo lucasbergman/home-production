@@ -1,0 +1,114 @@
+##############################
+# Configure networking and basic stats collection
+##############################
+
+- name: Find default netplan config
+  find:
+    paths: '/etc/netplan'
+    patterns: '[0-9]*'
+  register: default_netplan_config
+
+- name: Remove default netplan config
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  with_items: '{{ default_netplan_config.files }}'
+
+- name: Install netplan config
+  copy:
+    src: netplan.yml
+    dest: /etc/netplan/netplan.yaml
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Write hostname file
+  template:
+    src: hostname
+    dest: /etc/hostname
+    mode: '0644'
+  notify: hostname
+
+- name: Install node-exporter
+  apt:
+    pkg:
+      - 'prometheus-node-exporter'
+
+##############################
+# Configure server storage
+##############################
+
+- name: Install ZFS Ubuntu support
+  apt:
+    name:
+      - zfs-dkms
+      - zfsutils-linux
+
+- name: Make storage root
+  file:
+    path: /storage
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+##############################
+# Turn on Apache httpd
+##############################
+
+- name: Install Apache httpd
+  apt:
+    name: apache2
+
+- name: Enable httpd reverse proxy
+  file:
+    path: /etc/apache2/mods-enabled/{{ item }}.load
+    src: ../mods-available/{{ item }}.load
+    state: link
+  with_items:
+    - headers
+    - proxy
+    - proxy_http
+    - proxy_http2
+    - proxy_wstunnel
+    - rewrite
+    - ssl
+    # TODO: Enable handler to restart Apache server
+
+##############################
+# Turn on Docker
+##############################
+
+- name: Get Docker upstream APT GPG key
+  apt_key:
+    id: '{{ docker_apt_key }}'
+    keyserver: 'hkp://pool.sks-keyservers.net'
+    state: present
+
+- name: Configure Docker upstream APT repository
+  apt_repository:
+    repo: '{{ docker_repository }}'
+    update_cache: True
+    state: present
+
+- name: Install Docker
+  apt:
+    pkg:
+      - 'docker.io'
+      - 'docker-compose'
+
+- name: Add users to Docker usage group
+  user:
+    name: '{{ item }}'
+    groups: 'docker'
+    append: True
+  with_items: '{{ docker_users }}'
+  when: docker_users | length > 0
+
+- name: Make server config root
+  file:
+    path: /config/cluster
+    state: directory
+    owner: root
+    group: adm
+    mode: '751'
