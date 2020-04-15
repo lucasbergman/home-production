@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+basedir=$(dirname "$0")
+cd "$basedir"
+exec ansible-playbook                           \
+     -i inventory                               \
+     --diff                                     \
+     --vault-password-file=vault-password       \
+     --ask-become-pass                          \
+     install.yml
