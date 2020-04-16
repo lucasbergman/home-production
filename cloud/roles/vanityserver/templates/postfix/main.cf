@@ -1,0 +1,97 @@
+# Basic configuration
+alias_database = hash:/config/aliases
+alias_maps = hash:/config/aliases
+append_dot_mydomain = no
+biff = no
+compatibility_level = 2
+home_mailbox = Mailbox
+inet_interfaces = all
+inet_protocols = all
+mail_spool_directory = /mail/incoming
+mailbox_command = procmail -a "$EXTENSION"
+mailbox_size_limit = 0
+maillog_file = /dev/stdout
+message_size_limit = 67108864
+mydestination = $myhostname, localhost
+mydomain = bergmans.us
+myhostname = {{ inventory_hostname }}
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+myorigin = $myhostname
+queue_directory = /mail/queue
+readme_directory = no
+recipient_delimiter = +
+smtpd_banner = $myhostname ESMTP
+smtpd_helo_required = yes
+
+# Make the SMTP client relay to Mailgun
+#relayhost = [smtp.mailgun.org]:2525
+relayhost = [smtp.sendgrid.net]:2525
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/config/sasl_passwd
+smtp_sasl_security_options = noanonymous
+
+# TLS SMTP server
+smtpd_use_tls = yes
+smtpd_tls_auth_only = yes
+smtpd_tls_cert_file = /tls/live/{{ inventory_hostname }}/fullchain.pem
+smtpd_tls_key_file = /tls/live/{{ inventory_hostname }}/privkey.pem
+smtpd_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+smtpd_tls_security_level = may
+smtpd_tls_loglevel = 1
+smtpd_tls_received_header = yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtpd_tls_mandatory_protocols = !SSLv2,!SSLv3
+smtpd_tls_protocols = !SSLv2,!SSLv3
+smtpd_tls_mandatory_ciphers = medium
+tls_medium_cipherlist = AES128+EECDH:AES128+EDH
+
+# Authenticating with the SMTP server
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_local_domain = bergmans.us
+smtpd_sasl_path = private/auth
+smtpd_sasl_type = dovecot
+
+# TLS SMTP client
+smtp_tls_cert_file = $smtpd_tls_cert_file
+smtp_tls_key_file = $smtpd_tls_key_file
+smtp_tls_CAfile = $smtpd_tls_CAfile
+smtp_tls_security_level = encrypt
+smtp_tls_ciphers = medium
+smtp_tls_loglevel = 1
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+# Content control
+smtpd_helo_restrictions =
+  permit_mynetworks,
+  reject_rhsbl_helo dbl.spamhaus.org
+smtpd_relay_restrictions =
+  permit_mynetworks,
+  permit_sasl_authenticated,
+  reject_unauth_destination
+smtpd_sender_restrictions =
+  reject_unknown_sender_domain
+smtpd_recipient_restrictions =
+  permit_mynetworks,
+  permit_sasl_authenticated,
+  reject_non_fqdn_recipient,
+  reject_unknown_recipient_domain,
+  reject_unauth_destination,
+  reject_rbl_client zen.spamhaus.org,
+  reject_rbl_client b.barracudacentral.org,
+  reject_rhsbl_reverse_client dbl.spamhaus.org,
+  reject_rhsbl_sender dbl.spamhaus.org
+smtpd_data_restrictions =
+  reject_unauth_pipelining
+
+# Relay domains
+relay_domains = phoenixchicago.com
+relay_recipient_maps = hash:/config/virtual
+
+# Virtual mailbox/alias domains
+virtual_mailbox_domains = bergmans.us, bergman.house, smartmousetravel.com
+virtual_alias_maps = hash:/config/virtual
+virtual_mailbox_base = /mail/users
+virtual_mailbox_maps = hash:/config/vmailbox
+virtual_uid_maps = static:{{ getent_passwd['vmail'][1] }}
+virtual_gid_maps = static:{{ getent_group['vmail'][1] }}
+virtual_mailbox_limit = $message_size_limit

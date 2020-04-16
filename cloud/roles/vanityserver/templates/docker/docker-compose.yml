@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  postfix:
+    image: 'gcr.io/bergmans-services/postfix:{{ image_versions["postfix"] }}'
+    container_name: postfix
+    environment:
+      - "MAILBOX_OWNER_GID={{ getent_passwd['vmail'][1] }}"
+    volumes:
+      - type: bind
+        source: '{{ postfix_config_dir }}'
+        target: '/config'
+      - type: volume
+        source: mail
+        target: '/mail'
+      - type: volume
+        source: tls
+        target: '/tls'
+    logging:
+      driver: syslog
+      options:
+        tag: postfix
+    network_mode: host
+    restart: unless-stopped
+
+  dovecot:
+    image: 'gcr.io/bergmans-services/dovecot:{{ image_versions["dovecot"] }}'
+    container_name: dovecot
+    volumes:
+      - type: bind
+        source: '{{ dovecot_config_dir }}'
+        target: '/config'
+      - type: volume
+        source: mail
+        target: '/mail'
+      - type: volume
+        source: tls
+        target: '/tls'
+    logging:
+      driver: syslog
+      options:
+        tag: dovecot
+    network_mode: host
+    restart: unless-stopped
+
+volumes:
+  mail:
+    external: true
+  tls:
+    external: true

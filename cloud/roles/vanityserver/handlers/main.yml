@@ -1,0 +1,42 @@
+- name: hostname
+  shell: 'hostname --file /etc/hostname'
+
+- name: rsyslog
+  systemd:
+    name: rsyslog.service
+    state: restarted
+
+- name: enable letsencrypt gencerts
+  systemd:
+    name: gencerts.service
+    daemon_reload: yes
+    enabled: yes
+
+- name: enable letsencrypt gencerts timer
+  systemd:
+    name: gencerts.timer
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: restart httpd
+  systemd:
+    name: apache2.service
+    state: restarted
+
+- name: restart postfix
+  shell: 'true'
+  # TODO: Implement handler
+
+- name: restart dovecot
+  shell: 'true'
+  # TODO: Implement handler
+
+- name: postalias
+  shell: 'true || postalias /etc/aliases'
+  # TODO: Implement handler
+
+- name: postmap
+  shell: 'true || postmap /etc/postfix/{{ item.name }}'
+  with_items: '{{ postmap_files }}'
+  # TODO: Implement handler

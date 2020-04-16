@@ -1,0 +1,251 @@
+##############################
+# Basic setup
+##############################
+
+# TODO: Merge this with the similar stuff for home servers
+
+- name: Get user IDs
+  getent:
+    database: passwd
+
+- name: Get group IDs
+  getent:
+    database: group
+
+- name: Write hostname file
+  template:
+    src: hostname
+    dest: /etc/hostname
+    mode: '0644'
+  notify: hostname
+
+- name: Install node-exporter
+  apt:
+    pkg: ['prometheus-node-exporter']
+
+##############################
+# Turn on Apache httpd
+##############################
+
+- name: Install Apache httpd
+  apt:
+    name: apache2
+
+- name: Enable httpd reverse proxy
+  file:
+    path: /etc/apache2/mods-enabled/{{ item }}.load
+    src: ../mods-available/{{ item }}.load
+    state: link
+  with_items:
+    - headers
+    - proxy
+    - proxy_http
+    - proxy_http2
+    - rewrite
+    - ssl
+  notify: restart httpd
+
+##############################
+# Turn on Docker
+##############################
+
+- name: Get Docker upstream APT GPG key
+  apt_key:
+    id: '{{ docker_apt_key }}'
+    keyserver: 'hkp://pool.sks-keyservers.net'
+    state: present
+
+- name: Configure Docker upstream APT repository
+  apt_repository:
+    repo: '{{ docker_repository }}'
+    update_cache: True
+    state: present
+
+- name: Install Docker
+  apt:
+    pkg:
+      - 'docker.io'
+      - 'docker-compose'
+
+- name: Add users to Docker usage group
+  user:
+    name: '{{ item }}'
+    groups: 'docker'
+    append: True
+  with_items: '{{ docker_users }}'
+  when: docker_users | bool
+
+- name: Make server config root
+  file:
+    path: /config/docker
+    state: directory
+    owner: root
+    group: adm
+    mode: '751'
+
+# On Debian, the default config is 50-default.conf, so we have to have
+# our destination file name come before that to stop container logs from
+# polluting the catchall file, usually /var/log/syslog.
+#
+- name: Install docker rsyslog config
+  copy:
+    src: rsyslog/docker.conf
+    dest: /etc/rsyslog.d/30-docker.conf
+  notify: rsyslog
+
+##############################
+# Configure letsencrypt support
+##############################
+
+- name: Make volume for crypto material
+  docker_volume:
+    name: tls
+
+- name: Install letsencrypt httpd config
+  copy:
+    src: httpd/letsencrypt.conf
+    dest: /etc/apache2/conf-available
+    mode: '644'
+  notify: restart httpd
+
+- name: Enable letsencrypt httpd config
+  file:
+    path: /etc/apache2/conf-enabled/letsencrypt.conf
+    src: ../conf-available/letsencrypt.conf
+    state: link
+
+- name: Install letsencrypt renewal script
+  template:
+    src: letsencrypt/gencerts
+    dest: /usr/local/sbin
+    mode: '755'
+
+- name: Install letsencrypt renewal script systemd service
+  copy:
+    src: letsencrypt/gencerts.service
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable letsencrypt gencerts'
+
+- name: Install letsencrypt renewal script systemd timer
+  copy:
+    src: letsencrypt/gencerts.timer
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable letsencrypt gencerts timer'
+
+##############################
+# Set up mail storage and Postfix
+##############################
+
+- name: Create mailbox server system group
+  group:
+    name: vmail
+    system: yes
+    state: present
+
+- name: Create mailbox server system user
+  user:
+    name: vmail
+    group: vmail
+    system: yes
+    state: present
+    createhome: no
+    home: '/'
+
+- name: Make mail storage volume
+  docker_volume:
+    name: mail
+
+- name: Get user IDs
+  getent:
+    database: passwd
+
+- name: Get group IDs
+  getent:
+    database: group
+
+- name: Create Postfix config directory
+  file:
+    path: '{{ postfix_config_dir }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Install master Postfix config
+  template:
+    src: postfix/master.cf
+    dest: '{{ postfix_config_dir }}/master.cf'
+    mode: '0644'
+  notify: restart postfix
+
+- name: Install main Postfix config
+  template:
+    src: postfix/main.cf
+    dest: '{{ postfix_config_dir }}/main.cf'
+    mode: '0644'
+  notify: restart postfix
+
+- name: Install Postfix aliases file
+  copy:
+    src: postfix/aliases
+    dest: '{{ postfix_config_dir }}/'
+    mode: '0644'
+  notify: postalias
+
+- name: Install Postfix data files
+  copy:
+    src: 'postfix/{{ item.name }}'
+    dest: '{{ postfix_config_dir }}/'
+    mode: '{{ item.mode }}'
+  with_items:
+    - { name: 'sasl_passwd', mode: 'u=rw,g=,o=' }
+    - { name: 'virtual', mode: 'u=rw,g=r,o=r' }
+    - { name: 'vmailbox', mode: 'u=rw,g=r,o=r' }
+  notify: postmap
+
+##############################
+# Install Dovecot
+##############################
+
+- name: Create Dovecot config directory
+  file:
+    path: '{{ dovecot_config_dir }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Install Dovecot config files
+  template:
+    src: 'dovecot/dovecot.conf'
+    dest: '{{ dovecot_config_dir }}/'
+    mode: '0644'
+  notify: restart dovecot
+
+# TODO: Secure users file on the server
+- name: Install Dovecot users file
+  copy:
+    src: 'dovecot/users'
+    dest: '{{ dovecot_config_dir }}/'
+    mode: '0644'
+  notify: restart dovecot
+
+##############################
+# Install Docker services
+##############################
+
+# TODO: Install docker-credential-gcr
+# TODO: Install GCP account JSON key file
+
+- name: Install docker-compose config
+  template:
+    src: docker/docker-compose.yml
+    dest: /config/docker/docker-compose.yml
+    mode: '0640'
+    owner: root
+    group: adm
+  # TODO: notify Docker
