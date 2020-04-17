@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+GC_CREDS=credentials/gcloud-personal-dns.json
+PYTHON="$HOME"/opt/python/ansible/bin/python
+
+OUTDIR=$(dirname "$0")
+OUTDIR=$(cd "$OUTDIR"; pwd)
+OUTFILE="$OUTDIR"/ADDRESS
+TMPOUTFILE=$(mktemp --tmpdir="$OUTDIR")
+trap 'rm -f "$TMPOUTFILE"' EXIT
+cd "$OUTDIR"
+
+BASEDIR=$(git rev-parse --show-toplevel)
+cd "$BASEDIR"
+
+if [ ! -e "$GC_CREDS" ]; then
+  echo "home-update: no credentials file (still encrypted?): $GC_CREDS" >&2
+  exit 1
+fi
+
+curl --silent -4 --max-time 5 icanhazip.com > "$TMPOUTFILE"
+if ! cmp --silent "$OUTFILE" "$TMPOUTFILE"; then
+  env GOOGLE_APPLICATION_CREDENTIALS="$GC_CREDS"  \
+    "$PYTHON" "$OUTDIR"/gcloud-dns-update.py      \
+    $(cat "$OUTFILE")                             \
+    $(cat "$TMPOUTFILE")
+  mv -f "$TMPOUTFILE" "$OUTFILE"
+fi
