@@ -1,0 +1,10 @@
+load("@gcloud_deps//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "gcloud_dns_update",
+    srcs = ["gcloud_dns_update.py"],
+    deps = [
+        requirement("google-cloud-dns"),
+    ],
+)
