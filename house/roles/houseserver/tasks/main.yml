@@ -1,16 +1,4 @@
 ##############################
-# Gather host data
-##############################
-
-- name: Get user database
-  getent:
-    database: passwd
-
-- name: Get group database
-  getent:
-    database: group
-
-##############################
 # Configure networking and basic stats collection
 ##############################
 
@@ -414,6 +402,21 @@
     path: /etc/apache2/sites-enabled/moneydance.conf
     src: ../sites-available/moneydance.conf
     state: link
+
+##############################
+# Gather user/group data
+##############################
+
+# It's a hack that we gather getent at this stage, in that we're
+# counting on only using it in the config for Docker and not above.
+
+- name: Get user database
+  getent:
+    database: passwd
+
+- name: Get group database
+  getent:
+    database: group
 
 ##############################
 # Turn on docker-compose for services
