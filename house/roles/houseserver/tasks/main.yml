@@ -95,17 +95,21 @@
 # Turn on Docker
 ##############################
 
-- name: Get Docker upstream APT GPG key
-  apt_key:
-    id: '{{ docker_apt_key }}'
-    keyserver: 'hkp://pool.sks-keyservers.net'
-    state: present
-
 - name: Configure Docker upstream APT repository
-  apt_repository:
-    repo: '{{ docker_repository }}'
-    update_cache: True
-    state: present
+  block:
+    - name: Get Docker upstream APT GPG key
+      apt_key:
+        id: '{{ docker_apt_key }}'
+        keyserver: 'hkp://pool.sks-keyservers.net'
+        state: present
+
+    - name: Configure Docker upstream APT repository
+      apt_repository:
+        repo: '{{ docker_repository }}'
+        update_cache: True
+        state: present
+  # TODO: Hack to get newer Docker in Ubuntu LTS before 20.04
+  when: ansible_distribution_release != 'focal'
 
 - name: Install Docker
   apt:
