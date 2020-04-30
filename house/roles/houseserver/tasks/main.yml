@@ -110,7 +110,7 @@
     name: '{{ item }}'
     groups: 'docker'
     append: True
-  with_items: '{{ docker_users }}'
+  with_items: '{{ docker_users|list }}'
   when: docker_users | length > 0
 
 ##############################
