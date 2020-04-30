@@ -228,10 +228,18 @@
   docker_volume:
     name: grafana
 
+- name: Make grafana config directory
+  file:
+    path: /config/grafana
+    state: directory
+    owner: root
+    group: adm
+    mode: '0750'
+
 - name: Install grafana config
   copy:
     src: grafana.ini
-    dest: /config/grafana
+    dest: /config/grafana/
     owner: root
     group: adm
     mode: '644'
@@ -402,6 +410,14 @@
 ##############################
 # Turn on docker-compose for services
 ##############################
+
+- name: Make Docker config directory
+  file:
+    path: /config/cluster
+    state: directory
+    owner: root
+    group: adm
+    mode: '0750'
 
 - name: Install docker-compose config
   template:
