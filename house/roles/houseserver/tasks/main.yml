@@ -14,32 +14,35 @@
 # Configure networking and basic stats collection
 ##############################
 
-- name: Find default netplan config
-  find:
-    paths: '/etc/netplan'
-    patterns: '[0-9]*'
-  register: default_netplan_config
+- name: Set up static address and networking
+  when: is_production|bool
+  block:
+    - name: Find default netplan config
+      find:
+        paths: '/etc/netplan'
+        patterns: '[0-9]*'
+      register: default_netplan_config
 
-- name: Remove default netplan config
-  file:
-    path: '{{ item.path }}'
-    state: absent
-  with_items: '{{ default_netplan_config.files }}'
+    - name: Remove default netplan config
+      file:
+        path: '{{ item.path }}'
+        state: absent
+      with_items: '{{ default_netplan_config.files }}'
 
-- name: Install netplan config
-  copy:
-    src: netplan.yml
-    dest: /etc/netplan/netplan.yaml
-    owner: root
-    group: root
-    mode: '644'
+    - name: Install netplan config
+      copy:
+        src: netplan.yml
+        dest: /etc/netplan/netplan.yaml
+        owner: root
+        group: root
+        mode: '644'
 
-- name: Write hostname file
-  template:
-    src: hostname
-    dest: /etc/hostname
-    mode: '0644'
-  notify: hostname
+    - name: Write hostname file
+      template:
+        src: hostname
+        dest: /etc/hostname
+        mode: '0644'
+      notify: hostname
 
 - name: Install node-exporter
   apt:
@@ -51,6 +54,7 @@
 ##############################
 
 - name: Install ZFS Ubuntu support
+  when: is_production|bool
   apt:
     name:
       - zfs-dkms

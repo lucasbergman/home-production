@@ -3,6 +3,7 @@
 houseserver:
   hosts:
     hedwig.bergman.house:
+      is_production: true
       ansible_host: 127.0.0.1
       ansible_connection: local
       docker_users: ['lucas']
