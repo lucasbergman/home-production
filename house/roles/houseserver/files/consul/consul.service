@@ -1,0 +1,20 @@
+[Unit]
+Description="Consul service mesh"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/consul.d/consul.hcl
+
+[Service]
+# Normally this is Type=notify in a multi-node deployment
+Type=exec
+User=consul
+Group=consul
+ExecStart=/usr/local/sbin/consul agent -config-dir=/etc/consul.d/
+ExecReload=/usr/local/sbin/consul reload
+KillMode=process
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

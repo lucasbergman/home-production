@@ -1,5 +1,17 @@
 is_production: false
 
+control_packages:
+  consul:
+    version: '1.7.2'
+    filename: 'consul_1.7.2_linux_amd64.zip'
+    url: 'https://releases.hashicorp.com/consul/1.7.2/consul_1.7.2_linux_amd64.zip'
+    sum: 'sha256:5ab689cad175c08a226a5c41d16392bc7dd30ceaaf90788411542a756773e698'
+  nomad:
+    version: '0.11.1'
+    filename: 'nomad_0.11.1_linux_amd64.zip'
+    url: 'https://releases.hashicorp.com/nomad/0.11.1/nomad_0.11.1_linux_amd64.zip'
+    sum: 'sha256:711e98b89ac4f5540bf3d6273379999f6c4141529531c262222e63ce491f5176'
+
 docker_users: []
 docker_apt_key: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
 docker_repository: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"

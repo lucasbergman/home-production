@@ -7,3 +7,4 @@ houseserver:
       ansible_host: 127.0.0.1
       ansible_connection: local
       docker_users: ['lucas']
+      control_plane_interface: 'enp7s0'

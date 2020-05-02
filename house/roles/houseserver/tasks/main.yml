@@ -2,6 +2,15 @@
 # Configure networking and basic stats collection
 ##############################
 
+- name: Install boring starter packages
+  apt:
+    pkg:
+      - 'unzip'
+
+##############################
+# Configure networking and basic stats collection
+##############################
+
 - name: Set up static address and networking
   when: is_production|bool
   block:
@@ -57,27 +66,138 @@
     mode: '755'
 
 ##############################
-# Turn on Apache httpd
+# Install control plane packages
 ##############################
 
-- name: Install Apache httpd
-  apt:
-    name: apache2
-
-- name: Enable httpd reverse proxy
+- name: Create package download directory
   file:
-    path: /etc/apache2/mods-enabled/{{ item }}.load
-    src: ../mods-available/{{ item }}.load
-    state: link
-  with_items:
-    - headers
-    - proxy
-    - proxy_http
-    - proxy_http2
-    - proxy_wstunnel
-    - rewrite
-    - ssl
-    # TODO: Enable handler to restart Apache server
+    path: /var/download
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create cluster control data directory
+  file:
+    path: /storage/cluster
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create Consul group
+  group:
+    name: consul
+    state: present
+    system: true
+
+- name: Create Consul user
+  user:
+    name: consul
+    group: consul
+    create_home: false
+    password_lock: true
+    system: true
+    home: /etc/consul.d
+
+- name: Create Consul data directory
+  file:
+    path: /storage/cluster/consul
+    state: directory
+    owner: consul
+    group: consul
+    mode: '0750'
+
+- name: Install Consul systemd service
+  copy:
+    src: consul/consul.service
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable consul'
+
+- name: Fetch Consul
+  get_url:
+    url: '{{ control_packages.consul.url }}'
+    checksum: '{{ control_packages.consul.sum }}'
+    dest: '/var/download/{{ control_packages.consul.filename }}'
+  notify:
+    - 'restart consul'
+
+- name: Install Consul binary
+  unarchive:
+    src: '/var/download/{{ control_packages.consul.filename }}'
+    dest: /usr/local/sbin
+    remote_src: yes
+    owner: root
+    group: root
+
+- name: Install Consul server config
+  template:
+    src: consul/consul.hcl
+    dest: /etc/consul.d/
+    owner: consul
+    group: consul
+    mode: '640'
+  notify:
+    - 'restart consul'
+
+- name: Create Nomad group
+  group:
+    name: nomad
+    state: present
+    system: true
+
+- name: Create Nomad user
+  user:
+    name: nomad
+    group: nomad
+    create_home: false
+    password_lock: true
+    system: true
+    home: /etc/nomad.d
+
+- name: Create Nomad data directory
+  file:
+    path: /storage/cluster/nomad
+    state: directory
+    owner: nomad
+    group: nomad
+    mode: '0750'
+
+- name: Install Nomad systemd service
+  copy:
+    src: nomad/nomad.service
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable nomad'
+
+- name: Fetch Nomad
+  get_url:
+    url: '{{ control_packages.nomad.url }}'
+    checksum: '{{ control_packages.nomad.sum }}'
+    dest: '/var/download/{{ control_packages.nomad.filename }}'
+  notify:
+    - 'restart nomad'
+
+- name: Install Nomad binary
+  unarchive:
+    src: '/var/download/{{ control_packages.nomad.filename }}'
+    dest: /usr/local/sbin
+    remote_src: yes
+    owner: root
+    group: root
+
+- name: Install Nomad server config
+  template:
+    src: nomad/nomad.hcl
+    dest: /etc/nomad.d/
+    owner: nomad
+    group: nomad
+    mode: '640'
+  notify:
+    - 'restart nomad'
 
 ##############################
 # Turn on Docker
@@ -125,18 +245,6 @@
     group: www-data
     mode: '2750'
 
-- name: Install letsencrypt httpd config
-  copy:
-    src: httpd/letsencrypt.conf
-    dest: /etc/apache2/conf-available
-    mode: '644'
-
-- name: Enable letsencrypt httpd config
-  file:
-    path: /etc/apache2/conf-enabled/letsencrypt.conf
-    src: ../conf-available/letsencrypt.conf
-    state: link
-
 - name: Install letsencrypt renewal script
   copy:
     src: letsencrypt/gencerts
@@ -163,9 +271,13 @@
 # Turn on prometheus
 ##############################
 
-- name: Make prometheus storage volume
-  docker_volume:
-    name: prometheus
+- name: Make prometheus storage directory
+  file:
+    path: /storage/cluster/prometheus
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '750'
 
 - name: Make prometheus config directory
   file:
@@ -183,30 +295,21 @@
     group: adm
     mode: '644'
   with_items:
-    - prometheus.yml
     - node.rules
     - prober.rules
     - blackbox.yml
-
-- name: Install prometheus httpd config
-  copy:
-    src: httpd/mon.conf
-    dest: /etc/apache2/sites-available
-    mode: '644'
-
-- name: Enable prometheus httpd config
-  file:
-    path: /etc/apache2/sites-enabled/mon.conf
-    src: ../sites-available/mon.conf
-    state: link
 
 ##############################
 # Turn on alertmanager
 ##############################
 
-- name: Make alertmanager storage volume
-  docker_volume:
-    name: alertmanager
+- name: Make alertmanager storage directory
+  file:
+    path: /storage/alertmanager
+    state: directory
+    owner: nobody
+    group: nogroup  # alertmanager is hard-coded to run as nobody:nogroup
+    mode: '750'
 
 - name: Install alertmanager config
   copy:
@@ -220,37 +323,13 @@
 # Turn on grafana
 ##############################
 
-- name: Make grafana storage volume
-  docker_volume:
-    name: grafana
-
-- name: Make grafana config directory
+- name: Make grafana storage directory
   file:
-    path: /config/grafana
+    path: /storage/cluster/grafana
     state: directory
-    owner: root
-    group: adm
-    mode: '0750'
-
-- name: Install grafana config
-  copy:
-    src: grafana.ini
-    dest: /config/grafana/
-    owner: root
-    group: adm
-    mode: '644'
-
-- name: Install grafana httpd config
-  copy:
-    src: httpd/grafana.conf
-    dest: /etc/apache2/sites-available
-    mode: '644'
-
-- name: Enable grafana httpd config
-  file:
-    path: /etc/apache2/sites-enabled/grafana.conf
-    src: ../sites-available/grafana.conf
-    state: link
+    owner: '472'
+    group: '472'  # Ew, fix this UID/GID
+    mode: '750'
 
 ##############################
 # Turn on matrix/synapse
@@ -287,18 +366,6 @@
     owner: matrix
     group: matrix
     mode: '600'
-
-- name: Install matrix httpd config
-  copy:
-    src: httpd/matrix.conf
-    dest: /etc/apache2/sites-available
-    mode: '644'
-
-- name: Enable matrix httpd config
-  file:
-    path: /etc/apache2/sites-enabled/matrix.conf
-    src: ../sites-available/matrix.conf
-    state: link
 
 ##############################
 # Turn on Plex
@@ -338,34 +405,6 @@
     - 'plex-system'
     - 'plex-transcode'
 
-- name: Install video server httpd config
-  copy:
-    src: httpd/plex.conf
-    dest: /etc/apache2/sites-available
-    mode: '644'
-
-- name: Enable video server httpd config
-  file:
-    path: /etc/apache2/sites-enabled/plex.conf
-    src: ../sites-available/plex.conf
-    state: link
-
-##############################
-# Pass through connections to Deluge
-##############################
-
-- name: Install deluge httpd config
-  copy:
-    src: httpd/deluge.conf
-    dest: /etc/apache2/sites-available
-    mode: '644'
-
-- name: Enable deluge httpd config
-  file:
-    path: /etc/apache2/sites-enabled/deluge.conf
-    src: ../sites-available/deluge.conf
-    state: link
-
 ##############################
 # Turn on Moneydance VNC server
 ##############################
@@ -391,24 +430,12 @@
     group: moneydance
     mode: '2770'
 
-- name: Install moneydance httpd config
-  copy:
-    src: httpd/moneydance.conf
-    dest: /etc/apache2/sites-available
-    mode: '644'
-
-- name: Enable moneydance httpd config
-  file:
-    path: /etc/apache2/sites-enabled/moneydance.conf
-    src: ../sites-available/moneydance.conf
-    state: link
-
 ##############################
 # Gather user/group data
 ##############################
 
-# It's a hack that we gather getent at this stage, in that we're
-# counting on only using it in the config for Docker and not above.
+# It's a hack that we gather getent at this stage; we're counting on
+# only using it for these environment variables and not above
 
 - name: Get user database
   getent:
@@ -418,24 +445,26 @@
   getent:
     database: group
 
-##############################
-# Turn on docker-compose for services
-##############################
-
-- name: Make Docker config directory
-  file:
-    path: /config/cluster
-    state: directory
-    owner: root
-    group: adm
-    mode: '0750'
-
-- name: Install docker-compose config
+- name: Install Moneydance environment config
   template:
-    src: docker-compose.yml
-    dest: /config/cluster/docker-compose.yml
+    src: moneydance.env
+    dest: /config/
     owner: root
     group: adm
-    mode: '644'
-    # TODO: Enable handler to pull new images?
-    # TODO: Enable handler to restart containers
+    mode: '640'
+
+- name: Install Plex environment config
+  template:
+    src: plex.env
+    dest: /config/
+    owner: root
+    group: adm
+    mode: '640'
+
+- name: Install Synapse environment config
+  template:
+    src: synapse.env
+    dest: /config/
+    owner: root
+    group: adm
+    mode: '640'
