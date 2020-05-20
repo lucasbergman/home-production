@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "bento/ubuntu-20.04"
+    config.vm.network "public_network", bridge: "enp7s0"
+
+    config.vm.provider "virtualbox" do |v|
+        v.memory = 4096  # 4096 MiB = 4 GiB
+    end
+
+    config.vm.provision "shell", path: "disable-ipv6.sh", run: "always"
+    config.vm.provision "ansible" do |ansible|
+        ansible.compatibility_mode = "2.0"
+        ansible.playbook = "../install.yml"
+        ansible.vault_password_file = "../vault-password"
+        ansible.host_vars = {
+            "default" => {
+                "docker_users" => "'[\"vagrant\"]'",  # sick triple-escape broh
+                "control_plane_interface" => "eth1",
+            },
+        }
+    end
+end
