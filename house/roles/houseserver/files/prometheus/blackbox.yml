@@ -4,3 +4,4 @@ modules:
     timeout: 5s
     http:
       method: HEAD
+      fail_if_not_ssl: true

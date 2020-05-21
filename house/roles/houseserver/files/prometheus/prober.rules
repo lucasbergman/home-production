@@ -1,6 +1,8 @@
 groups:
   - name: prober_smartmouse
     rules:
+    - record: smartmouse:probe_http_duration_seconds
+      expr: probe_http_duration_seconds{job="smartmouse"}
     - record: smartmouse:prober_duration_seconds
       expr: probe_duration_seconds{job="smartmouse"}
     - record: smartmouse:prober_success
