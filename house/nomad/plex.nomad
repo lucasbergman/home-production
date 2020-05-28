@@ -37,6 +37,8 @@ job "plex" {
                 name = "plex"
             }
             resources {
+                cpu = 1000  # MHz
+                memory = 1024  # MiB
                 network {
                     port "http" {
                         static = "32400"
