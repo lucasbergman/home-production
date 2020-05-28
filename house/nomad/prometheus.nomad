@@ -16,12 +16,6 @@ job "prometheus" {
                     },
                     {
                         type = "bind"
-                        target = "/etc/prometheus-rules"
-                        source = "/config/prometheus"
-                        readonly = true
-                    },
-                    {
-                        type = "bind"
                         target = "/prometheus"
                         source = "/storage/cluster/prometheus"
                     },
@@ -45,8 +39,8 @@ global:
     monitor: 'home-monitor'
 
 rule_files:
-  - '/etc/prometheus-rules/node.rules'
-  - '/etc/prometheus-rules/prober.rules'
+  - '/etc/prometheus/node.rules'
+  - '/etc/prometheus/prober.rules'
 
 alerting:
   alertmanagers:
@@ -99,6 +93,80 @@ EOF
                 change_mode = "signal"
                 change_signal = "SIGHUP"
             }
+            template {
+                data = <<EOF
+groups:
+  - name: node_net
+    rules:
+      - record: node:receive_bytes
+        expr: node_network_receive_bytes{device=~"^(en|eth).*"}
+      - record: node:transmit_bytes
+        expr: node_network_transmit_bytes{device=~"^(en|eth).*"}
+      - record: node:receive_bytes:rate5m
+        expr: rate(node:receive_bytes[5m])
+      - record: node:transmit_bytes:rate5m
+        expr: rate(node:transmit_bytes[5m])
+
+  - name: node_fs
+    rules:
+      - record: node:filesystem_avail
+        expr: node_filesystem_avail
+      - record: node:filesystem_avail:fraction
+        expr: node_filesystem_avail / node_filesystem_size
+
+  - name: node_cpu
+    rules:
+      - record: node:cpu:rate1m
+        expr: sum(rate(node_cpu[1m])) by (host, mode)
+      - record: node:cpu:rate5m
+        expr: sum(rate(node_cpu[5m])) by (host, mode)
+
+  - name: node_router
+    rules:
+    - record: router:edge:receive_bytes
+      expr: node_network_receive_bytes{device="eth0",host="router"}
+    - record: router:edge:transmit_bytes
+      expr: node_network_transmit_bytes{device="eth0",host="router"}
+    - record: router:edge:receive_bytes:rate5m
+      expr: rate(router:edge:receive_bytes[5m])
+    - record: router:edge:transmit_bytes:rate5m
+      expr: rate(router:edge:transmit_bytes[5m])
+
+  - name: nomad_resources
+    rules:
+      - record: nomad:alloc:cpu_total_fraction
+        expr: sum without (alloc_id) (nomad_client_allocs_cpu_total_percent/100)
+      - record: nomad:alloc:mem_used
+        expr: sum without (alloc_id) (nomad_client_allocs_memory_usage)
+EOF
+                destination = "local/prometheus/node.rules"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
+            }
+            template {
+                data = <<EOF
+groups:
+  - name: prober_smartmouse
+    rules:
+    - record: smartmouse:probe_http_duration_seconds
+      expr: probe_http_duration_seconds{job="smartmouse"}
+    - record: smartmouse:prober_duration_seconds
+      expr: probe_duration_seconds{job="smartmouse"}
+    - record: smartmouse:prober_success
+      expr: probe_success{job="smartmouse"}
+    - alert: SmartmouseProberFailed
+      expr: smartmouse:prober_success == 0
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: 'Main smartmousetravel.com prober failed'
+        description: 'Main smartmousetravel.com prober has failed for >5m'
+EOF
+                destination = "local/prometheus/prober.rules"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
+            }
             service {
                 port = "http"
                 check {
@@ -135,7 +203,15 @@ EOF
                 ]
             }
             template {
-                source = "/config/prometheus/blackbox.yml"
+                data = <<EOF
+modules:
+  http_head:
+    prober: http
+    timeout: 5s
+    http:
+      method: HEAD
+      fail_if_not_ssl: true
+EOF
                 destination = "local/blackbox.yml"
                 change_mode = "signal"
                 change_signal = "SIGHUP"

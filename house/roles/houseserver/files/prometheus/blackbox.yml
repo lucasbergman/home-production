@@ -1,7 +1,0 @@
-modules:
-  http_head:
-    prober: http
-    timeout: 5s
-    http:
-      method: HEAD
-      fail_if_not_ssl: true

@@ -287,22 +287,6 @@
     group: adm
     mode: '751'
 
-- name: Install prometheus config files
-  copy:
-    src: 'prometheus/{{ item }}'
-    dest: /config/prometheus
-    owner: root
-    group: adm
-    mode: '644'
-  with_items:
-    - node.rules
-    - prober.rules
-    - blackbox.yml
-
-##############################
-# Turn on alertmanager
-##############################
-
 - name: Make alertmanager storage directory
   file:
     path: /storage/alertmanager
