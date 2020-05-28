@@ -33,6 +33,8 @@ job "moneydance" {
                 name = "moneydance"
             }
             resources {
+                cpu = 500  # MHz
+                memory = 1024  # MiB = 1 GiB
                 network {
                     port "http" {}
                 }
