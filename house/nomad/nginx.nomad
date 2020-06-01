@@ -163,10 +163,29 @@ upstream synapse {
 
 server {
   listen 443 ssl;
-  listen 8448 ssl;
   server_name matrix.bergman.house;
   ssl_certificate /tls/live/matrix.bergman.house/fullchain.pem;
   ssl_certificate_key /tls/live/matrix.bergman.house/privkey.pem;
+  location /.well-known/ {
+    root /html;
+  }
+  location /_matrix {
+    if ($scheme != "https") {
+      return 301 https://$host$request_uri;
+    }
+    proxy_pass http://synapse;
+    proxy_set_header X-Forwarded-For $remote_addr;
+  }
+  location / {
+    return 404;
+  }
+}
+
+server {
+  listen 8448 ssl;
+  server_name bergman.house;
+  ssl_certificate /tls/live/bergman.house/fullchain.pem;
+  ssl_certificate_key /tls/live/bergman.house/privkey.pem;
   location /.well-known/ {
     root /html;
   }
