@@ -1,9 +1,5 @@
 // -*- mode: hcl -*-
 
-provider "google" {
-    project = "bergmans-services"
-}
-
 resource "google_dns_managed_zone" "bergmans" {
     name        = "bergmans"
     dns_name    = "bergmans.us."
