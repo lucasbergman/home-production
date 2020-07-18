@@ -1,17 +1,6 @@
 - name: hostname
   shell: 'hostname --file /etc/hostname'
 
-- name: enable consul
-  systemd:
-    name: consul.service
-    daemon_reload: yes
-    enabled: yes
-
-- name: restart consul
-  systemd:
-    name: consul.service
-    state: restarted
-
 - name: enable nomad
   systemd:
     name: nomad.service

@@ -2,4 +2,7 @@
   become: yes
   become_method: sudo
   roles:
+    - role: '../ansible/roles/consul-node'
+      vars:
+        consul_storage_directory: /storage/cluster/consul
     - houseserver

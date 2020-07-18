@@ -2,6 +2,7 @@
 # Configure networking and basic stats collection
 ##############################
 
+# TODO: Remove when nomad installation is factored out
 - name: Install boring starter packages
   apt:
     pkg:
@@ -84,63 +85,6 @@
     owner: root
     group: root
     mode: '0755'
-
-- name: Create Consul group
-  group:
-    name: consul
-    state: present
-    system: true
-
-- name: Create Consul user
-  user:
-    name: consul
-    group: consul
-    create_home: false
-    password_lock: true
-    system: true
-    home: /etc/consul.d
-
-- name: Create Consul data directory
-  file:
-    path: /storage/cluster/consul
-    state: directory
-    owner: consul
-    group: consul
-    mode: '0750'
-
-- name: Install Consul systemd service
-  copy:
-    src: consul/consul.service
-    dest: /etc/systemd/system
-    mode: '644'
-  notify:
-    - 'enable consul'
-
-- name: Fetch Consul
-  get_url:
-    url: '{{ control_packages.consul.url }}'
-    checksum: '{{ control_packages.consul.sum }}'
-    dest: '/var/download/{{ control_packages.consul.filename }}'
-  notify:
-    - 'restart consul'
-
-- name: Install Consul binary
-  unarchive:
-    src: '/var/download/{{ control_packages.consul.filename }}'
-    dest: /usr/local/sbin
-    remote_src: yes
-    owner: root
-    group: root
-
-- name: Install Consul server config
-  template:
-    src: consul/consul.hcl
-    dest: /etc/consul.d/
-    owner: consul
-    group: consul
-    mode: '640'
-  notify:
-    - 'restart consul'
 
 - name: Create Nomad group
   group:
