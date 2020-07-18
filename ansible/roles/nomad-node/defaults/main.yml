@@ -5,11 +5,9 @@ nomad_package:
   sum: 'sha256:926e19b6d9ff54729f9b156eb1839cd7bcba56956617d6b00600b8ce90a4d970'
 package_download_directory: '/var/download'
 
-nomad_datacenter: 'testdc'
+nomad_datacenter: ''
+nomad_server_enable: true
 nomad_interface: ''
 nomad_storage_directory: '/var/nomad'
 nomad_bootstrap_nodes: 1
-
-use_digitalocean: false
-digitalocean_region: 'nonexistent'
-nomad_digitalocean_tag: 'nonexistent'
+nomad_should_start: true

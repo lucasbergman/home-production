@@ -1,5 +1,7 @@
 #jinja2:block_start_string:'[%', block_end_string:'%]', variable_start_string:'[[', variable_end_string:']]'
+[% if nomad_datacenter|length %]
 datacenter = "[[ nomad_datacenter ]]"
+[% endif %]
 data_dir = "[[ nomad_storage_directory ]]"
 [% if nomad_interface|length %]
 bind_addr = "{{ GetInterfaceIP \"[[ nomad_interface ]]\" }}"
@@ -14,21 +16,17 @@ telemetry {
 }
 
 server {
+[% if nomad_server_enable|bool %]
     enabled = true
+[% endif %]
     bootstrap_expect = [[ nomad_bootstrap_nodes ]]
 }
 
-[% if use_digitalocean %]
-server_join {
-    retry_join = [
-        "provider=digitalocean region=[[ digitalocean_region ]] tag_name=[[ nomad_digitalocean_tag ]] api_token=[[ digitalocean_token ]]",
-    ]
-}
-[% endif %]
-
 client {
     enabled = true
+[% if nomad_interface|length %]
     network_interface = "[[ nomad_interface ]]"
+[% endif %]
 }
 
 plugin "docker" {

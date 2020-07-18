@@ -3,6 +3,8 @@ Description="Nomad workload orchestration"
 Documentation=https://nomadproject.io/
 Requires=network-online.target
 After=network-online.target
+Requires=cloud-init.target
+After=cloud-init.target
 
 [Service]
 ExecReload=/bin/kill -HUP $MAINPID
@@ -17,4 +19,4 @@ StartLimitBurst=3
 TasksMax=infinity
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

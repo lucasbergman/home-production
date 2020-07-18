@@ -8,3 +8,4 @@
   systemd:
     name: consul.service
     state: restarted
+  when: consul_should_start | bool

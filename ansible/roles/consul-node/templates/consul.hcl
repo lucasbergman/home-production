@@ -1,9 +1,21 @@
-#jinja2:variable_start_string:'[%', variable_end_string:'%]'
-datacenter = "[% consul_datacenter %]"
-data_dir = "[% consul_storage_directory %]"
-# TODO: generate proper key and encrypt
-encrypt = "Luj2FZWwlt8475wD1WtwUQ=="
+#jinja2:block_start_string:'[%', block_end_string:'%]', variable_start_string:'[[', variable_end_string:']]'
+[% if consul_datacenter|length %]
+datacenter = "[[ consul_datacenter ]]"
+[% endif %]
+data_dir = "[[ consul_storage_directory ]]"
+[% if consul_gossip_encrypt_key|string|length %]
+encrypt = "[[ consul_gossip_encrypt_key ]]"
+[% endif %]
 
+[% if consul_server_enable|bool %]
 server = true
-bootstrap_expect = 1
-bind_addr = "{{ GetInterfaceIP \"[% consul_interface %]\" }}"
+[% endif %]
+bootstrap_expect = [[ consul_bootstrap_nodes ]]
+[% if consul_interface|length %]
+bind_addr = "{{ GetInterfaceIP \"[[ consul_interface ]]\" }}"
+[% endif %]
+[% if consul_retry_join|length %]
+retry_join = [
+    "[[ consul_retry_join ]]",
+]
+[% endif %]

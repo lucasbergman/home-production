@@ -8,3 +8,4 @@
   systemd:
     name: nomad.service
     state: restarted
+  when: nomad_should_start | bool
