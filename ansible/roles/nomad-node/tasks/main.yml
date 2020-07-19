@@ -1,0 +1,61 @@
+- name: Create Nomad group
+  group:
+    name: nomad
+    state: present
+    system: true
+
+- name: Create Nomad user
+  user:
+    name: nomad
+    group: nomad
+    create_home: false
+    password_lock: true
+    system: true
+    home: /etc/nomad.d
+
+- name: Create Nomad data directory
+  file:
+    path: '{{ nomad_storage_directory }}'
+    state: directory
+    owner: nomad
+    group: nomad
+    mode: '0750'
+
+- name: Install Nomad systemd service
+  copy:
+    src: nomad.service
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable nomad'
+
+- name: Fetch Nomad
+  get_url:
+    url: '{{ nomad_package.url }}'
+    checksum: '{{ nomad_package.sum }}'
+    dest: '{{ package_download_directory }}/{{ nomad_package.filename }}'
+  notify:
+    - 'restart nomad'
+
+- name: Install unzip
+  package:
+    name: unzip
+    state: present
+
+- name: Install Nomad binary
+  unarchive:
+    src: '{{ package_download_directory }}/{{ nomad_package.filename }}'
+    dest: /usr/local/sbin
+    remote_src: yes
+    owner: root
+    group: root
+
+- name: Install Nomad server config
+  template:
+    src: nomad.hcl
+    dest: /etc/nomad.d/
+    owner: nomad
+    group: nomad
+    mode: '640'
+  notify:
+    - 'restart nomad'

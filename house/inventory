@@ -7,6 +7,7 @@ all:
       ansible_host: 127.0.0.1
       ansible_connection: local
       docker_users: ['lucas']
-      control_plane_interface: 'enp7s0'
       consul_datacenter: house
       consul_interface: enp7s0
+      nomad_datacenter: house
+      nomad_interface: enp7s0

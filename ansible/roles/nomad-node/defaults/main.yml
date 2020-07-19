@@ -1,0 +1,15 @@
+nomad_package:
+  version: '0.11.1'
+  filename: 'nomad_0.11.1_linux_amd64.zip'
+  url: 'https://releases.hashicorp.com/nomad/0.11.1/nomad_0.11.1_linux_amd64.zip'
+  sum: 'sha256:711e98b89ac4f5540bf3d6273379999f6c4141529531c262222e63ce491f5176'
+package_download_directory: '/var/download'
+
+nomad_datacenter: 'testdc'
+nomad_interface: ''
+nomad_storage_directory: '/var/nomad'
+nomad_bootstrap_nodes: 1
+
+use_digitalocean: false
+digitalocean_region: 'nonexistent'
+nomad_digitalocean_tag: 'nonexistent'

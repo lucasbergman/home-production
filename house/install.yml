@@ -6,4 +6,7 @@
     - role: '../ansible/roles/consul-node'
       vars:
         consul_storage_directory: /storage/cluster/consul
+    - role: '../ansible/roles/nomad-node'
+      vars:
+        nomad_storage_directory: /storage/cluster/nomad
     - houseserver

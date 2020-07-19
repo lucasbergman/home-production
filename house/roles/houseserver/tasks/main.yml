@@ -2,16 +2,6 @@
 # Configure networking and basic stats collection
 ##############################
 
-# TODO: Remove when nomad installation is factored out
-- name: Install boring starter packages
-  apt:
-    pkg:
-      - 'unzip'
-
-##############################
-# Configure networking and basic stats collection
-##############################
-
 - name: Set up static address and networking
   when: is_production|bool
   block:
@@ -65,83 +55,6 @@
     owner: root
     group: root
     mode: '755'
-
-##############################
-# Install control plane packages
-##############################
-
-- name: Create package download directory
-  file:
-    path: /var/download
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Create cluster control data directory
-  file:
-    path: /storage/cluster
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Create Nomad group
-  group:
-    name: nomad
-    state: present
-    system: true
-
-- name: Create Nomad user
-  user:
-    name: nomad
-    group: nomad
-    create_home: false
-    password_lock: true
-    system: true
-    home: /etc/nomad.d
-
-- name: Create Nomad data directory
-  file:
-    path: /storage/cluster/nomad
-    state: directory
-    owner: nomad
-    group: nomad
-    mode: '0750'
-
-- name: Install Nomad systemd service
-  copy:
-    src: nomad/nomad.service
-    dest: /etc/systemd/system
-    mode: '644'
-  notify:
-    - 'enable nomad'
-
-- name: Fetch Nomad
-  get_url:
-    url: '{{ control_packages.nomad.url }}'
-    checksum: '{{ control_packages.nomad.sum }}'
-    dest: '/var/download/{{ control_packages.nomad.filename }}'
-  notify:
-    - 'restart nomad'
-
-- name: Install Nomad binary
-  unarchive:
-    src: '/var/download/{{ control_packages.nomad.filename }}'
-    dest: /usr/local/sbin
-    remote_src: yes
-    owner: root
-    group: root
-
-- name: Install Nomad server config
-  template:
-    src: nomad/nomad.hcl
-    dest: /etc/nomad.d/
-    owner: nomad
-    group: nomad
-    mode: '640'
-  notify:
-    - 'restart nomad'
 
 ##############################
 # Configure letsencrypt support

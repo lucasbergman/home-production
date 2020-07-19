@@ -1,12 +1,5 @@
 is_production: false
 
-control_packages:
-  nomad:
-    version: '0.11.1'
-    filename: 'nomad_0.11.1_linux_amd64.zip'
-    url: 'https://releases.hashicorp.com/nomad/0.11.1/nomad_0.11.1_linux_amd64.zip'
-    sum: 'sha256:711e98b89ac4f5540bf3d6273379999f6c4141529531c262222e63ce491f5176'
-
 moneydance_http_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           39633362356336633066636633303634343962303036333031363733366232313435376234383464
