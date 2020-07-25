@@ -31,3 +31,7 @@ resource "nomad_job" "prometheus" {
 resource "nomad_job" "synapse" {
     jobspec = file("synapse.nomad")
 }
+
+resource "nomad_job" "unifi" {
+    jobspec = file("unifi.nomad")
+}

@@ -359,6 +359,31 @@
     mode: '2770'
 
 ##############################
+# Turn on Unifi controller
+##############################
+
+- name: Create unifi group
+  group:
+    name: unifi
+    state: present
+
+- name: Create unifi user
+  user:
+    name: unifi
+    group: unifi
+    create_home: false
+    password_lock: true
+    home: /storage/unifi
+
+- name: Make unifi storage directory
+  file:
+    path: /storage/unifi
+    state: directory
+    owner: unifi
+    group: unifi
+    mode: '2770'
+
+##############################
 # Gather user/group data
 ##############################
 
@@ -392,6 +417,14 @@
 - name: Install Synapse environment config
   template:
     src: synapse.env
+    dest: /config/
+    owner: root
+    group: adm
+    mode: '640'
+
+- name: Install Unifi environment config
+  template:
+    src: unifi.env
     dest: /config/
     owner: root
     group: adm
