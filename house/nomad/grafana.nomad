@@ -6,7 +6,7 @@ job "grafana" {
         task "grafana" {
             driver = "docker"
             config {
-                image = "grafana/grafana:6.7.1"
+                image = "grafana/grafana:7.1.1"
                 mounts = [
                     {
                         type = "bind"

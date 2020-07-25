@@ -6,7 +6,7 @@ job "prometheus" {
         task "frontend" {
             driver = "docker"
             config {
-                image = "prom/prometheus:v2.17.0"
+                image = "prom/prometheus:v2.19.3"
                 mounts = [
                     {
                         type = "bind"
@@ -188,7 +188,7 @@ EOF
         task "blackbox-exporter" {
             driver = "docker"
             config {
-                image = "prom/blackbox-exporter:v0.16.0"
+                image = "prom/blackbox-exporter:v0.17.0"
                 mounts = [
                     {
                         type = "bind"
@@ -237,7 +237,7 @@ EOF
         task "alertmanager" {
             driver = "docker"
             config {
-                image = "prom/alertmanager:v0.20.0"
+                image = "prom/alertmanager:v0.21.0"
                 mounts = [
                     {
                         type = "bind"
