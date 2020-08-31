@@ -6,7 +6,7 @@ job "unifi" {
         task "controller" {
             driver = "docker"
             config {
-                image = "linuxserver/unifi-controller:5.13.32-ls68"
+                image = "linuxserver/unifi-controller:5.14.23-ls74"
                 network_mode = "host"
                 mounts = [
                     {

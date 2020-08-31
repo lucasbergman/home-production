@@ -6,7 +6,7 @@ job "prometheus" {
         task "frontend" {
             driver = "docker"
             config {
-                image = "prom/prometheus:v2.19.3"
+                image = "prom/prometheus:v2.20.1"
                 mounts = [
                     {
                         type = "bind"
