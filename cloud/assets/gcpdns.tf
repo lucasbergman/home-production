@@ -103,6 +103,14 @@ resource "google_dns_record_set" "bergmans_domainkey_sendgrid3" {
     ttl = 3600
 }
 
+resource "google_dns_record_set" "bergmans_cname_cmscal" {
+    managed_zone = google_dns_managed_zone.bergmans.name
+    name = "cmscal.bergmans.us."
+    type = "CNAME"
+    rrdatas = ["ghs.googlehosted.com."]
+    ttl = 3600
+}
+
 resource "google_dns_record_set" "bergmans_a_git" {
     managed_zone = google_dns_managed_zone.bergmans.name
     name = "git.bergmans.us."
