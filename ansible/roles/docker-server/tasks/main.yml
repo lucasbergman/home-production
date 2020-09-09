@@ -1,0 +1,26 @@
+- name: Get Docker upstream APT GPG key
+  apt_key:
+    id: '{{ docker_apt_key }}'
+    keyserver: 'hkp://pool.sks-keyservers.net'
+    state: present
+
+- name: Configure Docker upstream APT repository
+  apt_repository:
+    repo: '{{ docker_repository }}'
+    state: present
+
+- name: Install Docker
+  apt:
+    pkg:
+      - 'containerd.io'
+      - 'docker-ce'
+      - 'docker-ce-cli'
+      - 'docker-compose'
+
+- name: Add users to Docker usage group
+  user:
+    name: '{{ item }}'
+    groups: 'docker'
+    append: True
+  with_items: '{{ docker_users|list }}'
+  when: docker_users | length > 0
