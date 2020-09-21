@@ -6,7 +6,7 @@ job "synapse" {
         task "synapse" {
             driver = "docker"
             config {
-                image = "matrixdotorg/synapse:v1.19.1"
+                image = "matrixdotorg/synapse:v1.19.3"
                 port_map {
                     http = 8008
                 }
