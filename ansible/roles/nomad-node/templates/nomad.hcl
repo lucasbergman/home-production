@@ -30,3 +30,11 @@ client {
     enabled = true
     network_interface = "[[ nomad_interface ]]"
 }
+
+plugin "docker" {
+    config {
+        volumes {
+            enabled = true
+        }
+    }
+}
