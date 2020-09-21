@@ -6,7 +6,7 @@ job "plex" {
         task "plex" {
             driver = "docker"
             config {
-                image = "plexinc/pms-docker:1.20.1.3252-a78fef9a9"
+                image = "${image.name}:${image.version}"
                 network_mode = "host"
                 mounts = [
                     {

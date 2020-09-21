@@ -6,7 +6,7 @@ job "prometheus" {
         task "frontend" {
             driver = "docker"
             config {
-                image = "prom/prometheus:v2.20.1"
+                image = "${image_prometheus.name}:${image_prometheus.version}"
                 mounts = [
                     {
                         type = "bind"
@@ -21,7 +21,7 @@ job "prometheus" {
                     },
                 ]
                 args = [
-                    "--web.listen-address=0.0.0.0:${NOMAD_PORT_http}",
+                    "--web.listen-address=0.0.0.0:$${NOMAD_PORT_http}",
                     "--config.file=/etc/prometheus/prometheus.yml",
                     "--storage.tsdb.path=/prometheus",
                     "--web.console.libraries=/usr/share/prometheus/console_libraries",
@@ -188,7 +188,7 @@ EOF
         task "blackbox-exporter" {
             driver = "docker"
             config {
-                image = "prom/blackbox-exporter:v0.17.0"
+                image = "${image_blackbox.name}:${image_blackbox.version}"
                 mounts = [
                     {
                         type = "bind"
@@ -198,7 +198,7 @@ EOF
                     },
                 ]
                 args = [
-                    "--web.listen-address=0.0.0.0:${NOMAD_PORT_http}",
+                    "--web.listen-address=0.0.0.0:$${NOMAD_PORT_http}",
                     "--config.file=/etc/blackbox_exporter/config.yml",
                 ]
             }
@@ -237,7 +237,7 @@ EOF
         task "alertmanager" {
             driver = "docker"
             config {
-                image = "prom/alertmanager:v0.21.0"
+                image = "${image_alertmanager.name}:${image_alertmanager.version}"
                 mounts = [
                     {
                         type = "bind"
@@ -252,7 +252,7 @@ EOF
                     },
                 ]
                 args = [
-                    "--web.listen-address=0.0.0.0:${NOMAD_PORT_http}",
+                    "--web.listen-address=0.0.0.0:$${NOMAD_PORT_http}",
                     "--config.file=/etc/alertmanager/alertmanager.yml",
                     "--storage.path=/alertmanager",
                 ]
