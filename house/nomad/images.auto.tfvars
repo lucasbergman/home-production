@@ -5,8 +5,8 @@ images = {
         version = "7.1.5"
     }
     plex = {
-        name = "plexinc/pms-docker"
-        version = "1.20.1.3252-a78fef9a9"
+        name = "linuxserver/plex"
+        version = "1.20.1.3252-a78fef9a9-ls117"
     }
     prom_alertmanager = {
         name = "prom/alertmanager"
