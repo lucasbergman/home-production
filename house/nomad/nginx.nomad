@@ -5,6 +5,7 @@ job "nginx" {
             driver = "docker"
             config {
                 image = "nginx"
+                network_mode = "host"
                 port_map {
                     http = 80
                     https = 443
