@@ -1,5 +1,9 @@
 # -*- mode: hcl -*-
 images = {
+    nginx = {
+        name = "nginx"
+        version = "1.19.2"
+    }
     grafana = {
         name = "grafana/grafana"
         version = "7.1.5"

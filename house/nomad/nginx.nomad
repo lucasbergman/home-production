@@ -4,7 +4,7 @@ job "nginx" {
         task "nginx" {
             driver = "docker"
             config {
-                image = "nginx"
+                image = "${image.name}:${image.version}"
                 network_mode = "host"
                 port_map {
                     http = 80

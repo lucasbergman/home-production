@@ -1,5 +1,6 @@
 resource "nomad_job" "nginx" {
     jobspec = templatefile("nginx.nomad", {
+        image = var.images.nginx
         config_default = file("conf/nginx/default.conf")
         config_mon = file("conf/nginx/mon.conf")
         config_grafana = file("conf/nginx/grafana.conf")
