@@ -1,0 +1,58 @@
+global:
+  scrape_interval:     30s
+  evaluation_interval: 30s
+  scrape_timeout:      5s
+
+  external_labels:
+    monitor: 'home-monitor'
+
+rule_files:
+  - '/etc/prometheus/node.rules'
+  - '/etc/prometheus/prober.rules'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets:
+          {{- range service "prometheus-alertmanager-alertmanager" }}
+          - '{{ .Address }}:{{ .Port }}'
+          {{- end }}
+
+scrape_configs:
+  - job_name: 'router'
+    static_configs:
+      - targets: ['192.168.101.1:9100']
+        labels:
+          host: router
+
+  - job_name: 'node'
+    static_configs:
+      - targets:
+          {{- range nodes }}
+          - '{{ .Address }}:9100'
+          {{- end }}
+        labels:
+          host: hedwig
+
+  - job_name: 'nomad'
+    metrics_path: '/v1/metrics'
+    params:
+      format: [ 'prometheus' ]
+    static_configs:
+      - targets:
+          {{- range nodes }}
+          - '{{ .Address }}:4646'
+          {{- end }}
+        labels:
+          host: hedwig
+
+  - job_name: 'smartmouse'
+    metrics_path: '/probe'
+    params:
+      module: ['http_head']
+      target: ['https://smartmousetravel.com/']
+    static_configs:
+      - targets:
+          {{- range service "prometheus-prober-blackbox-exporter" }}
+          - '{{ .Address }}:{{ .Port }}'
+          {{- end }}

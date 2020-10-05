@@ -1,9 +1,19 @@
 resource "nomad_job" "nginx" {
-    jobspec = file("nginx.nomad")
+    jobspec = templatefile("nginx.nomad", {
+        config_default = file("conf/nginx/default.conf")
+        config_mon = file("conf/nginx/mon.conf")
+        config_grafana = file("conf/nginx/grafana.conf")
+        config_moneydance = file("conf/nginx/moneydance.conf")
+        config_synapse = file("conf/nginx/synapse.conf")
+        config_plex = file("conf/nginx/plex.conf")
+    })
 }
 
 resource "nomad_job" "grafana" {
-    jobspec = templatefile("grafana.nomad", {image = var.images.grafana})
+    jobspec = templatefile("grafana.nomad", {
+        image = var.images.grafana
+        config_grafana = file("conf/grafana.ini")
+    })
 }
 
 resource "nomad_job" "moneydance" {
@@ -19,6 +29,10 @@ resource "nomad_job" "prometheus" {
         image_alertmanager = var.images.prom_alertmanager
         image_blackbox = var.images.prom_blackbox
         image_prometheus = var.images.prom_prometheus
+        config_prometheus = file("conf/prometheus/prometheus.yml")
+        config_rules_node = file("conf/prometheus/node.rules")
+        config_rules_prober = file("conf/prometheus/prober.rules")
+        config_blackbox = file("conf/prometheus/blackbox.yml")
     })
 }
 

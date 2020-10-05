@@ -25,23 +25,7 @@ job "grafana" {
             }
             template {
                 data = <<EOF
-instance_name = grafana.bergman.house
-
-[server]
-domain = grafana.bergman.house
-root_url = https://grafana.bergman.house
-http_port = {{ env "NOMAD_PORT_http" }}
-
-[users]
-allow_sign_up = false
-
-[smtp]
-enabled = true
-host = bergmans.us:25
-;TODO set this up properly
-;user =
-;password =
-from_address = grafana@bergmans.us
+${config_grafana}
 EOF
                 destination = "local/grafana.ini"
                 change_mode = "restart"
