@@ -7,6 +7,7 @@ CERTBOT_VERSION=v0.38.0
 hosts=(bergman.house
        deluge.bergman.house
        grafana.bergman.house
+       hass.bergman.house
        matrix.bergman.house
        mon.bergman.house
        moneydance.bergman.house

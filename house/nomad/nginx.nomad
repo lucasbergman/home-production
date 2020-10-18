@@ -80,6 +80,14 @@ EOF
                 change_mode = "signal"
                 change_signal = "SIGHUP"
             }
+            template {
+                data = <<EOF
+${config_hass}
+EOF
+                destination = "local/hass.conf"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
+            }
             resources {
                 network {
                     port "http" {

@@ -279,6 +279,18 @@
     mode: '640'
 
 ##############################
+# Set up Home Assistant storage
+##############################
+
+- name: Make Home Assistant storage directory
+  file:
+    path: /storage/homeassistant
+    state: directory
+    owner: root
+    group: adm
+    mode: '750'
+
+##############################
 # Gather user/group data
 ##############################
 

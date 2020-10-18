@@ -2,11 +2,12 @@ resource "nomad_job" "nginx" {
     jobspec = templatefile("nginx.nomad", {
         image = var.images.nginx
         config_default = file("conf/nginx/default.conf")
-        config_mon = file("conf/nginx/mon.conf")
         config_grafana = file("conf/nginx/grafana.conf")
+        config_hass = file("conf/nginx/hass.conf")
+        config_mon = file("conf/nginx/mon.conf")
         config_moneydance = file("conf/nginx/moneydance.conf")
-        config_synapse = file("conf/nginx/synapse.conf")
         config_plex = file("conf/nginx/plex.conf")
+        config_synapse = file("conf/nginx/synapse.conf")
     })
 }
 
@@ -14,6 +15,13 @@ resource "nomad_job" "grafana" {
     jobspec = templatefile("grafana.nomad", {
         image = var.images.grafana
         config_grafana = file("conf/grafana.ini")
+    })
+}
+
+resource "nomad_job" "homeassistant" {
+    jobspec = templatefile("homeassistant.nomad", {
+        image = var.images.homeassistant
+        config = file("conf/homeassistant/http.yml")
     })
 }
 
