@@ -10,7 +10,7 @@ images = {
     }
     plex = {
         name = "linuxserver/plex"
-        version = "1.20.2.3402-0fec14d92-ls118"
+        version = "1.20.3.3483-211702a9f-ls120"
     }
     prom_alertmanager = {
         name = "prom/alertmanager"
