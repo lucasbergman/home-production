@@ -11,3 +11,4 @@ all:
       consul_interface: enp7s0
       nomad_datacenter: house
       nomad_interface: enp7s0
+      unifi_site_name: default

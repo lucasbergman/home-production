@@ -262,6 +262,22 @@
     group: unifi
     mode: '2770'
 
+- name: Make unifi config directory
+  file:
+    path: '/storage/unifi/data/sites/{{ unifi_site_name }}'
+    state: directory
+    owner: unifi
+    group: unifi
+    mode: '2770'
+
+- name: Install unifi gateway config
+  copy:
+    src: 'usg-config.json'
+    dest: '/storage/unifi/data/sites/{{ unifi_site_name}}/config.gateway.json'
+    owner: unifi
+    group: unifi
+    mode: '640'
+
 ##############################
 # Gather user/group data
 ##############################

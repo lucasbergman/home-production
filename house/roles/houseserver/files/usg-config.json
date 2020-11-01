@@ -1,0 +1,105 @@
+{
+  "interfaces": {
+    "ethernet": {
+      "eth0": {
+        "address": [
+          "192.168.100.2/24"
+        ],
+        "description": "WAN",
+        "duplex": "auto",
+        "speed": "auto"
+      }
+    }
+  },
+  "service": {
+    "dhcp-server": {
+      "shared-network-name": {
+        "net_LAN_eth1_192.168.101.0-24": {
+          "authoritative": "enable",
+          "description": "vlan1",
+          "subnet": {
+            "192.168.101.0/24": {
+              "default-router": "192.168.101.1",
+              "dns-server": [
+                "192.168.101.1"
+              ],
+              "domain-name": "bergman.house",
+              "lease": "86400",
+              "start": {
+                "192.168.101.31": {
+                  "stop": "192.168.101.239"
+                }
+              }
+            }
+          }
+        },
+        "net_VoIP_LAN_eth2_192.168.102.0-24": {
+          "authoritative": "enable",
+          "description": "vlan4012",
+          "subnet": {
+            "192.168.102.0/24": {
+              "default-router": "192.168.102.1",
+              "dns-server": [
+                "192.168.102.1"
+              ],
+              "lease": "86400",
+              "start": {
+                "192.168.102.6": {
+                  "stop": "192.168.102.254"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nat": {
+      "rule": {
+        "1": {
+          "description": "hairpin_https",
+          "destination": {
+            "address": "75.150.214.42",
+            "port": "443"
+          },
+          "inbound-interface": "eth1",
+          "inside-address": {
+            "address": "192.168.101.2",
+            "port": "443"
+          },
+          "log": "disable",
+          "protocol": "tcp",
+          "type": "destination"
+        },
+        "2": {
+          "description": "hairpin_http",
+          "destination": {
+            "address": "75.150.214.42",
+            "port": "80"
+          },
+          "inbound-interface": "eth1",
+          "inside-address": {
+            "address": "192.168.101.2",
+            "port": "80"
+          },
+          "log": "disable",
+          "protocol": "tcp",
+          "type": "destination"
+        },
+        "5000": {
+          "description": "hairpin_src",
+          "destination": {
+            "address": "192.168.101.2",
+            "port": "80,443"
+          },
+          "log": "disable",
+          "outbound-interface": "eth1",
+          "protocol": "tcp",
+          "source": {
+            "address": "192.168.101.0/24"
+          },
+          "type": "masquerade"
+        }
+      }
+    }
+  }
+}
