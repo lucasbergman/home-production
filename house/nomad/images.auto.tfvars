@@ -30,7 +30,7 @@ images = {
     }
     synapse = {
         name = "matrixdotorg/synapse"
-        version = "v1.22.1"
+        version = "v1.23.0"
     }
     unifi = {
         name = "linuxserver/unifi-controller"
