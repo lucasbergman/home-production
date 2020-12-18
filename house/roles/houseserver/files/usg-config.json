@@ -13,6 +13,8 @@
   },
   "service": {
     "dhcp-server": {
+      "disabled": "false",
+      "hostfile-update": "enable",
       "shared-network-name": {
         "net_LAN_eth1_192.168.101.0-24": {
           "authoritative": "enable",
@@ -28,6 +30,13 @@
               "start": {
                 "192.168.101.31": {
                   "stop": "192.168.101.239"
+                }
+              },
+              "static-mapping": {
+                "30-05-5c-7b-43-fa": {
+                  "host-record": "disable",
+                  "ip-address": "192.168.101.6",
+                  "mac-address": "30:05:5c:7b:43:fa"
                 }
               }
             }
