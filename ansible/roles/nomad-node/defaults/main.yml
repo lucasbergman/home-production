@@ -1,8 +1,8 @@
 nomad_package:
-  version: '0.12.4'
-  filename: 'nomad_0.12.4_linux_amd64.zip'
-  url: 'https://releases.hashicorp.com/nomad/0.12.4/nomad_0.12.4_linux_amd64.zip'
-  sum: 'sha256:926e19b6d9ff54729f9b156eb1839cd7bcba56956617d6b00600b8ce90a4d970'
+  version: '1.0.3'
+  filename: 'nomad_1.0.3_linux_amd64.zip'
+  url: 'https://releases.hashicorp.com/nomad/1.0.3/nomad_1.0.3_linux_amd64.zip'
+  sum: 'sha256:7af9291354a8ab90196306b5cb3270ca9bbc4fb4bc4ceb009951e114417822f0'
 package_download_directory: '/var/download'
 
 nomad_datacenter: ''

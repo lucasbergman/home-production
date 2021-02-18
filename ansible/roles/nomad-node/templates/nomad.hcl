@@ -27,6 +27,10 @@ client {
 [% if nomad_interface|length %]
     network_interface = "[[ nomad_interface ]]"
 [% endif %]
+    template {
+        # TODO: This is a security hole that we should get rid of
+        disable_file_sandbox = true
+    }
 }
 
 plugin "docker" {
