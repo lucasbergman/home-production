@@ -1,9 +1,5 @@
-nomad_package:
-  version: '1.0.3'
-  filename: 'nomad_1.0.3_linux_amd64.zip'
-  url: 'https://releases.hashicorp.com/nomad/1.0.3/nomad_1.0.3_linux_amd64.zip'
-  sum: 'sha256:7af9291354a8ab90196306b5cb3270ca9bbc4fb4bc4ceb009951e114417822f0'
-package_download_directory: '/var/download'
+hashicorp_apt_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
+hashicorp_repository: 'deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main'
 
 nomad_datacenter: ''
 nomad_server_enable: true

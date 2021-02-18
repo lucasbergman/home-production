@@ -1,17 +1,17 @@
-- name: Create Nomad group
-  group:
-    name: nomad
+- name: Get HashiCorp upstream APT GPG key
+  apt_key:
+    id: '{{ hashicorp_apt_key }}'
+    keyserver: 'hkp://pool.sks-keyservers.net'
     state: present
-    system: true
 
-- name: Create Nomad user
-  user:
-    name: nomad
-    group: nomad
-    create_home: false
-    password_lock: true
-    system: true
-    home: /etc/nomad.d
+- name: Configure HashiCorp upstream APT repository
+  apt_repository:
+    repo: '{{ hashicorp_repository }}'
+    state: present
+
+- name: Install Nomad
+  apt:
+    pkg: ['nomad']
 
 - name: Create Nomad data directory
   file:
@@ -20,35 +20,6 @@
     owner: nomad
     group: nomad
     mode: '0750'
-
-- name: Install Nomad systemd service
-  copy:
-    src: nomad.service
-    dest: /etc/systemd/system
-    mode: '644'
-  notify:
-    - 'enable nomad'
-
-- name: Fetch Nomad
-  get_url:
-    url: '{{ nomad_package.url }}'
-    checksum: '{{ nomad_package.sum }}'
-    dest: '{{ package_download_directory }}/{{ nomad_package.filename }}'
-  notify:
-    - 'restart nomad'
-
-- name: Install unzip
-  package:
-    name: unzip
-    state: present
-
-- name: Install Nomad binary
-  unarchive:
-    src: '{{ package_download_directory }}/{{ nomad_package.filename }}'
-    dest: /usr/local/sbin
-    remote_src: yes
-    owner: root
-    group: root
 
 - name: Install Nomad server config
   template:

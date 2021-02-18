@@ -1,9 +1,3 @@
-- name: enable nomad
-  systemd:
-    name: nomad.service
-    daemon_reload: yes
-    enabled: yes
-
 - name: restart nomad
   systemd:
     name: nomad.service
