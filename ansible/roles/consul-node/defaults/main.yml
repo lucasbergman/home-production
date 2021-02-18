@@ -1,8 +1,8 @@
 consul_package:
-  version: '1.8.4'
-  filename: 'consul_1.8.4_linux_amd64.zip'
-  url: 'https://releases.hashicorp.com/consul/1.8.4/consul_1.8.4_linux_amd64.zip'
-  sum: 'sha256:0d74525ee101254f1cca436356e8aee51247d460b56fc2b4f7faef8a6853141f'
+  version: '1.9.3'
+  filename: 'consul_1.9.3_linux_amd64.zip'
+  url: 'https://releases.hashicorp.com/consul/1.9.3/consul_1.9.3_linux_amd64.zip'
+  sum: 'sha256:2ec9203bf370ae332f6584f4decc2f25097ec9ef63852cd4ef58fdd27a313577'
 package_download_directory: '/var/download'
 
 consul_gossip_encrypt_key: ''
