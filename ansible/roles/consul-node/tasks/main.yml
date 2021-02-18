@@ -1,25 +1,17 @@
-- name: Create package download directory
-  file:
-    path: '{{ package_download_directory }}'
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Create Consul group
-  group:
-    name: consul
+- name: Get HashiCorp upstream APT GPG key
+  apt_key:
+    id: '{{ hashicorp_apt_key }}'
+    keyserver: 'hkp://pool.sks-keyservers.net'
     state: present
-    system: true
 
-- name: Create Consul user
-  user:
-    name: consul
-    group: consul
-    create_home: false
-    password_lock: true
-    system: true
-    home: /etc/consul.d
+- name: Configure HashiCorp upstream APT repository
+  apt_repository:
+    repo: '{{ hashicorp_repository }}'
+    state: present
+
+- name: Install Consul
+  apt:
+    pkg: ['consul']
 
 - name: Create Consul data directory
   file:
@@ -28,35 +20,6 @@
     owner: consul
     group: consul
     mode: '0750'
-
-- name: Install Consul systemd service
-  copy:
-    src: consul.service
-    dest: /etc/systemd/system
-    mode: '644'
-  notify:
-    - 'enable consul'
-
-- name: Fetch Consul
-  get_url:
-    url: '{{ consul_package.url }}'
-    checksum: '{{ consul_package.sum }}'
-    dest: '{{ package_download_directory }}/{{ consul_package.filename }}'
-
-- name: Install unzip
-  package:
-    name: unzip
-    state: present
-
-- name: Install Consul binary
-  unarchive:
-    src: '{{ package_download_directory }}/{{ consul_package.filename }}'
-    dest: /usr/local/sbin
-    remote_src: yes
-    owner: root
-    group: root
-  notify:
-    - 'restart consul'
 
 - name: Install Consul server config
   template:

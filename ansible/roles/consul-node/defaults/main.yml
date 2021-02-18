@@ -1,9 +1,5 @@
-consul_package:
-  version: '1.9.3'
-  filename: 'consul_1.9.3_linux_amd64.zip'
-  url: 'https://releases.hashicorp.com/consul/1.9.3/consul_1.9.3_linux_amd64.zip'
-  sum: 'sha256:2ec9203bf370ae332f6584f4decc2f25097ec9ef63852cd4ef58fdd27a313577'
-package_download_directory: '/var/download'
+hashicorp_apt_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
+hashicorp_repository: 'deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main'
 
 consul_gossip_encrypt_key: ''
 consul_datacenter: ''
