@@ -4,14 +4,14 @@ resource "google_dns_managed_zone" "bergmans" {
     name        = "bergmans"
     dns_name    = "bergmans.us."
     description = "bergmans.us"
-    project     = "bergmans-services"
+    project     = var.gcloud_project
 }
 
 resource "google_dns_managed_zone" "bergmanhouse" {
     name        = "bergmanhouse"
     dns_name    = "bergman.house."
     description = "bergman.house"
-    project     = "bergmans-services"
+    project     = var.gcloud_project
 }
 
 //
