@@ -1,6 +1,9 @@
 job "moneydance" {
     datacenters = ["house"]
     type = "service"
+    vault {
+        policies = ["access-secrets"]
+    }
 
     group "moneydance" {
         task "moneydance" {
@@ -24,7 +27,10 @@ job "moneydance" {
                 ]
             }
             template {
-                source = "/config/moneydance.env"
+                data = <<EOH
+MONEYDANCE_UID="{{with secret "secret/moneydance"}}{{.Data.uid}}{{end}}"
+HTTP_PASSWORD="{{with secret "secret/moneydance"}}{{.Data.password}}{{end}}"
+EOH
                 destination = "secrets/moneydance.env"
                 env = true
             }
