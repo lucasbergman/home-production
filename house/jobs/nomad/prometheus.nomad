@@ -1,6 +1,9 @@
 job "prometheus" {
     datacenters = ["house"]
     type = "service"
+    vault {
+        policies = ["access-secrets"]
+    }
 
     group "monitoring" {
         task "frontend" {
@@ -121,7 +124,7 @@ EOF
                     {
                         type = "bind"
                         target = "/etc/alertmanager/alertmanager.yml"
-                        source = "/config/prometheus/alertmanager.yml"
+                        source = "local/alertmanager.yml"
                         readonly = true
                     },
                     {
@@ -135,6 +138,14 @@ EOF
                     "--config.file=/etc/alertmanager/alertmanager.yml",
                     "--storage.path=/alertmanager",
                 ]
+            }
+            template {
+                data = <<EOF
+${config_alertmanager}
+EOF
+                destination = "local/alertmanager.yml"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
             }
             service {
                 port = "http"

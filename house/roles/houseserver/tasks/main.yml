@@ -122,14 +122,6 @@
     group: nogroup
     mode: '750'
 
-- name: Make prometheus config directory
-  file:
-    path: /config/prometheus
-    state: directory
-    owner: root
-    group: adm
-    mode: '751'
-
 - name: Make alertmanager storage directory
   file:
     path: /storage/alertmanager
@@ -137,14 +129,6 @@
     owner: nobody
     group: nogroup  # alertmanager is hard-coded to run as nobody:nogroup
     mode: '750'
-
-- name: Install alertmanager config
-  copy:
-    src: prometheus/alertmanager.yml
-    dest: /config/prometheus
-    owner: root
-    group: nogroup  # alertmanager is hard-coded to run as nobody:nogroup
-    mode: '640'
 
 ##############################
 # Turn on grafana

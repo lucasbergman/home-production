@@ -38,6 +38,7 @@ resource "nomad_job" "prometheus" {
         config_prometheus = file("conf/prometheus/prometheus.yml")
         config_rules_node = file("conf/prometheus/node.rules")
         config_rules_prober = file("conf/prometheus/prober.rules")
+        config_alertmanager = file("conf/prometheus/alertmanager.yml")
         config_blackbox = file("conf/prometheus/blackbox.yml")
     })
 }

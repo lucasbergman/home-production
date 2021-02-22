@@ -1,0 +1,25 @@
+global:
+  smtp_smarthost: 'greywind.bergmans.us:25'
+  smtp_from: 'alertmanager@bergmans.us'
+  smtp_auth_username: 'alertmanager@bergmans.us'
+  smtp_auth_password: '{{with secret "secret/alertmanager"}}{{.Data.smtp_password}}{{end}}'
+  smtp_require_tls: true
+
+# default route and receiver
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  receiver: 'bergmansmail'
+  routes:
+    - match:
+        severity: 'page'
+      receiver: 'pagerduty'
+
+receivers:
+  - name: 'bergmansmail'
+    email_configs:
+      - to: 'lucas+alerts@bergmans.us'
+      - to: 'cristin+alerts@bergmans.us'
+
+  - name: 'pagerduty'
+    pagerduty_configs:
+      - service_key: '{{with secret "secret/alertmanager"}}{{.Data.pagerduty_key}}{{end}}'
