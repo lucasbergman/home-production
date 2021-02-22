@@ -12,4 +12,8 @@ house_uids = {
         uid = "999"
         gid = "999"
     }
+    unifi = {
+        uid = "997"
+        gid = "997"
+    }
 }

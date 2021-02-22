@@ -16,10 +16,9 @@ job "unifi" {
                     },
                 ]
             }
-            template {
-                source = "/config/unifi.env"
-                destination = "secrets/unifi.env"
-                env = true
+            env {
+                PUID = "${uids.uid}"
+                PGID = "${uids.gid}"
             }
             service {
                 port = "ui"

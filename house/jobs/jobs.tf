@@ -58,5 +58,8 @@ resource "nomad_job" "synapse" {
 }
 
 resource "nomad_job" "unifi" {
-    jobspec = templatefile("nomad/unifi.nomad", {image = var.images.unifi})
+    jobspec = templatefile("nomad/unifi.nomad", {
+        image = var.images.unifi
+        uids = var.house_uids.unifi
+    })
 }

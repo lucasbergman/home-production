@@ -309,26 +309,3 @@
     owner: root
     group: adm
     mode: '750'
-
-##############################
-# Gather user/group data
-##############################
-
-# It's a hack that we gather getent at this stage; we're counting on
-# only using it for these environment variables and not above
-
-- name: Get user database
-  getent:
-    database: passwd
-
-- name: Get group database
-  getent:
-    database: group
-
-- name: Install Unifi environment config
-  template:
-    src: unifi.env
-    dest: /config/
-    owner: root
-    group: adm
-    mode: '640'
