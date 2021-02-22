@@ -1,11 +1,11 @@
 resource vault_policy "nomad_access_secrets" {
     name = "access-secrets"
-    policy = file("access-secrets-policy.hcl")
+    policy = file("nomad/access-secrets-policy.hcl")
 }
 
 resource vault_policy "nomad_server" {
     name = "nomad-server"
-    policy = file("nomad-server-policy.hcl")
+    policy = file("nomad/nomad-server-policy.hcl")
 }
 
 resource "vault_token_auth_backend_role" "nomad_cluster" {

@@ -1,5 +1,5 @@
 resource "nomad_job" "nginx" {
-    jobspec = templatefile("nginx.nomad", {
+    jobspec = templatefile("nomad/nginx.nomad", {
         image = var.images.nginx
         config_default = file("conf/nginx/default.conf")
         config_grafana = file("conf/nginx/grafana.conf")
@@ -12,29 +12,29 @@ resource "nomad_job" "nginx" {
 }
 
 resource "nomad_job" "grafana" {
-    jobspec = templatefile("grafana.nomad", {
+    jobspec = templatefile("nomad/grafana.nomad", {
         image = var.images.grafana
         config_grafana = file("conf/grafana.ini")
     })
 }
 
 resource "nomad_job" "homeassistant" {
-    jobspec = templatefile("homeassistant.nomad", {
+    jobspec = templatefile("nomad/homeassistant.nomad", {
         image = var.images.homeassistant
         config = file("conf/homeassistant/http.yml")
     })
 }
 
 resource "nomad_job" "moneydance" {
-    jobspec = file("moneydance.nomad")
+    jobspec = file("nomad/moneydance.nomad")
 }
 
 resource "nomad_job" "plex" {
-    jobspec = templatefile("plex.nomad", {image = var.images.plex})
+    jobspec = templatefile("nomad/plex.nomad", {image = var.images.plex})
 }
 
 resource "nomad_job" "prometheus" {
-    jobspec = templatefile("prometheus.nomad", {
+    jobspec = templatefile("nomad/prometheus.nomad", {
         image_alertmanager = var.images.prom_alertmanager
         image_blackbox = var.images.prom_blackbox
         image_prometheus = var.images.prom_prometheus
@@ -46,9 +46,9 @@ resource "nomad_job" "prometheus" {
 }
 
 resource "nomad_job" "synapse" {
-    jobspec = templatefile("synapse.nomad", {image = var.images.synapse})
+    jobspec = templatefile("nomad/synapse.nomad", {image = var.images.synapse})
 }
 
 resource "nomad_job" "unifi" {
-    jobspec = templatefile("unifi.nomad", {image = var.images.unifi})
+    jobspec = templatefile("nomad/unifi.nomad", {image = var.images.unifi})
 }
