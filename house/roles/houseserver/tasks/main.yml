@@ -341,14 +341,6 @@
     group: adm
     mode: '640'
 
-- name: Install Synapse environment config
-  template:
-    src: synapse.env
-    dest: /config/
-    owner: root
-    group: adm
-    mode: '640'
-
 - name: Install Unifi environment config
   template:
     src: unifi.env
