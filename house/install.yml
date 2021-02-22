@@ -17,4 +17,9 @@
     - role: '../ansible/roles/nomad-node'
       vars:
         nomad_storage_directory: /storage/cluster/nomad
+    - role: '../ansible/roles/vault-node'
+      vars:
+        vault_unseal_gcpckms: true
+        vault_unseal_gcpckms_project: 'bergmans-services'
+        vault_unseal_gcpckms_key_ring: 'vault-home'
     - houseserver

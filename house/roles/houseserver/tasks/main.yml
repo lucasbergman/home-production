@@ -57,6 +57,26 @@
     mode: '755'
 
 ##############################
+# Set up Vault unseal and Nomad-to-Vault connection
+##############################
+
+- name: Install Vault GCP credentials
+  copy:
+    src: vaultcreds.json
+    dest: /etc/vault.d/creds.json
+    mode: '0640'
+    owner: vault
+    group: vault
+
+- name: Install Nomad Vault config
+  copy:
+    src: nomadvault.hcl
+    dest: /etc/nomad.d/vault.hcl
+    mode: '0640'
+    owner: nomad
+    group: nomad
+
+##############################
 # Configure letsencrypt support
 ##############################
 
