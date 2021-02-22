@@ -28,11 +28,13 @@ job "moneydance" {
             }
             template {
                 data = <<EOH
-MONEYDANCE_UID="{{with secret "secret/moneydance"}}{{.Data.uid}}{{end}}"
 HTTP_PASSWORD="{{with secret "secret/moneydance"}}{{.Data.password}}{{end}}"
 EOH
                 destination = "secrets/moneydance.env"
                 env = true
+            }
+            env {
+                MONEYDANCE_UID = "${uids.uid}"
             }
             service {
                 port = "http"

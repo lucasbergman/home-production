@@ -1,9 +1,6 @@
 job "synapse" {
     datacenters = ["house"]
     type = "service"
-    vault {
-        policies = ["access-secrets"]
-    }
 
     group "synapse" {
         task "synapse" {
@@ -27,15 +24,9 @@ job "synapse" {
                     },
                 ]
             }
-            template {
-                data = <<EOH
-UID="{{with secret "secret/synapse"}}{{.Data.uid}}{{end}}"
-GID="{{with secret "secret/synapse"}}{{.Data.gid}}{{end}}"
-EOH
-                destination = "secrets/synapse.env"
-                env = true
-            }
             env {
+                UID = "${uids.uid}"
+                GID = "${uids.gid}"
                 SYNAPSE_SERVER_NAME = "bergman.house"
                 SYNAPSE_REPORT_STATS = "yes"
                 SYNAPSE_ENABLE_REGISTRATION = "no"

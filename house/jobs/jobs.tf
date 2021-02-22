@@ -26,11 +26,16 @@ resource "nomad_job" "homeassistant" {
 }
 
 resource "nomad_job" "moneydance" {
-    jobspec = file("nomad/moneydance.nomad")
+    jobspec = templatefile("nomad/moneydance.nomad", {
+        uids = var.house_uids.moneydance
+    })
 }
 
 resource "nomad_job" "plex" {
-    jobspec = templatefile("nomad/plex.nomad", {image = var.images.plex})
+    jobspec = templatefile("nomad/plex.nomad", {
+        image = var.images.plex
+        uids = var.house_uids.plex
+    })
 }
 
 resource "nomad_job" "prometheus" {
@@ -46,7 +51,10 @@ resource "nomad_job" "prometheus" {
 }
 
 resource "nomad_job" "synapse" {
-    jobspec = templatefile("nomad/synapse.nomad", {image = var.images.synapse})
+    jobspec = templatefile("nomad/synapse.nomad", {
+        image = var.images.synapse
+        uids = var.house_uids.synapse
+    })
 }
 
 resource "nomad_job" "unifi" {
