@@ -1,0 +1,8 @@
+hashicorp_apt_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
+hashicorp_repository: 'deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main'
+
+vault_unseal_gcpckms: false
+vault_unseal_gcpckms_project: ''
+vault_unseal_gcpckms_region: 'global'
+vault_unseal_gcpckms_key_ring: 'vault'
+vault_unseal_gcpckms_key: 'seal'

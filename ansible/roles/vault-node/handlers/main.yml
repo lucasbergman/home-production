@@ -1,0 +1,4 @@
+- name: restart vault
+  systemd:
+    name: vault.service
+    state: restarted

@@ -1,0 +1,22 @@
+- name: Get HashiCorp upstream APT GPG key
+  apt_key:
+    id: '{{ hashicorp_apt_key }}'
+    keyserver: 'hkp://pool.sks-keyservers.net'
+    state: present
+
+- name: Configure HashiCorp upstream APT repository
+  apt_repository:
+    repo: '{{ hashicorp_repository }}'
+    state: present
+
+- name: Install Vault
+  apt:
+    pkg: ['vault']
+
+- name: Install Vault config
+  template:
+    src: 'vault.hcl'
+    dest: '/etc/vault.d/vault.hcl'
+    owner: vault
+    group: vault
+  notify: ['restart vault']
