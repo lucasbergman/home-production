@@ -325,14 +325,6 @@
   getent:
     database: group
 
-- name: Install Plex environment config
-  template:
-    src: plex.env
-    dest: /config/
-    owner: root
-    group: adm
-    mode: '640'
-
 - name: Install Unifi environment config
   template:
     src: unifi.env

@@ -1,6 +1,9 @@
 job "plex" {
     datacenters = ["house"]
     type = "service"
+    vault {
+        policies = ["access-secrets"]
+    }
 
     group "plex" {
         task "plex" {
@@ -28,7 +31,12 @@ job "plex" {
                 ]
             }
             template {
-                source = "/config/plex.env"
+                data = <<EOH
+HOSTNAME=plex.bergman.house
+TZ=America/Chicago
+PUID={{with secret "secret/plex"}}{{.Data.uid}}{{end}}
+PGID={{with secret "secret/plex"}}{{.Data.gid}}{{end}}
+EOH
                 destination = "secrets/plex.env"
                 env = true
             }
