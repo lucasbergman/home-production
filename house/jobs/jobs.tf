@@ -47,6 +47,7 @@ resource "nomad_job" "synapse" {
     jobspec = templatefile("nomad/synapse.nomad", {
         image = var.images.synapse
         uids = var.house_uids.synapse
+        config = file("conf/synapse.yml")
     })
 }
 

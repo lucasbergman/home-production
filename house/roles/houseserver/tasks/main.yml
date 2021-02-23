@@ -170,14 +170,6 @@
     group: matrix
     mode: '700'
 
-- name: Install matrix server config
-  copy:
-    src: synapse.yml
-    dest: /storage/matrix/homeserver.yaml
-    owner: matrix
-    group: matrix
-    mode: '600'
-
 ##############################
 # Turn on Plex
 ##############################

@@ -1,6 +1,9 @@
 job "synapse" {
     datacenters = ["house"]
     type = "service"
+    vault {
+        policies = ["access-secrets"]
+    }
 
     group "synapse" {
         task "synapse" {
@@ -18,11 +21,24 @@ job "synapse" {
                     },
                     {
                         type = "bind"
+                        target = "/data/homeserver.yaml"
+                        source = "local/synapse.yml"
+                    },
+                    {
+                        type = "bind"
                         target = "/tls"
                         source = "/storage/tls"
                         readonly = true
                     },
                 ]
+            }
+            template {
+                data = <<EOF
+${config}
+EOF
+                destination = "local/synapse.yml"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
             }
             env {
                 UID = "${uids.uid}"
@@ -32,7 +48,6 @@ job "synapse" {
                 SYNAPSE_ENABLE_REGISTRATION = "no"
                 SYNAPSE_LOG_LEVEL = "INFO"
                 SYNAPSE_NO_TLS = "yes"
-
             }
             service {
                 port = "http"
