@@ -30,6 +30,6 @@ images = {
     }
     unifi = {
         name = "linuxserver/unifi-controller"
-        version = "6.0.45-ls98"
+        version = "6.1.71-ls102"
     }
 }
