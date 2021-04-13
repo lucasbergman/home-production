@@ -2,11 +2,11 @@
 images = {
     nginx = {
         name = "nginx"
-        version = "1.19.7"
+        version = "1.19.10"
     }
     grafana = {
         name = "grafana/grafana"
-        version = "7.4.2"
+        version = "7.5.3"
     }
     plex = {
         name = "linuxserver/plex"
@@ -22,11 +22,11 @@ images = {
     }
     prom_prometheus = {
         name = "prom/prometheus"
-        version = "v2.25.0"
+        version = "v2.26.0"
     }
     synapse = {
         name = "matrixdotorg/synapse"
-        version = "v1.27.0"
+        version = "v1.31.0"
     }
     unifi = {
         name = "linuxserver/unifi-controller"
