@@ -17,6 +17,10 @@ groups:
         expr: node_filesystem_avail
       - record: node:filesystem_avail:fraction
         expr: node_filesystem_avail / node_filesystem_size
+      - record: node:disk_write_ms:rate5m
+        expr: rate(node_disk_write_time_ms{host="hedwig",device!~"loop.*"}[5m])
+      - record: node:disk_read_ms:rate5m
+        expr: rate(node_disk_read_time_ms{host="hedwig",device!~"loop.*"}[5m])
 
   - name: node_cpu
     rules:
