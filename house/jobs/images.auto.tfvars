@@ -2,15 +2,15 @@
 images = {
     nginx = {
         name = "nginx"
-        version = "1.19.10"
+        version = "1.20.0"
     }
     grafana = {
         name = "grafana/grafana"
-        version = "7.5.3"
+        version = "7.5.5"
     }
     plex = {
         name = "linuxserver/plex"
-        version = "1.21.2.3943-a91458577-ls21"
+        version = "1.22.3.4392-d7c624def-ls45"
     }
     prom_alertmanager = {
         name = "prom/alertmanager"
@@ -26,7 +26,7 @@ images = {
     }
     synapse = {
         name = "matrixdotorg/synapse"
-        version = "v1.31.0"
+        version = "v1.33.1"
     }
     unifi = {
         name = "linuxserver/unifi-controller"
