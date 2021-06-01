@@ -87,7 +87,11 @@ relay_domains = phoenixchicago.com
 relay_recipient_maps = hash:/config/virtual
 
 # Virtual mailbox/alias domains
-virtual_mailbox_domains = bergmans.us, bergman.house, smartmousetravel.com
+virtual_mailbox_domains =
+  bergmans.us,
+  bergman.house,
+  smartgirltravel.com,
+  smartmousetravel.com
 virtual_alias_maps = hash:/config/virtual
 virtual_mailbox_base = /mail/users
 virtual_mailbox_maps = hash:/config/vmailbox
