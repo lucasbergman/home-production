@@ -8,6 +8,10 @@ images = {
         name = "grafana/grafana"
         version = "7.5.5"
     }
+    homeassistant = {
+        name = "homeassistant/home-assistant"
+        version = "2021.6.4"
+    }
     plex = {
         name = "linuxserver/plex"
         version = "1.22.3.4392-d7c624def-ls45"

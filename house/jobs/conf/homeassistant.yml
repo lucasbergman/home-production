@@ -1,0 +1,10 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+http:
+  server_host: {{ env "NOMAD_IP_http" }}
+  server_port: {{ env "NOMAD_PORT_http" }}

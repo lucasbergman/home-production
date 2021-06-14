@@ -1,1 +1,0 @@
-server_port: {{ env "NOMAD_PORT_http" }}
