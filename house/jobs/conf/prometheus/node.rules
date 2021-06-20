@@ -21,6 +21,10 @@ groups:
         expr: rate(node_disk_write_time_ms{host="hedwig",device!~"loop.*"}[5m])
       - record: node:disk_read_ms:rate5m
         expr: rate(node_disk_read_time_ms{host="hedwig",device!~"loop.*"}[5m])
+      - record: node:disk_write_ms:rate1m
+        expr: rate(node_disk_write_time_ms{host="hedwig",device!~"loop.*"}[1m])
+      - record: node:disk_read_ms:rate1m
+        expr: rate(node_disk_read_time_ms{host="hedwig",device!~"loop.*"}[1m])
 
   - name: node_cpu
     rules:
