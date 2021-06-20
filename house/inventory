@@ -3,6 +3,7 @@
 all:
   hosts:
     hedwig.bergman.house:
+      ansible_python_interpreter: '/usr/bin/python3'
       is_production: true
       ansible_host: 127.0.0.1
       ansible_connection: local
