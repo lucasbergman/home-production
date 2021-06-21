@@ -46,6 +46,15 @@ scrape_configs:
         labels:
           host: hedwig
 
+  - job_name: 'hass'
+    metrics_path: '/api/prometheus'
+    bearer_token: '{{ with secret "secret/homeassistant" }}{{ .Data.prometheus_token }}{{ end }}'
+    static_configs:
+      - targets:
+          {{- range service "homeassistant" }}
+          - '{{ .Address }}:{{ .Port }}'
+          {{- end }}
+
   - job_name: 'smartmouse'
     metrics_path: '/probe'
     params:
