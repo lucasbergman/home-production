@@ -1,0 +1,6 @@
+# -*- mode: yaml -*-
+groups:
+  - name: house_climate
+    rules:
+      - record: house:temperature_f
+        expr: hass_current_temperature_c{domain="climate"} * 9/5 + 32

@@ -41,6 +41,14 @@ EOF
             }
             template {
                 data = <<EOF
+${config_rules_house}
+EOF
+                destination = "local/prometheus/house.rules"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
+            }
+            template {
+                data = <<EOF
 ${config_rules_node}
 EOF
                 destination = "local/prometheus/node.rules"
