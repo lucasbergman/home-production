@@ -8,3 +8,11 @@ tts:
 http:
   server_host: {{ env "NOMAD_IP_http" }}
   server_port: {{ env "NOMAD_PORT_http" }}
+
+{{ with secret "secret/homeassistant" }}
+nest:
+  client_id: "{{ .Data.nest_client_id }}"
+  client_secret: "{{ .Data.nest_secret }}"
+  project_id: "{{ .Data.nest_project_id }}"
+  subscriber_id: "{{ .Data.nest_subscription }}"
+{{ end }}

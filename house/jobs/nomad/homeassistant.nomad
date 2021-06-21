@@ -1,6 +1,9 @@
 job "homeassistant" {
     datacenters = ["house"]
     type = "service"
+    vault {
+        policies = ["access-secrets"]
+    }
 
     group "homeassistant" {
         task "homeassistant" {
