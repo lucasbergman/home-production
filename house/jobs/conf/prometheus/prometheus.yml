@@ -50,6 +50,9 @@ scrape_configs:
   - job_name: 'hass'
     metrics_path: '/api/prometheus'
     bearer_token: '{{ with secret "secret/homeassistant" }}{{ .Data.prometheus_token }}{{ end }}'
+    relabel_configs:
+      - target_label: instance
+        replacement: homeassistant
     static_configs:
       - targets:
           {{- range service "homeassistant" }}
