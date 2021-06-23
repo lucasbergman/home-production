@@ -1,14 +1,16 @@
 #jinja2:block_start_string:'[%', block_end_string:'%]', variable_start_string:'[[', variable_end_string:']]'
 ui = true
 
+[% if vault_storage_consul %]
+storage "consul" {
+    address = "127.0.0.1:8500"
+    path    = "vault"
+}
+[% else %]
 storage "file" {
     path = "/opt/vault/data"
 }
-
-#storage "consul" {
-#  address = "127.0.0.1:8500"
-#  path    = "vault"
-#}
+[% endif %]
 
 listener "tcp" {
     address = "127.0.0.1:8200"
