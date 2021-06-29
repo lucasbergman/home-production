@@ -1,0 +1,23 @@
+load("@pytest_deps//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+py_library(
+    name = "latestimage",
+    srcs = ["latestimage.py"],
+)
+
+filegroup(
+    name = "testdata",
+    testonly = 1,
+    srcs = glob(["testdata/*.json"]),
+)
+
+py_test(
+    name = "latestimage_test",
+    srcs = ["latestimage_test.py"],
+    data = [":testdata"],
+    deps = [
+        ":latestimage",
+        requirement("pytest"),
+    ],
+)
