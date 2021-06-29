@@ -23,3 +23,8 @@ pip_install(
     name = "gcloud_deps",
     requirements = "//tools:gcloud-requirements.txt",
 )
+
+pip_install(
+    name = "pytest_deps",
+    requirements = "//tools:pytest-requirements.txt",
+)
