@@ -3,9 +3,9 @@ groups:
   - name: node_net
     rules:
       - record: node:receive_bytes
-        expr: node_network_receive_bytes{device=~"^(en|eth).*"}
+        expr: node_network_receive_bytes_total{device=~"^(en|eth).*"}
       - record: node:transmit_bytes
-        expr: node_network_transmit_bytes{device=~"^(en|eth).*"}
+        expr: node_network_transmit_bytes_total{device=~"^(en|eth).*"}
       - record: node:receive_bytes:rate5m
         expr: rate(node:receive_bytes[5m])
       - record: node:transmit_bytes:rate5m
@@ -13,25 +13,25 @@ groups:
 
   - name: node_fs
     rules:
-      - record: node:filesystem_avail
-        expr: node_filesystem_avail
+      - record: node:filesystem_avail_bytes
+        expr: node_filesystem_avail_bytes
       - record: node:filesystem_avail:fraction
-        expr: node_filesystem_avail / node_filesystem_size
-      - record: node:disk_write_ms:rate5m
-        expr: rate(node_disk_write_time_ms{host="hedwig",device!~"loop.*"}[5m])
-      - record: node:disk_read_ms:rate5m
-        expr: rate(node_disk_read_time_ms{host="hedwig",device!~"loop.*"}[5m])
-      - record: node:disk_write_ms:rate1m
-        expr: rate(node_disk_write_time_ms{host="hedwig",device!~"loop.*"}[1m])
-      - record: node:disk_read_ms:rate1m
-        expr: rate(node_disk_read_time_ms{host="hedwig",device!~"loop.*"}[1m])
+        expr: node_filesystem_avail_bytes / node_filesystem_size_bytes
+      - record: node:disk_write_seconds:rate5m
+        expr: rate(node_disk_write_time_seconds_total{host="hedwig",device!~"loop.*"}[5m])
+      - record: node:disk_read_seconds:rate5m
+        expr: rate(node_disk_read_time_seconds_total{host="hedwig",device!~"loop.*"}[5m])
+      - record: node:disk_write_seconds:rate1m
+        expr: rate(node_disk_write_time_seconds_total{host="hedwig",device!~"loop.*"}[1m])
+      - record: node:disk_read_seconds:rate1m
+        expr: rate(node_disk_read_time_seconds_total{host="hedwig",device!~"loop.*"}[1m])
 
   - name: node_cpu
     rules:
       - record: node:cpu:rate1m
-        expr: sum(rate(node_cpu[1m])) by (host, mode)
+        expr: sum(rate(node_cpu_seconds_total[1m])) by (host, mode)
       - record: node:cpu:rate5m
-        expr: sum(rate(node_cpu[5m])) by (host, mode)
+        expr: sum(rate(node_cpu_seconds_total[5m])) by (host, mode)
 
   - name: node_router
     rules:
