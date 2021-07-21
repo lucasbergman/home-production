@@ -17,7 +17,7 @@ job "synapse" {
                     {
                         type = "bind"
                         target = "/data"
-                        source = "/storage/matrix"
+                        source = "/var/matrix"
                     },
                     {
                         type = "bind"

@@ -12,7 +12,7 @@ job "unifi" {
                     {
                         type = "bind"
                         target = "/config"
-                        source = "/storage/unifi"
+                        source = "/var/unifi"
                     },
                 ]
             }

@@ -116,7 +116,7 @@
 
 - name: Make prometheus storage directory
   file:
-    path: /storage/cluster/prometheus
+    path: /var/prometheus
     state: directory
     owner: nobody
     group: nogroup
@@ -124,7 +124,7 @@
 
 - name: Make alertmanager storage directory
   file:
-    path: /storage/alertmanager
+    path: /var/alertmanager
     state: directory
     owner: nobody
     group: nogroup  # alertmanager is hard-coded to run as nobody:nogroup
@@ -160,11 +160,11 @@
     create_home: false
     password_lock: true
     system: true
-    home: /storage/matrix
+    home: /var/matrix
 
 - name: Make matrix server storage directory
   file:
-    path: /storage/matrix
+    path: /var/matrix
     state: directory
     owner: matrix
     group: matrix
@@ -248,11 +248,11 @@
     group: unifi
     create_home: false
     password_lock: true
-    home: /storage/unifi
+    home: /var/unifi
 
 - name: Make unifi storage directory
   file:
-    path: /storage/unifi
+    path: /var/unifi
     state: directory
     owner: unifi
     group: unifi
@@ -260,7 +260,7 @@
 
 - name: Make unifi config directory
   file:
-    path: '/storage/unifi/data/sites/{{ unifi_site_name }}'
+    path: '/var/unifi/data/sites/{{ unifi_site_name }}'
     state: directory
     owner: unifi
     group: unifi
@@ -269,7 +269,7 @@
 - name: Install unifi gateway config
   copy:
     src: 'usg-config.json'
-    dest: '/storage/unifi/data/sites/{{ unifi_site_name}}/config.gateway.json'
+    dest: '/var/unifi/data/sites/{{ unifi_site_name}}/config.gateway.json'
     owner: unifi
     group: unifi
     mode: '640'

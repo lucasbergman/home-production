@@ -20,7 +20,7 @@ job "prometheus" {
                     {
                         type = "bind"
                         target = "/prometheus"
-                        source = "/storage/cluster/prometheus"
+                        source = "/var/prometheus"
                     },
                 ]
                 args = [
@@ -138,7 +138,7 @@ EOF
                     {
                         type = "bind"
                         target = "/alertmanager"
-                        source = "/storage/alertmanager"
+                        source = "/var/alertmanager"
                     },
                 ]
                 args = [
