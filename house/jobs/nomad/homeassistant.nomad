@@ -20,16 +20,32 @@ job "homeassistant" {
                     {
                         type = "bind"
                         target = "/config/configuration.yaml"
-                        source = "local/conf.yml"
+                        source = "local/configuration.yaml"
+                    },
+                    {
+                        type = "bind"
+                        target = "/config/automations.yaml"
+                        source = "local/automations.yaml"
                     },
                 ]
             }
             template {
                 data = <<EOF
-${config}
+${config_main}
 EOF
-                destination = "local/conf.yml"
+                destination = "local/configuration.yaml"
                 change_mode = "restart"
+            }
+            template {
+                data = <<EOF
+${config_automation}
+EOF
+                destination = "local/automations.yaml"
+                change_mode = "restart"
+
+                # Swap delimiters to avoid collision with Home Assistant Jinja2
+                left_delimiter = "[["
+                right_delimiter = "]]"
             }
             service {
                 port = "http"

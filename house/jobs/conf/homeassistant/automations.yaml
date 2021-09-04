@@ -1,0 +1,41 @@
+- id: '1630788392994'
+  alias: AC Safety Office
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: /20
+  condition:
+  - condition: numeric_state
+    entity_id: weather.home
+    attribute: temperature
+    below: '60'
+  - condition: template
+    value_template: "{{ states.climate.office.state == 'cool' }}"
+  action:
+  - device_id: 0b2584b86cddf81019c077cd6923b175
+    domain: climate
+    entity_id: climate.office
+    type: set_hvac_mode
+    hvac_mode: 'off'
+  mode: single
+
+- id: '1630788550176'
+  alias: AC Safety Kitchen
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: /20
+  condition:
+  - condition: numeric_state
+    entity_id: weather.home
+    attribute: temperature
+    below: '60'
+  - condition: template
+    value_template: "{{ states.climate.kitchen.state == 'cool' }}"
+  action:
+  - device_id: 76c6f7b15d6539d0aca66fefdeda734a
+    domain: climate
+    entity_id: climate.kitchen
+    type: set_hvac_mode
+    hvac_mode: 'off'
+  mode: single

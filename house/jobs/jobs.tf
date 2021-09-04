@@ -21,7 +21,8 @@ resource "nomad_job" "grafana" {
 resource "nomad_job" "homeassistant" {
     jobspec = templatefile("nomad/homeassistant.nomad", {
         image = var.images.homeassistant
-        config = file("conf/homeassistant.yml")
+        config_main = file("conf/homeassistant/configuration.yaml")
+        config_automation = file("conf/homeassistant/automations.yaml")
     })
 }
 
