@@ -2,23 +2,23 @@
 images = {
     nginx = {
         name = "nginx"
-        version = "1.21.0"
+        version = "1.21.3"
     }
     grafana = {
         name = "grafana/grafana"
-        version = "8.0.3"
+        version = "8.1.3"
     }
     homeassistant = {
         name = "homeassistant/home-assistant"
-        version = "2021.6.6"
+        version = "2021.9.6"
     }
     plex = {
         name = "linuxserver/plex"
-        version = "1.23.3.4707-ebb5fe9f3-ls58"
+        version = "1.24.2.4973-2b1b51db9-ls74"
     }
     prom_alertmanager = {
         name = "prom/alertmanager"
-        version = "v0.22.2"
+        version = "v0.23.0"
     }
     prom_blackbox = {
         name = "prom/blackbox-exporter"
@@ -26,11 +26,11 @@ images = {
     }
     prom_prometheus = {
         name = "prom/prometheus"
-        version = "v2.28.0"
+        version = "v2.30.0"
     }
     synapse = {
         name = "matrixdotorg/synapse"
-        version = "v1.36.0"
+        version = "v1.42.0"
     }
     unifi = {
         name = "linuxserver/unifi-controller"
