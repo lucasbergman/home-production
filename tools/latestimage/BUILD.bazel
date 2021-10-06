@@ -1,8 +1,13 @@
 load("@pytest_deps//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
-py_library(
+py_binary(
     name = "latestimage",
+    srcs = ["latestimage.py"],
+)
+
+py_library(
+    name = "latestimage_lib",
     srcs = ["latestimage.py"],
 )
 
@@ -17,7 +22,7 @@ py_test(
     srcs = ["latestimage_test.py"],
     data = [":testdata"],
     deps = [
-        ":latestimage",
+        ":latestimage_lib",
         requirement("pytest"),
     ],
 )
