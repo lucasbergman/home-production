@@ -5,7 +5,7 @@ docker_repository: "deb [arch=amd64] https://download.docker.com/linux/{{ ansibl
 docker_apt_package_name: "{{ docker_version }}~{{ docker_edition }}~3-0~{{ ansible_distribution | lower }}"
 
 image_versions:
-  certbot: 'v0.40.1'
+  certbot: 'v1.20.0'
   dovecot: '2021101101'
   postfix: '2021101101'
 dovecot_config_dir: '/config/dovecot'
