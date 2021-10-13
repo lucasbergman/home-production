@@ -6,15 +6,15 @@ images = {
     }
     grafana = {
         name = "grafana/grafana"
-        version = "8.1.7"
+        version = "8.2.1"
     }
     homeassistant = {
         name = "homeassistant/home-assistant"
-        version = "2021.9.7"
+        version = "2021.10.4"
     }
     plex = {
         name = "linuxserver/plex"
-        version = "1.24.3"
+        version = "1.24.4"
     }
     prom_alertmanager = {
         name = "prom/alertmanager"
