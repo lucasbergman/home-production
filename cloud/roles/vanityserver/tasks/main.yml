@@ -235,6 +235,28 @@
   notify: restart dovecot
 
 ##############################
+# Install Murmur
+##############################
+
+- name: Make volume for Murmur data
+  docker_volume:
+    name: murmur
+
+- name: Create Murmur config directory
+  file:
+    path: '{{ murmur_config_dir }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: Install Murmur config files
+  template:
+    src: 'murmur.ini'
+    dest: '{{ murmur_config_dir }}/'
+    mode: '0644'
+
+##############################
 # Install Docker services
 ##############################
 

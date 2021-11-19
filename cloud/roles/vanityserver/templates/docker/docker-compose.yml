@@ -43,8 +43,30 @@ services:
     network_mode: host
     restart: unless-stopped
 
+  murmur:
+    image: 'gcr.io/bergmans-services/murmur:{{ image_versions["murmur"] }}'
+    container_name: murmur
+    volumes:
+      - type: bind
+        source: '{{ murmur_config_dir }}/murmur.ini'
+        target: '/etc/murmur.ini'
+      - type: volume
+        source: murmur
+        target: '/data'
+      - type: volume
+        source: tls
+        target: '/tls'
+    logging:
+      driver: syslog
+      options:
+        tag: murmur
+    network_mode: host
+    restart: unless-stopped
+
 volumes:
   mail:
+    external: true
+  murmur:
     external: true
   tls:
     external: true
