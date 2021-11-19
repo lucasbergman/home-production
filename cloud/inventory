@@ -1,2 +1,2 @@
 [vanityserver]
-greywind.bergmans.us ansible_user=root ansible_host=45.79.142.74
+greywind.bergmans.us ansible_user=root ansible_host=45.79.142.74 ansible_python_interpreter=/usr/bin/python3
