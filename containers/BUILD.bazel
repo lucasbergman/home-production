@@ -1,0 +1,46 @@
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
+load("@io_bazel_rules_docker//docker/util:run.bzl", "container_run_and_commit")
+
+container_run_and_commit(
+    name = "alpine_murmur",
+    commands = [
+        "apk add --no-cache murmur=1.3.4-r4",
+    ],
+    image = "@alpine_amd64//image",
+)
+
+container_image(
+    name = "murmur",
+    base = ":alpine_murmur",
+    cmd = [
+        "/usr/bin/murmurd",
+        "-fg",
+        "-ini",
+        "/etc/murmur.ini",
+    ],
+)
+
+container_push(
+    name = "murmur_push",
+    format = "Docker",
+    image = ":murmur",
+    registry = "gcr.io",
+    repository = "bergmans-services/murmur",
+    tag_file = ":tag",
+)
+
+# We're using an undocumented[1] Bazel trick to generate a Docker image tag
+# with information about the Git commit at HEAD. The workspace bazelrc adds
+# workspace_status_command=container/bazelstatus.sh to the build command.
+# Setting stamp=True here makes workspace status a dependency of this rule;
+# otherwise, stable-status.txt might not be available. This genrule sucks the
+# commit data out of stable-status.txt and dumps it in an output file we can
+# use in the container_push rule above.
+#
+# 1. https://github.com/bazelbuild/bazel/issues/4942
+genrule(
+    name = "gentag",
+    outs = ["tag"],
+    cmd = "grep ^STABLE_BUILD_SCM_HEAD bazel-out/stable-status.txt | awk '{print $$2}' > \"$@\"",
+    stamp = True,
+)

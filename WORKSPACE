@@ -40,3 +40,11 @@ load(
     "@io_bazel_rules_docker//container:container.bzl",
     "container_pull",
 )
+
+container_pull(
+    name = "alpine_amd64",
+    digest = "sha256:3eea5acfa729637baeedf1059a2a03d5a29356aac6baf65fea08762afa72321b",
+    registry = "index.docker.io",
+    repository = "alpine",
+    tag = "3.15",
+)
