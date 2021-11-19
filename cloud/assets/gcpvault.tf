@@ -28,8 +28,9 @@ resource "google_kms_key_ring" "vault_home" {
 
 resource "google_kms_crypto_key" "vault_home" {
     name = "seal"
-    rotation_period = "100000s"
     key_ring = google_kms_key_ring.vault_home.id
+    destroy_scheduled_duration = "86400s"
+    rotation_period = "604800s"
 }
 
 resource "google_kms_crypto_key_iam_member" "vault_home_encrypt" {
