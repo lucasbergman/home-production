@@ -139,6 +139,14 @@ resource "google_dns_record_set" "bergmans_a_mail" {
     ttl = 300
 }
 
+resource "google_dns_record_set" "bergmans_a_mumble" {
+    managed_zone = google_dns_managed_zone.bergmans.name
+    name = "mumble.bergmans.us."
+    type = "A"
+    rrdatas = ["45.79.142.74"]
+    ttl = 300
+}
+
 //
 // bergman.house records
 //
