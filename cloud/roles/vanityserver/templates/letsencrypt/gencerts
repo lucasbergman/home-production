@@ -3,6 +3,7 @@ set -e
 
 hosts=(
     {{ inventory_hostname }}
+    mumble.bergmans.us
 )
 
 for host in ${hosts[@]}; do
