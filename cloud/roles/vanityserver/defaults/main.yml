@@ -7,6 +7,6 @@ docker_apt_package_name: "{{ docker_version }}~{{ docker_edition }}~3-0~{{ ansib
 image_versions:
   certbot: 'v1.20.0'
   dovecot: '2021101101'
-  postfix: '2021101101'
+  postfix: '2019121301'
 dovecot_config_dir: '/config/dovecot'
 postfix_config_dir: '/config/postfix'
