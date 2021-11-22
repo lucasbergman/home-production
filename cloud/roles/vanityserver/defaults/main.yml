@@ -12,3 +12,7 @@ image_versions:
 dovecot_config_dir: '/config/dovecot'
 murmur_config_dir: '/config/murmur'
 postfix_config_dir: '/config/postfix'
+postmap_files:
+  - 'sasl_passwd'
+  - 'virtual'
+  - 'vmailbox'
