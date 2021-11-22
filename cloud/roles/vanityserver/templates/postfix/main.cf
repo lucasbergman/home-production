@@ -90,6 +90,7 @@ relay_recipient_maps = hash:/config/virtual
 virtual_mailbox_domains =
   bergmans.us,
   bergman.house,
+  boozyprofessor.com,
   smartgirltravel.com,
   smartmousetravel.com
 virtual_alias_maps = hash:/config/virtual
