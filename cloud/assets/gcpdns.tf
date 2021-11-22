@@ -14,6 +14,13 @@ resource "google_dns_managed_zone" "bergmanhouse" {
     project     = var.gcloud_project
 }
 
+resource "google_dns_managed_zone" "boozyprofessor" {
+    name        = "boozyprofessor"
+    dns_name    = "boozyprofessor.com."
+    description = "boozyprofessor.com"
+    project     = var.gcloud_project
+}
+
 //
 // bergmans.us records
 //
@@ -293,4 +300,45 @@ resource "google_dns_record_set" "bergmanhouse_matrix_a" {
     type = "A"
     rrdatas = ["75.150.214.42"]
     ttl = 300
+}
+
+//
+// boozyprofessor.com records
+//
+
+resource "google_dns_record_set" "boozyprofessor_ns" {
+    managed_zone = google_dns_managed_zone.boozyprofessor.name
+    name = google_dns_managed_zone.boozyprofessor.dns_name
+    type = "NS"
+    rrdatas = [
+        "ns-cloud-a1.googledomains.com.",
+        "ns-cloud-a2.googledomains.com.",
+        "ns-cloud-a3.googledomains.com.",
+        "ns-cloud-a4.googledomains.com.",
+    ]
+    ttl = 21600
+}
+
+resource "google_dns_record_set" "boozyprofessor_soa" {
+    managed_zone = google_dns_managed_zone.boozyprofessor.name
+    name = google_dns_managed_zone.boozyprofessor.dns_name
+    type = "SOA"
+    rrdatas = ["ns-cloud-a1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300"]
+    ttl = 21600
+}
+
+resource "google_dns_record_set" "boozyprofessor_mx" {
+    managed_zone = google_dns_managed_zone.boozyprofessor.name
+    name = google_dns_managed_zone.boozyprofessor.dns_name
+    type = "MX"
+    rrdatas = ["10 mail.boozyprofessor.com."]
+    ttl = 1800
+}
+
+resource "google_dns_record_set" "boozyprofessor_mail" {
+    managed_zone = google_dns_managed_zone.boozyprofessor.name
+    name = "mail.boozyprofessor.com."
+    type = "A"
+    rrdatas = ["45.79.142.74"]
+    ttl = 1800
 }
