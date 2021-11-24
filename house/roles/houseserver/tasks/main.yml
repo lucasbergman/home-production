@@ -285,3 +285,24 @@
     owner: root
     group: adm
     mode: '750'
+
+##############################
+# Set up Google Cloud Storage backup
+##############################
+
+- name: Install rclone
+  apt:
+    pkg:
+      - 'rclone'
+
+- name: Install rclone GCS config
+  copy:
+    src: 'backup/rclone.conf'
+    dest: '/etc/rclone-gcs.conf'
+    mode: '644'
+
+- name: Install rclone service account credentials file
+  copy:
+    src: 'backup/creds.json'
+    dest: '/etc/rclone-gcs-creds.json'
+    mode: '600'

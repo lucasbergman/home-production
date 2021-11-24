@@ -1,4 +1,5 @@
 /.terraform
+/rclonecreds.json
 /terraform.tfstate*
 /vaultcreds.json
 /*private*.tfvars
