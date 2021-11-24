@@ -13,3 +13,16 @@
     daemon_reload: yes
     state: started
     enabled: yes
+
+- name: enable consulbackup
+  systemd:
+    name: consulbackup.service
+    daemon_reload: yes
+    enabled: yes
+
+- name: enable consulbackup timer
+  systemd:
+    name: consulbackup.timer
+    daemon_reload: yes
+    state: started
+    enabled: yes

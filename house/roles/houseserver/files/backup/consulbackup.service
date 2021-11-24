@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Consul data backup script
+Wants=consulbackup.timer
+
+[Service]
+ExecStart=/usr/local/sbin/consulbackup
+
+[Install]
+WantedBy=multi-user.target

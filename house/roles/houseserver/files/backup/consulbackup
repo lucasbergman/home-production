@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+tmpout=$(mktemp)
+trap "rm -f $tmpout" EXIT
+tmpdir=$(dirname "$tmpout")
+
+consul snapshot save "$tmpout" >/dev/null
+id=$(consul snapshot inspect "$tmpout" |        \
+         grep --max-count=1 '^ Index' |         \
+         awk '{print $2}')
+d=$(date --utc +%Y%m%dT%H%M)
+newfile="$tmpdir"/"consul-${d}-${id}.snap"
+mv "$tmpout" "$newfile"
+trap "rm -f $newfile" EXIT
+rclone --config=/etc/rclone-gcs.conf copy       \
+       "$newfile"                               \
+       gcs:rclone-home-backup/consul/

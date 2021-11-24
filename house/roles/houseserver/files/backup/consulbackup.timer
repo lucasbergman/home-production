@@ -1,0 +1,11 @@
+[Unit]
+Description=Runs Consul backup script every day
+Requires=consul.service
+
+[Timer]
+Unit=consul.service
+OnUnitInactiveSec=24h
+RandomizedDelaySec=1h
+
+[Install]
+WantedBy=timers.target

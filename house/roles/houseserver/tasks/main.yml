@@ -306,3 +306,25 @@
     src: 'backup/creds.json'
     dest: '/etc/rclone-gcs-creds.json'
     mode: '600'
+
+- name: Install Consul backup script
+  copy:
+    src: 'backup/consulbackup'
+    dest: '/usr/local/sbin/'
+    mode: '755'
+
+- name: Install Consul backup systemd service
+  copy:
+    src: 'backup/consulbackup.service'
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable consulbackup'
+
+- name: Install Consul backup systemd timer
+  copy:
+    src: 'backup/consulbackup.timer'
+    dest: /etc/systemd/system
+    mode: '644'
+  notify:
+    - 'enable consulbackup timer'
