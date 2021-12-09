@@ -1,16 +1,16 @@
 - name: Get HashiCorp upstream APT GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     id: '{{ hashicorp_apt_key }}'
-    keyserver: 'hkp://pool.sks-keyservers.net'
+    url: 'https://apt.releases.hashicorp.com/gpg'
     state: present
 
 - name: Configure HashiCorp upstream APT repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: '{{ hashicorp_repository }}'
     state: present
 
 - name: Install Nomad
-  apt:
+  ansible.builtin.apt:
     pkg: ['nomad']
 
 - name: Create Nomad data directory
