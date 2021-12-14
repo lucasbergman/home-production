@@ -1,6 +1,7 @@
 hashicorp_apt_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
 hashicorp_repository: 'deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main'
 
+vault_should_start: true
 vault_storage_consul: false
 vault_unseal_gcpckms: false
 vault_unseal_gcpckms_project: ''
