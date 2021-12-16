@@ -30,3 +30,13 @@
     mode: "640"
   when: consul_config_template | length > 0
   notify: ["restart consul"]
+
+# The systemd unit won't start without this file, but I've occasionally
+# seen the APT package fail to install one
+- name: Install empty Consul server env file
+  ansible.builtin.copy:
+    content: ""
+    dest: "/etc/consul.d/consul.env"
+    owner: consul
+    group: consul
+    mode: "0644"
