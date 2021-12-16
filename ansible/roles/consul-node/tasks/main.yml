@@ -1,32 +1,32 @@
 - name: Get HashiCorp upstream APT GPG key
   ansible.builtin.apt_key:
-    id: '{{ hashicorp_apt_key }}'
-    url: 'https://apt.releases.hashicorp.com/gpg'
+    id: "{{ hashicorp_apt_key }}"
+    url: "https://apt.releases.hashicorp.com/gpg"
     state: present
 
 - name: Configure HashiCorp upstream APT repository
   ansible.builtin.apt_repository:
-    repo: '{{ hashicorp_repository }}'
+    repo: "{{ hashicorp_repository }}"
     state: present
 
 - name: Install Consul
   ansible.builtin.apt:
-    pkg: ['consul']
+    pkg: ["consul"]
 
 - name: Create Consul data directory
-  file:
-    path: '{{ consul_storage_directory }}'
+  ansible.builtin.file:
+    path: "{{ consul_storage_directory }}"
     state: directory
     owner: consul
     group: consul
-    mode: '0750'
+    mode: "0750"
 
-- name: Install Consul server config
-  template:
-    src: consul.hcl
-    dest: /etc/consul.d/
+- name: Install custom Consul server config file
+  ansible.builtin.template:
+    src: "{{ consul_config_template }}"
+    dest: /etc/consul.d/consul.hcl
     owner: consul
     group: consul
-    mode: '640'
-  notify:
-    - 'restart consul'
+    mode: "640"
+  when: consul_config_template | length > 0
+  notify: ["restart consul"]

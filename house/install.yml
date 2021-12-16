@@ -2,25 +2,18 @@
   become: yes
   become_method: sudo
   roles:
-    - role: '../ansible/roles/docker-server'
-    - role: '../ansible/roles/consul-node'
+    - role: "../ansible/roles/docker-server"
+    - role: "../ansible/roles/consul-node"
       vars:
-        consul_gossip_encrypt_key: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          39383565316139636331663266653636343264643362383865636633323839346134646331363661
-          3662386233393663366339376337616638633838383039660a633634366162653337613962393232
-          31636434613937373263396162636461306463386666643638333462343664653830666434366438
-          3036356433356235310a313864303231326530663634396161333533366439386465323862613030
-          65653034636366393062323039376266616165306538663832373561376236663463623565623464
-          3439336338376536373630393532653761353831393435663165
-        consul_storage_directory: /var/consul
-    - role: '../ansible/roles/nomad-node'
+        consul_config_template: "./config/consul.hcl"
+        consul_storage_directory: "/var/consul"
+    - role: "../ansible/roles/nomad-node"
       vars:
         nomad_storage_directory: /var/nomad
-    - role: '../ansible/roles/vault-node'
+    - role: "../ansible/roles/vault-node"
       vars:
         vault_storage_consul: true
         vault_unseal_gcpckms: true
-        vault_unseal_gcpckms_project: 'bergmans-services'
-        vault_unseal_gcpckms_key_ring: 'vault-home'
+        vault_unseal_gcpckms_project: "bergmans-services"
+        vault_unseal_gcpckms_key_ring: "vault-home"
     - houseserver

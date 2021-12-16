@@ -1,11 +1,5 @@
-hashicorp_apt_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
-hashicorp_repository: 'deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main'
+hashicorp_apt_key: "E8A032E094D8EB4EA189D270DA418C88A3219F7B"
+hashicorp_repository: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
 
-consul_gossip_encrypt_key: ''
-consul_datacenter: ''
-consul_server_enable: true
-consul_interface: ''
-consul_storage_directory: '/var/consul'
-consul_bootstrap_nodes: 1
+consul_config_template: ""
 consul_should_start: true
-consul_retry_join: ''
