@@ -6,15 +6,15 @@ images = {
     }
     grafana = {
         name = "grafana/grafana"
-        version = "8.2.5"
+        version = "8.3.3"
     }
     homeassistant = {
         name = "homeassistant/home-assistant"
-        version = "2021.11.5"
+        version = "2021.12.4"
     }
     plex = {
         name = "linuxserver/plex"
-        version = "1.24.5"
+        version = "1.25.2"
     }
     prom_alertmanager = {
         name = "prom/alertmanager"
@@ -26,14 +26,14 @@ images = {
     }
     prom_prometheus = {
         name = "prom/prometheus"
-        version = "v2.31.1"
+        version = "v2.32.1"
     }
     synapse = {
         name = "matrixdotorg/synapse"
-        version = "v1.47.1"
+        version = "v1.49.2"
     }
     unifi = {
         name = "linuxserver/unifi-controller"
-        version = "6.5.53"
+        version = "6.5.55"
     }
 }
