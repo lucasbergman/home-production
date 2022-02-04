@@ -10,7 +10,6 @@ hosts=(bergman.house
        hass.bergman.house
        matrix.bergman.house
        mon.bergman.house
-       moneydance.bergman.house
        plex.bergman.house)
 
 for host in ${hosts[@]}; do

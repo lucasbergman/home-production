@@ -209,7 +209,7 @@
     - 'plex-transcode'
 
 ##############################
-# Turn on Moneydance VNC server
+# Create user and storage for Moneydance
 ##############################
 
 - name: Create Moneydance group

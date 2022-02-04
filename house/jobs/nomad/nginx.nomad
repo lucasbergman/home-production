@@ -58,14 +58,6 @@ EOF
             }
             template {
                 data = <<EOF
-${config_moneydance}
-EOF
-                destination = "local/moneydance.conf"
-                change_mode = "signal"
-                change_signal = "SIGHUP"
-            }
-            template {
-                data = <<EOF
 ${config_synapse}
 EOF
                 destination = "local/synapse.conf"

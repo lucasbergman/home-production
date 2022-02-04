@@ -5,7 +5,6 @@ resource "nomad_job" "nginx" {
         config_grafana = file("conf/nginx/grafana.conf")
         config_hass = file("conf/nginx/hass.conf")
         config_mon = file("conf/nginx/mon.conf")
-        config_moneydance = file("conf/nginx/moneydance.conf")
         config_plex = file("conf/nginx/plex.conf")
         config_synapse = file("conf/nginx/synapse.conf")
     })
@@ -23,12 +22,6 @@ resource "nomad_job" "homeassistant" {
         image = var.images.homeassistant
         config_main = file("conf/homeassistant/configuration.yaml")
         config_automation = file("conf/homeassistant/automations.yaml")
-    })
-}
-
-resource "nomad_job" "moneydance" {
-    jobspec = templatefile("nomad/moneydance.nomad", {
-        uids = var.house_uids.moneydance
     })
 }
 
