@@ -38,6 +38,23 @@
       - 'prometheus-node-exporter'
 
 ##############################
+# Turn on APC UPS daemon
+##############################
+
+- name: Install UPS monitoring daemon
+  apt:
+    name:
+      - apcupsd
+
+- name: Install UPS monitoring config file
+  copy:
+    src: apcupsd.conf
+    dest: /etc/apcupsd/
+    owner: root
+    group: root
+    mode: '0644'
+
+##############################
 # Configure server storage
 ##############################
 
