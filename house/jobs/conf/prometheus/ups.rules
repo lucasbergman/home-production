@@ -1,0 +1,12 @@
+# -*- mode: yaml -*-
+groups:
+  - name: ups
+    rules:
+      - record: ups:battery_charge_fraction
+        expr: apcupsd_battery_charge_percent{job="apcupsd"} / 100
+      - record: ups:battery_time_left_s
+        expr: apcupsd_battery_time_left_seconds{job="apcupsd"}
+      - record: ups:line_volts
+        expr: apcupsd_line_volts{job="apcupsd"}
+      - record: ups:output_volts
+        expr: apcupsd_output_volts{job="apcupsd"}

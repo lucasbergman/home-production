@@ -63,6 +63,14 @@ EOF
                 change_mode = "signal"
                 change_signal = "SIGHUP"
             }
+            template {
+                data = <<EOF
+${config_rules_ups}
+EOF
+                destination = "local/prometheus/ups.rules"
+                change_mode = "signal"
+                change_signal = "SIGHUP"
+            }
             service {
                 port = "http"
                 check {

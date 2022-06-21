@@ -10,6 +10,7 @@ rule_files:
   - '/etc/prometheus/house.rules'
   - '/etc/prometheus/node.rules'
   - '/etc/prometheus/prober.rules'
+  - '/etc/prometheus/ups.rules'
 
 alerting:
   alertmanagers:
