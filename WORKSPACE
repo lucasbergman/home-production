@@ -48,3 +48,11 @@ container_pull(
     repository = "alpine",
     tag = "3.16",
 )
+
+container_pull(
+    name = "golang_alpine_amd64",
+    digest = "sha256:725f8fd50191209a4c4a00def1d93c4193c4d0a1c2900139daf8f742480f3367",
+    registry = "index.docker.io",
+    repository = "golang",
+    tag = "1.18.3-alpine3.16",
+)

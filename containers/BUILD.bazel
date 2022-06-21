@@ -29,6 +29,31 @@ container_push(
     tag_file = ":tag",
 )
 
+container_run_and_commit(
+    name = "alpine_apcupsd_exporter",
+    commands = [
+        "go install github.com/mdlayher/apcupsd_exporter/cmd/apcupsd_exporter@3f531e5",
+    ],
+    image = "@golang_alpine_amd64//image",
+)
+
+container_image(
+    name = "apcupsd_exporter",
+    base = ":alpine_apcupsd_exporter",
+    cmd = [
+        "/go/bin/apcupsd_exporter",
+    ],
+)
+
+container_push(
+    name = "apcupsd_exporter_push",
+    format = "Docker",
+    image = ":apcupsd_exporter",
+    registry = "gcr.io",
+    repository = "bergmans-services/apcupsd_exporter",
+    tag_file = ":tag",
+)
+
 # We're using an undocumented[1] Bazel trick to generate a Docker image tag
 # with information about the Git commit at HEAD. The workspace bazelrc adds
 # workspace_status_command=container/bazelstatus.sh to the build command.
