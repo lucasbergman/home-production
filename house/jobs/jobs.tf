@@ -10,6 +10,12 @@ resource "nomad_job" "nginx" {
     })
 }
 
+resource "nomad_job" "apcupsd_exporter" {
+    jobspec = templatefile("nomad/apcupsd_exporter.nomad", {
+        image = var.images.apcupsd_exporter
+    })
+}
+
 resource "nomad_job" "grafana" {
     jobspec = templatefile("nomad/grafana.nomad", {
         image = var.images.grafana

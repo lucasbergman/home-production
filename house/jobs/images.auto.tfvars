@@ -4,6 +4,10 @@ images = {
         name = "nginx"
         version = "1.21.6"
     }
+    apcupsd_exporter = {
+        name = "gcr.io/bergmans-services/apcupsd_exporter"
+        version = "20220621T1855-42e619b"
+    }
     grafana = {
         name = "grafana/grafana"
         version = "8.5.5"

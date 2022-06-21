@@ -69,3 +69,13 @@ scrape_configs:
           {{- range service "prometheus-prober-blackbox-exporter" }}
           - '{{ .Address }}:{{ .Port }}'
           {{- end }}
+
+  - job_name: 'apcupsd'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets:
+          {{- range service "apcupsd-exporter" }}
+          - '{{ .Address }}:{{ .Port }}'
+          {{- end }}
+        labels:
+          instance: hedwig
