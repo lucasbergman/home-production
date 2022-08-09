@@ -27,23 +27,15 @@
 # Turn on Apache httpd
 ##############################
 
-- name: Install Apache httpd
+- name: Install nginx
   apt:
-    name: apache2
+    name: nginx
 
-- name: Enable httpd reverse proxy
-  file:
-    path: /etc/apache2/mods-enabled/{{ item }}.load
-    src: ../mods-available/{{ item }}.load
-    state: link
-  with_items:
-    - headers
-    - proxy
-    - proxy_http
-    - proxy_http2
-    - rewrite
-    - ssl
-  notify: restart httpd
+- name: Install nginx config
+  copy:
+    dest: /etc/nginx/sites-available/default
+    src: nginx/default.conf
+  notify: reload nginx
 
 ##############################
 # Turn on Docker
@@ -100,19 +92,6 @@
 - name: Make volume for crypto material
   docker_volume:
     name: tls
-
-- name: Install letsencrypt httpd config
-  copy:
-    src: httpd/letsencrypt.conf
-    dest: /etc/apache2/conf-available
-    mode: '644'
-  notify: restart httpd
-
-- name: Enable letsencrypt httpd config
-  file:
-    path: /etc/apache2/conf-enabled/letsencrypt.conf
-    src: ../conf-available/letsencrypt.conf
-    state: link
 
 - name: Install letsencrypt renewal script
   template:
