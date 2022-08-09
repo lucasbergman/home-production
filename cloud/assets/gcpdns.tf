@@ -21,6 +21,13 @@ resource "google_dns_managed_zone" "boozyprofessor" {
     project     = var.gcloud_project
 }
 
+resource "google_dns_managed_zone" "maunder" {
+    name        = "maunder"
+    dns_name    = "maunder.chat."
+    description = "maunder.chat"
+    project     = var.gcloud_project
+}
+
 //
 // bergmans.us records
 //
@@ -338,6 +345,47 @@ resource "google_dns_record_set" "boozyprofessor_mx" {
 resource "google_dns_record_set" "boozyprofessor_mail" {
     managed_zone = google_dns_managed_zone.boozyprofessor.name
     name = "mail.boozyprofessor.com."
+    type = "A"
+    rrdatas = ["45.79.142.74"]
+    ttl = 1800
+}
+
+//
+// maunder.chat records
+//
+
+resource "google_dns_record_set" "maunder_ns" {
+    managed_zone = google_dns_managed_zone.maunder.name
+    name = google_dns_managed_zone.maunder.dns_name
+    type = "NS"
+    rrdatas = [
+        "ns-cloud-c1.googledomains.com.",
+        "ns-cloud-c2.googledomains.com.",
+        "ns-cloud-c3.googledomains.com.",
+        "ns-cloud-c4.googledomains.com.",
+    ]
+    ttl = 21600
+}
+
+resource "google_dns_record_set" "maunder_soa" {
+    managed_zone = google_dns_managed_zone.maunder.name
+    name = google_dns_managed_zone.maunder.dns_name
+    type = "SOA"
+    rrdatas = ["ns-cloud-c1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300"]
+    ttl = 21600
+}
+
+resource "google_dns_record_set" "maunder_mx" {
+    managed_zone = google_dns_managed_zone.maunder.name
+    name = google_dns_managed_zone.maunder.dns_name
+    type = "MX"
+    rrdatas = ["10 mail.maunder.chat."]
+    ttl = 1800
+}
+
+resource "google_dns_record_set" "maunder_mail" {
+    managed_zone = google_dns_managed_zone.maunder.name
+    name = "mail.maunder.chat."
     type = "A"
     rrdatas = ["45.79.142.74"]
     ttl = 1800
