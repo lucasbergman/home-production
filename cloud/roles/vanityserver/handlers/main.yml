@@ -36,5 +36,5 @@
   shell: 'docker exec postfix postalias /config/aliases'
 
 - name: postmap
-  shell: 'docker exec postfix postmap /config/{{ item.name }}'
+  shell: 'docker exec postfix postmap /config/{{ item }}'
   with_items: '{{ postmap_files }}'
