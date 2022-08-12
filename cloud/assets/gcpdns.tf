@@ -21,10 +21,10 @@ resource "google_dns_managed_zone" "boozyprofessor" {
     project     = var.gcloud_project
 }
 
-resource "google_dns_managed_zone" "maunder" {
-    name        = "maunder"
-    dns_name    = "maunder.chat."
-    description = "maunder.chat"
+resource "google_dns_managed_zone" "blurt" {
+    name        = "blurt"
+    dns_name    = "blurt.chat."
+    description = "blurt.chat"
     project     = var.gcloud_project
 }
 
@@ -351,41 +351,41 @@ resource "google_dns_record_set" "boozyprofessor_mail" {
 }
 
 //
-// maunder.chat records
+// blurt.chat records
 //
 
-resource "google_dns_record_set" "maunder_ns" {
-    managed_zone = google_dns_managed_zone.maunder.name
-    name = google_dns_managed_zone.maunder.dns_name
+resource "google_dns_record_set" "blurt_ns" {
+    managed_zone = google_dns_managed_zone.blurt.name
+    name = google_dns_managed_zone.blurt.dns_name
     type = "NS"
     rrdatas = [
-        "ns-cloud-c1.googledomains.com.",
-        "ns-cloud-c2.googledomains.com.",
-        "ns-cloud-c3.googledomains.com.",
-        "ns-cloud-c4.googledomains.com.",
+        "ns-cloud-a1.googledomains.com.",
+        "ns-cloud-a2.googledomains.com.",
+        "ns-cloud-a3.googledomains.com.",
+        "ns-cloud-a4.googledomains.com.",
     ]
     ttl = 21600
 }
 
-resource "google_dns_record_set" "maunder_soa" {
-    managed_zone = google_dns_managed_zone.maunder.name
-    name = google_dns_managed_zone.maunder.dns_name
+resource "google_dns_record_set" "blurt_soa" {
+    managed_zone = google_dns_managed_zone.blurt.name
+    name = google_dns_managed_zone.blurt.dns_name
     type = "SOA"
-    rrdatas = ["ns-cloud-c1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300"]
+    rrdatas = ["ns-cloud-a1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300"]
     ttl = 21600
 }
 
-resource "google_dns_record_set" "maunder_mx" {
-    managed_zone = google_dns_managed_zone.maunder.name
-    name = google_dns_managed_zone.maunder.dns_name
+resource "google_dns_record_set" "blurt_mx" {
+    managed_zone = google_dns_managed_zone.blurt.name
+    name = google_dns_managed_zone.blurt.dns_name
     type = "MX"
-    rrdatas = ["10 mail.maunder.chat."]
+    rrdatas = ["10 mail.blurt.chat."]
     ttl = 1800
 }
 
-resource "google_dns_record_set" "maunder_mail" {
-    managed_zone = google_dns_managed_zone.maunder.name
-    name = "mail.maunder.chat."
+resource "google_dns_record_set" "blurt_mail" {
+    managed_zone = google_dns_managed_zone.blurt.name
+    name = "mail.blurt.chat."
     type = "A"
     rrdatas = ["45.79.142.74"]
     ttl = 1800
