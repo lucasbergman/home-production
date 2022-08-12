@@ -42,6 +42,7 @@
     dest: /etc/nginx/sites-available/{{ item }}
     src: nginx/{{ item }}.conf
   with_items:
+    - blurt
     - mumble
   notify: reload nginx
 
@@ -51,6 +52,7 @@
     src: ../sites-available/{{ item }}
     state: link
   with_items:
+    - blurt
     - mumble
   notify: reload nginx
 

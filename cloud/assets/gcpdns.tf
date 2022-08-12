@@ -390,3 +390,11 @@ resource "google_dns_record_set" "blurt_mail" {
     rrdatas = ["45.79.142.74"]
     ttl = 1800
 }
+
+resource "google_dns_record_set" "blurt_a" {
+    managed_zone = google_dns_managed_zone.blurt.name
+    name = "blurt.chat."
+    type = "A"
+    rrdatas = ["45.79.142.74"]
+    ttl = 1800
+}
