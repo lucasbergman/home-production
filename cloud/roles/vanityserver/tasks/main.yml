@@ -37,6 +37,23 @@
     src: nginx/default.conf
   notify: reload nginx
 
+- name: Install nginx site configs
+  copy:
+    dest: /etc/nginx/sites-available/{{ item }}
+    src: nginx/{{ item }}.conf
+  with_items:
+    - mumble
+  notify: reload nginx
+
+- name: Enable nginx site configs
+  file:
+    path: /etc/nginx/sites-enabled/{{ item }}
+    src: ../sites-available/{{ item }}
+    state: link
+  with_items:
+    - mumble
+  notify: reload nginx
+
 ##############################
 # Turn on Docker
 ##############################
