@@ -92,6 +92,7 @@ virtual_mailbox_domains =
   bergman.house,
   blurt.chat,
   boozyprofessor.com,
+  maunder.chat,
   smartgirltravel.com,
   smartmousetravel.com
 virtual_alias_maps = hash:/config/virtual
