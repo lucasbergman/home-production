@@ -83,9 +83,9 @@ Anyway, here's a vague pre-flight checklist of things that I know need to get
 ported over to the new setup. I'm sure I'll think of more.
 
 -   ☐ bootstrapping cloud assets
-    -   ☐ DNS records
-    -   ☐ Cloud VMs
-    -   ☐ Service accounts and permissions
+    -   ☒ DNS records
+    -   ☒ Cloud VMs
+    -   ☒ Service accounts and permissions
 -   ☐ Install on main cloud VMs
     -   ☐ Secrets for cloud VMs
     -   ☐ LetsEncrypt certificates with renewal
