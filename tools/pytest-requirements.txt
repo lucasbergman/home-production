@@ -4,19 +4,19 @@
 #
 #    pip-compile pytest-requirements.in
 #
-attrs==21.2.0
+attrs==22.1.0
+    # via pytest
+exceptiongroup==1.0.1
     # via pytest
 iniconfig==1.1.1
     # via pytest
-packaging==20.9
+packaging==21.3
     # via pytest
-pluggy==0.13.1
+pluggy==1.0.0
     # via pytest
-py==1.10.0
-    # via pytest
-pyparsing==2.4.7
+pyparsing==3.0.9
     # via packaging
-pytest==6.2.4
+pytest==7.2.0
     # via -r pytest-requirements.in
-toml==0.10.2
+tomli==2.0.1
     # via pytest
