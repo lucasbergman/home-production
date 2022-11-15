@@ -1,0 +1,3 @@
+data_volume_mount_path: ""
+data_volume_blkdev: ""
+data_volume_fstype: ext4

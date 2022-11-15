@@ -1,4 +1,20 @@
 ---
+- name: Prepare data volume
+  block:
+    - name: Create the data volume filesystem
+      community.general.filesystem:
+        fstype: "{{ data_volume_fstype }}"
+        dev: "{{ data_volume_blkdev }}"
+
+    - name: Mount the data volume filesystem
+      ansible.posix.mount:
+        path: "{{ data_volume_mount_path }}"
+        src: "{{ data_volume_blkdev }}"
+        fstype: "{{ data_volume_fstype }}"
+        state: mounted
+
+  when: data_volume_mount_path|length > 0
+
 - name: Install Prometheus node stats exporter
   ansible.builtin.apt:
     name: prometheus-node-exporter

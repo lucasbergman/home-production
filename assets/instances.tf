@@ -38,6 +38,12 @@ resource "linode_instance_disk" "snowball_boot" {
   }
 }
 
+resource "linode_volume" "snowball_data" {
+  label  = "snowball-data"
+  region = "us-central"
+  size   = 10 # GB
+}
+
 resource "linode_instance_config" "snowball" {
   linode_id = linode_instance.snowball.id
   label     = "ubuntu"
@@ -49,6 +55,9 @@ resource "linode_instance_config" "snowball" {
     }
     sdb {
       disk_id = linode_instance_disk.snowball_swap.id
+    }
+    sdc {
+      volume_id = linode_volume.snowball_data.id
     }
   }
 }
