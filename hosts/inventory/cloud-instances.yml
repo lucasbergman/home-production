@@ -1,0 +1,6 @@
+all:
+  hosts:
+    snowball.bergmans.us:
+      ansible_user: root
+      letsencrypt_domains:
+        - snowball.bergmans.us

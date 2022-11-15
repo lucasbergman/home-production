@@ -1,0 +1,8 @@
+---
+- name: Upgrade hosts
+  hosts: all
+  tasks:
+    - name: APT upgrade
+      ansible.builtin.apt:
+        upgrade: "yes" # this field is a string, because reasons
+        update_cache: yes

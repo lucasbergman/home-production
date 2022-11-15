@@ -1,0 +1,6 @@
+---
+- name: Provision hosts
+  hosts: all
+  roles:
+    - base
+    - letsencrypt
