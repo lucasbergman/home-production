@@ -88,13 +88,13 @@ ported over to the new setup. I'm sure I'll think of more.
     -   ☒ Service accounts and permissions
 -   ☐ Install on main cloud VMs
     -   ☐ Secrets for cloud VMs
-    -   ☐ LetsEncrypt certificates with renewal
+    -   ☒ LetsEncrypt certificates with renewal
     -   ☐ Mumble server install
     -   ☐ mail server install
     -   ☐ move Synapse/Matrix install from home
 -   ☐ Install on home server
     -   ☐ Secrets for home server
-    -   ☐ LetsEncrypt certificates with renewal
+    -   ☒ LetsEncrypt certificates with renewal
     -   ☐ nginx install
     -   ☐ Prometheus install
     -   ☐ Alert Manager install

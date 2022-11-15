@@ -1,0 +1,33 @@
+---
+- name: Install certbot
+  ansible.builtin.apt:
+    pkg:
+      - certbot
+      - python3-certbot-dns-google
+    state: present
+
+# Currently, the certbot apt package installs a systemd service and timer by
+# default. This is just here to check that that behavior doesn't change.
+- name: Make sure certbot systemd service is enabled
+  ansible.builtin.systemd:
+    name: certbot.service
+    enabled: yes
+
+- name: Install certbot config file
+  ansible.builtin.template:
+    src: letsencrypt_cli.ini
+    dest: /etc/letsencrypt/cli.ini
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Install initial certificates
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/certbot
+      - certonly
+      - --non-interactive
+      - --domain
+      - "{{ item }}"
+    creates: "/etc/letsencrypt/live/{{ item }}/fullchain.pem"
+  loop: "{{ letsencrypt_domains }}"
