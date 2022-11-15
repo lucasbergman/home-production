@@ -1,0 +1,5 @@
+---
+- name: Install Prometheus node stats exporter
+  ansible.builtin.apt:
+    name: prometheus-node-exporter
+    state: present
