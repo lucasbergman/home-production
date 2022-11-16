@@ -1,0 +1,33 @@
+---
+- name: Install Mumble server certificate deployment hook
+  ansible.builtin.template:
+    src: tls-deploy-hook.sh
+    dest: /etc/letsencrypt/renewal-hooks/deploy/mumble-server.sh
+    owner: root
+    group: root
+    mode: "0750"
+  notify: Fix Mumble server cert permissions
+
+- name: Create Mumble server data directory
+  ansible.builtin.file:
+    path: "{{ mumble_server_state_directory }}"
+    owner: root
+    group: mumble-server
+    mode: "0770"
+    state: directory
+
+- name: Install Mumble server
+  ansible.builtin.apt:
+    pkg:
+      - acl
+      - mumble-server
+    state: present
+
+- name: Install Mumble server config file
+  ansible.builtin.template:
+    src: mumble-server.ini
+    dest: /etc/mumble-server.ini
+    owner: root
+    group: mumble-server
+    mode: "0640"
+  notify: Restart Mumble server

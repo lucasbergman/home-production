@@ -1,0 +1,8 @@
+---
+- name: Restart Mumble server
+  ansible.builtin.systemd:
+    name: mumble-server.service
+    state: restarted
+
+- name: Fix Mumble server cert permissions
+  ansible.builtin.command: /etc/letsencrypt/renewal-hooks/deploy/mumble-server.sh

@@ -1,0 +1,3 @@
+mumble_server_state_directory: /var/lib/mumble-server
+mumble_server_password: hunter2
+mumble_server_tls_host: mumble.example.com
