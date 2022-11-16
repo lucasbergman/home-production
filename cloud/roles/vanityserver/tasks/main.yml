@@ -16,12 +16,12 @@
   template:
     src: hostname
     dest: /etc/hostname
-    mode: '0644'
+    mode: "0644"
   notify: hostname
 
 - name: Install node-exporter
   apt:
-    pkg: ['prometheus-node-exporter']
+    pkg: ["prometheus-node-exporter"]
 
 ##############################
 # Turn on Apache httpd
@@ -43,7 +43,6 @@
     src: nginx/{{ item }}.conf
   with_items:
     - blurt
-    - mumble
   notify: reload nginx
 
 - name: Enable nginx site configs
@@ -53,7 +52,6 @@
     state: link
   with_items:
     - blurt
-    - mumble
   notify: reload nginx
 
 ##############################
@@ -62,28 +60,28 @@
 
 - name: Get Docker upstream APT GPG key
   apt_key:
-    id: '{{ docker_apt_key }}'
-    keyserver: 'hkp://pool.sks-keyservers.net'
+    id: "{{ docker_apt_key }}"
+    keyserver: "hkp://pool.sks-keyservers.net"
     state: present
 
 - name: Configure Docker upstream APT repository
   apt_repository:
-    repo: '{{ docker_repository }}'
+    repo: "{{ docker_repository }}"
     update_cache: True
     state: present
 
 - name: Install Docker
   apt:
     pkg:
-      - 'docker.io'
-      - 'docker-compose'
+      - "docker.io"
+      - "docker-compose"
 
 - name: Add users to Docker usage group
   user:
-    name: '{{ item }}'
-    groups: 'docker'
+    name: "{{ item }}"
+    groups: "docker"
     append: True
-  with_items: '{{ docker_users }}'
+  with_items: "{{ docker_users }}"
   when: docker_users | bool
 
 - name: Make server config root
@@ -92,7 +90,7 @@
     state: directory
     owner: root
     group: adm
-    mode: '751'
+    mode: "751"
 
 # On Debian, the default config is 50-default.conf, so we have to have
 # our destination file name come before that to stop container logs from
@@ -116,23 +114,23 @@
   template:
     src: letsencrypt/gencerts
     dest: /usr/local/sbin
-    mode: '755'
+    mode: "755"
 
 - name: Install letsencrypt renewal script systemd service
   copy:
     src: letsencrypt/gencerts.service
     dest: /etc/systemd/system
-    mode: '644'
+    mode: "644"
   notify:
-    - 'enable letsencrypt gencerts'
+    - "enable letsencrypt gencerts"
 
 - name: Install letsencrypt renewal script systemd timer
   copy:
     src: letsencrypt/gencerts.timer
     dest: /etc/systemd/system
-    mode: '644'
+    mode: "644"
   notify:
-    - 'enable letsencrypt gencerts timer'
+    - "enable letsencrypt gencerts timer"
 
 ##############################
 # Set up mail storage and Postfix
@@ -151,7 +149,7 @@
     system: yes
     state: present
     createhome: no
-    home: '/'
+    home: "/"
 
 - name: Make mail storage volume
   docker_volume:
@@ -167,42 +165,42 @@
 
 - name: Create Postfix config directory
   file:
-    path: '{{ postfix_config_dir }}'
+    path: "{{ postfix_config_dir }}"
     state: directory
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
 
 - name: Install master Postfix config
   template:
     src: postfix/master.cf
-    dest: '{{ postfix_config_dir }}/master.cf'
-    mode: '0644'
+    dest: "{{ postfix_config_dir }}/master.cf"
+    mode: "0644"
   notify: restart postfix
 
 - name: Install main Postfix config
   template:
     src: postfix/main.cf
-    dest: '{{ postfix_config_dir }}/main.cf'
-    mode: '0644'
+    dest: "{{ postfix_config_dir }}/main.cf"
+    mode: "0644"
   notify: restart postfix
 
 - name: Install Postfix aliases file
   copy:
     src: postfix/aliases
-    dest: '{{ postfix_config_dir }}/'
-    mode: '0644'
+    dest: "{{ postfix_config_dir }}/"
+    mode: "0644"
   notify: postalias
 
 - name: Install Postfix data files
   copy:
-    src: 'postfix/{{ item.name }}'
-    dest: '{{ postfix_config_dir }}/'
-    mode: '{{ item.mode }}'
+    src: "postfix/{{ item.name }}"
+    dest: "{{ postfix_config_dir }}/"
+    mode: "{{ item.mode }}"
   with_items:
-    - { name: 'sasl_passwd', mode: 'u=rw,g=,o=' }
-    - { name: 'virtual', mode: 'u=rw,g=r,o=r' }
-    - { name: 'vmailbox', mode: 'u=rw,g=r,o=r' }
+    - { name: "sasl_passwd", mode: "u=rw,g=,o=" }
+    - { name: "virtual", mode: "u=rw,g=r,o=r" }
+    - { name: "vmailbox", mode: "u=rw,g=r,o=r" }
   notify: postmap
 
 ##############################
@@ -211,61 +209,37 @@
 
 - name: Create Dovecot config directory
   file:
-    path: '{{ dovecot_config_dir }}'
+    path: "{{ dovecot_config_dir }}"
     state: directory
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
 
 - name: Install Dovecot config files
   template:
-    src: 'dovecot/dovecot.conf'
-    dest: '{{ dovecot_config_dir }}/'
-    mode: '0644'
+    src: "dovecot/dovecot.conf"
+    dest: "{{ dovecot_config_dir }}/"
+    mode: "0644"
   notify: restart dovecot
 
 # TODO: Secure users file on the server
 - name: Install Dovecot users file
   copy:
-    src: 'dovecot/users'
-    dest: '{{ dovecot_config_dir }}/'
-    mode: '0644'
+    src: "dovecot/users"
+    dest: "{{ dovecot_config_dir }}/"
+    mode: "0644"
   notify: restart dovecot
-
-##############################
-# Install Murmur
-##############################
-
-- name: Make volume for Murmur data
-  docker_volume:
-    name: murmur
-
-- name: Create Murmur config directory
-  file:
-    path: '{{ murmur_config_dir }}'
-    state: directory
-    owner: root
-    group: root
-    mode: '0750'
-
-- name: Install Murmur config files
-  template:
-    src: 'murmur.ini'
-    dest: '{{ murmur_config_dir }}/'
-    mode: '0644'
 
 ##############################
 # Install Docker services
 ##############################
-
 # TODO: Install docker-credential-gcr
 # TODO: Install GCP account JSON key file
-
 - name: Install docker-compose config
   template:
     src: docker/docker-compose.yml
     dest: /config/docker/docker-compose.yml
-    mode: '0640'
+    mode: "0640"
     owner: root
     group: adm
   # TODO: notify Docker

@@ -89,7 +89,7 @@ ported over to the new setup. I'm sure I'll think of more.
 -   ☐ Install on main cloud VMs
     -   ☐ Secrets for cloud VMs
     -   ☒ LetsEncrypt certificates with renewal
-    -   ☐ Mumble server install
+    -   ☒ Mumble server install
     -   ☐ mail server install
     -   ☐ move Synapse/Matrix install from home
 -   ☐ Install on home server

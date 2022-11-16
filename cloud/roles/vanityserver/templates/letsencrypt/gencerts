@@ -3,7 +3,6 @@ set -e
 
 hosts=(
     {{ inventory_hostname }}
-    mumble.bergmans.us
     blurt.chat
 )
 

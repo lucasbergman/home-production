@@ -69,3 +69,11 @@ resource "google_dns_record_set" "bergmans_a_snowball" {
   rrdatas      = [linode_instance.snowball.ip_address]
   ttl          = 300
 }
+
+resource "google_dns_record_set" "bergmans_a_mumble" {
+  managed_zone = google_dns_managed_zone.bergmans.name
+  name         = "mumble.bergmans.us."
+  type         = "A"
+  rrdatas      = [linode_instance.snowball.ip_address]
+  ttl          = 300
+}
