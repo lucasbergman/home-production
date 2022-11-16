@@ -1,6 +1,11 @@
 ---
-- name: Provision hosts
+- name: Provision base host requirements
   hosts: all
   roles:
     - base
     - letsencrypt
+
+- name: Provision all-purpose cloud server
+  hosts: cloud_all_purpose
+  roles:
+    - mumble_server

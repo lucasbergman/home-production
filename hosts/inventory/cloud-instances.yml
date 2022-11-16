@@ -5,4 +5,19 @@ all:
       data_volume_mount_path: /data
       data_volume_blkdev: /dev/sdc
       letsencrypt_domains:
+        - mumble.bergmans.us
         - snowball.bergmans.us
+
+      mumble_server_password: !vault |
+        $ANSIBLE_VAULT;1.1;AES256
+        64346339616163666665383065366661313434643166363235663037653130666165393331666436
+        6433656238343430343766343233343639363439386330630a653365373766386530366536663361
+        37376366396537396638343261333865386134633938623462356339326233653237623032366133
+        6238303233666461650a373861613164343632333539376530626463663564643961663036343134
+        6663
+      mumble_server_tls_host: mumble.bergmans.us
+      mumble_server_state_directory: /data/mumble-server
+  children:
+    cloud_all_purpose:
+      hosts:
+        snowball.bergmans.us:
