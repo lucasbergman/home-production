@@ -1,4 +1,13 @@
 ---
+- name: Install OpenSSH daemon config file
+  ansible.builtin.template:
+    src: sshd.conf
+    dest: /etc/ssh/sshd_config.d/00-no-passwords.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart SSH
+
 - name: Prepare data volume
   block:
     - name: Create the data volume filesystem
