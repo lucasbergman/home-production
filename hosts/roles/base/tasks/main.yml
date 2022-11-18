@@ -24,7 +24,36 @@
 
   when: data_volume_mount_path|length > 0
 
-- name: Install Prometheus node stats exporter
-  ansible.builtin.apt:
-    name: prometheus-node-exporter
+- name: Get Fluent Bit APT key
+  ansible.builtin.get_url:
+    url: https://packages.fluentbit.io/fluentbit.key
+    dest: /etc/apt/trusted.gpg.d/fluentbit.asc
+    checksum: sha256:df248e2d7103ca62cb683c20a077198d0fb0a7f79dbf53a604af0317de3b4711
+
+- name: Configure Fluent Bit APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/fluentbit.asc] https://packages.fluentbit.io/ubuntu/{{ ansible_distribution_release }} {{ ansible_distribution_release }} main"
     state: present
+    update_cache: yes
+
+- name: Install base packages
+  ansible.builtin.apt:
+    pkg:
+      - fluent-bit
+      - prometheus-node-exporter
+    state: present
+
+- name: Enable Fluent Bit service
+  ansible.builtin.systemd:
+    name: fluent-bit.service
+    enabled: yes
+    state: started
+
+- name: Install Fluent Bit config file
+  ansible.builtin.template:
+    src: fluent-bit.conf
+    dest: /etc/fluent-bit/fluent-bit.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Fluent Bit

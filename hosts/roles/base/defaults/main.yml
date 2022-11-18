@@ -1,3 +1,6 @@
 data_volume_mount_path: ""
 data_volume_blkdev: ""
 data_volume_fstype: ext4
+
+logging_gcp_creds_path: /etc/gcp-instance-creds.json
+logging_gcp_location: ""
