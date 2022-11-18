@@ -9,6 +9,12 @@ resource "google_project_iam_member" "snowball_acme_dns" {
   member  = "serviceAccount:${google_service_account.instance_snowball.email}"
 }
 
+resource "google_project_iam_member" "snowball_log_writer" {
+  project = var.gcp_project
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.instance_snowball.email}"
+}
+
 resource "google_service_account_key" "instance_snowball" {
   service_account_id = google_service_account.instance_snowball.id
 }
