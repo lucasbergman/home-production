@@ -15,6 +15,12 @@ resource "google_project_iam_member" "snowball_log_writer" {
   member  = "serviceAccount:${google_service_account.instance_snowball.email}"
 }
 
+resource "google_storage_bucket_iam_member" "snowball_backup" {
+  bucket = google_storage_bucket.backup.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.instance_snowball.email}"
+}
+
 resource "google_service_account_key" "instance_snowball" {
   service_account_id = google_service_account.instance_snowball.id
 }
