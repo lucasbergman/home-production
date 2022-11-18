@@ -41,7 +41,38 @@
     pkg:
       - fluent-bit
       - prometheus-node-exporter
+      - restic
     state: present
+
+- name: Install Restic backup wrapper script
+  ansible.builtin.template:
+    src: backup/run-restic.sh
+    dest: /usr/local/sbin/run-restic
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Initialize Restic backup repo
+  ansible.builtin.shell: "run-restic --quiet snapshots || run-restic --quiet init && touch /etc/restic-init-done"
+  args:
+    creates: /etc/restic-init-done
+
+- name: Install Restic backup systemd service
+  ansible.builtin.template:
+    src: backup/restic.service
+    dest: /etc/systemd/system/restic.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Install Restic periodic backup timer
+  ansible.builtin.template:
+    src: backup/restic.timer
+    dest: /etc/systemd/system/restic.timer
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Enable Restic timer
 
 - name: Enable Fluent Bit service
   ansible.builtin.systemd:

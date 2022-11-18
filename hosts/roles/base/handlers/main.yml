@@ -4,6 +4,13 @@
     name: sshd.service
     state: restarted
 
+- name: Enable Restic timer
+  ansible.builtin.systemd:
+    name: restic.timer
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
 - name: Restart Fluent Bit
   ansible.builtin.systemd:
     name: fluent-bit.service

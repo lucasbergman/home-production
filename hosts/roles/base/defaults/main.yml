@@ -4,3 +4,7 @@ data_volume_fstype: ext4
 
 logging_gcp_creds_path: /etc/gcp-instance-creds.json
 logging_gcp_location: ""
+
+restic_gcp_creds_path: /etc/gcp-instance-creds.json
+restic_password: hunter2
+restic_gcp_storage_path: ""

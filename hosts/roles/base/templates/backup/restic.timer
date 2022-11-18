@@ -1,0 +1,9 @@
+[Unit]
+Description=Runs the Restic backup periodically
+
+[Timer]
+OnCalendar=*-*-* 6,18:00
+RandomizedDelaySec=2h
+
+[Install]
+WantedBy=timers.target

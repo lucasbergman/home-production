@@ -1,0 +1,8 @@
+[Unit]
+Description=Restic data volume backup
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/run-restic backup --quiet /data
+# TODO: Generalize this so it can back up hosts that don't use /data
+# TODO: Occasionally run forget and prune
