@@ -1,4 +1,11 @@
 ---
+# Modern Linux userspace is so weird. The hostname gets set by
+# systemd-hostnamed(8), so you use hostnamectl(1) to set it.
+- name: Set host name
+  ansible.builtin.shell: hostnamectl hostname "{{ inventory_hostname }}" && touch /etc/hostname-set
+  args:
+    creates: /etc/hostname-set
+
 - name: Install OpenSSH daemon config file
   ansible.builtin.template:
     src: sshd.conf
