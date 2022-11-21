@@ -32,10 +32,6 @@ images = {
     name    = "prom/prometheus"
     version = "v2.40.1"
   }
-  synapse = {
-    name    = "matrixdotorg/synapse"
-    version = "v1.71.0"
-  }
   unifi = {
     name    = "linuxserver/unifi-controller"
     version = "7.2.95"

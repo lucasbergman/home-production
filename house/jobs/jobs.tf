@@ -6,7 +6,6 @@ resource "nomad_job" "nginx" {
         config_hass = file("conf/nginx/hass.conf")
         config_mon = file("conf/nginx/mon.conf")
         config_plex = file("conf/nginx/plex.conf")
-        config_synapse = file("conf/nginx/synapse.conf")
     })
 }
 
@@ -50,14 +49,6 @@ resource "nomad_job" "prometheus" {
         config_rules_ups = file("conf/prometheus/ups.rules")
         config_alertmanager = file("conf/prometheus/alertmanager.yml")
         config_blackbox = file("conf/prometheus/blackbox.yml")
-    })
-}
-
-resource "nomad_job" "synapse" {
-    jobspec = templatefile("nomad/synapse.nomad", {
-        image = var.images.synapse
-        uids = var.house_uids.synapse
-        config = file("conf/synapse.yml")
     })
 }
 

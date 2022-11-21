@@ -9,7 +9,6 @@ job "nginx" {
                 port_map {
                     http = 80
                     https = 443
-                    matrix_http = 8448
                 }
                 mounts = [
                     {
@@ -58,14 +57,6 @@ EOF
             }
             template {
                 data = <<EOF
-${config_synapse}
-EOF
-                destination = "local/synapse.conf"
-                change_mode = "signal"
-                change_signal = "SIGHUP"
-            }
-            template {
-                data = <<EOF
 ${config_plex}
 EOF
                 destination = "local/plex.conf"
@@ -87,9 +78,6 @@ EOF
                     }
                     port "https" {
                         static = "443"
-                    }
-                    port "matrix_http" {
-                        static = "8448"
                     }
                 }
             }

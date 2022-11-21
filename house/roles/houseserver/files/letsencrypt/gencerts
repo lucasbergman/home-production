@@ -8,7 +8,6 @@ hosts=(bergman.house
        deluge.bergman.house
        grafana.bergman.house
        hass.bergman.house
-       matrix.bergman.house
        mon.bergman.house
        plex.bergman.house)
 

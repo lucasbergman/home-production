@@ -105,3 +105,19 @@ resource "google_dns_record_set" "bergmans_aaaa_mumble" {
   rrdatas      = [split("/", linode_instance.snowball.ipv6)[0]]
   ttl          = 300
 }
+
+resource "google_dns_record_set" "bergmanhouse_a_matrix" {
+  managed_zone = google_dns_managed_zone.bergmanhouse.name
+  name         = "matrix.bergman.house."
+  type         = "A"
+  rrdatas      = [linode_instance.snowball.ip_address]
+  ttl          = 300
+}
+
+resource "google_dns_record_set" "bergmanhouse_aaaa_matrix" {
+  managed_zone = google_dns_managed_zone.bergmanhouse.name
+  name         = "matrix.bergman.house."
+  type         = "AAAA"
+  rrdatas      = [split("/", linode_instance.snowball.ipv6)[0]]
+  ttl          = 300
+}

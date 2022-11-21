@@ -91,7 +91,7 @@ ported over to the new setup. I'm sure I'll think of more.
     -   ☒ LetsEncrypt certificates with renewal
     -   ☒ Mumble server install
     -   ☐ mail server install
-    -   ☐ move Synapse/Matrix install from home
+    -   ☒ move Synapse/Matrix install from home
 -   ☐ Install on home server
     -   ☐ Secrets for home server
     -   ☒ LetsEncrypt certificates with renewal

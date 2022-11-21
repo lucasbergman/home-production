@@ -269,14 +269,6 @@ resource "google_dns_record_set" "bergmanhouse_a_mail" {
   ttl          = 1800
 }
 
-resource "google_dns_record_set" "bergmanhouse_a_matrix" {
-  managed_zone = google_dns_managed_zone.bergmanhouse.name
-  name         = "matrix.bergman.house."
-  type         = "A"
-  rrdatas      = ["75.150.214.42"]
-  ttl          = 300
-}
-
 //
 // boozyprofessor.com records
 //

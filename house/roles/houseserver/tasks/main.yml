@@ -7,15 +7,15 @@
   block:
     - name: Find default netplan config
       find:
-        paths: '/etc/netplan'
-        patterns: '[0-9]*'
+        paths: "/etc/netplan"
+        patterns: "[0-9]*"
       register: default_netplan_config
 
     - name: Remove default netplan config
       file:
-        path: '{{ item.path }}'
+        path: "{{ item.path }}"
         state: absent
-      with_items: '{{ default_netplan_config.files }}'
+      with_items: "{{ default_netplan_config.files }}"
 
     - name: Install netplan config
       copy:
@@ -23,19 +23,19 @@
         dest: /etc/netplan/netplan.yaml
         owner: root
         group: root
-        mode: '644'
+        mode: "644"
 
     - name: Write hostname file
       copy:
         content: "{{ inventory_hostname }}\n"
         dest: /etc/hostname
-        mode: '0644'
+        mode: "0644"
       notify: hostname
 
 - name: Install node-exporter
   apt:
     pkg:
-      - 'prometheus-node-exporter'
+      - "prometheus-node-exporter"
 
 ##############################
 # Turn on APC UPS daemon
@@ -52,7 +52,7 @@
     dest: /etc/apcupsd/
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
 
 ##############################
 # Configure server storage
@@ -71,7 +71,7 @@
     state: directory
     owner: root
     group: root
-    mode: '755'
+    mode: "755"
 
 ##############################
 # Set up Vault unseal and Nomad-to-Vault connection
@@ -81,7 +81,7 @@
   copy:
     src: vaultcreds.json
     dest: /etc/vault.d/creds.json
-    mode: '0640'
+    mode: "0640"
     owner: vault
     group: vault
 
@@ -89,7 +89,7 @@
   copy:
     src: nomadvault.hcl
     dest: /etc/nomad.d/vault.hcl
-    mode: '0640'
+    mode: "0640"
     owner: nomad
     group: nomad
 
@@ -103,29 +103,29 @@
     state: directory
     owner: root
     group: www-data
-    mode: '2750'
+    mode: "2750"
 
 - name: Install letsencrypt renewal script
   copy:
     src: letsencrypt/gencerts
     dest: /usr/local/sbin
-    mode: '750'
+    mode: "750"
 
 - name: Install letsencrypt renewal script systemd service
   copy:
     src: letsencrypt/gencerts.service
     dest: /etc/systemd/system
-    mode: '644'
+    mode: "644"
   notify:
-    - 'enable letsencrypt gencerts'
+    - "enable letsencrypt gencerts"
 
 - name: Install letsencrypt renewal script systemd timer
   copy:
     src: letsencrypt/gencerts.timer
     dest: /etc/systemd/system
-    mode: '644'
+    mode: "644"
   notify:
-    - 'enable letsencrypt gencerts timer'
+    - "enable letsencrypt gencerts timer"
 
 ##############################
 # Turn on prometheus
@@ -137,15 +137,15 @@
     state: directory
     owner: nobody
     group: nogroup
-    mode: '750'
+    mode: "750"
 
 - name: Make alertmanager storage directory
   file:
     path: /var/alertmanager
     state: directory
     owner: nobody
-    group: nogroup  # alertmanager is hard-coded to run as nobody:nogroup
-    mode: '750'
+    group: nogroup # alertmanager is hard-coded to run as nobody:nogroup
+    mode: "750"
 
 ##############################
 # Turn on grafana
@@ -155,37 +155,9 @@
   file:
     path: /storage/cluster/grafana
     state: directory
-    owner: '472'
-    group: '472'  # Ew, fix this UID/GID
-    mode: '750'
-
-##############################
-# Turn on matrix/synapse
-##############################
-
-- name: Create matrix server group
-  group:
-    name: matrix
-    state: present
-    system: true
-
-- name: Create matrix server user
-  user:
-    name: matrix
-    group: matrix
-    groups: ['www-data']
-    create_home: false
-    password_lock: true
-    system: true
-    home: /var/matrix
-
-- name: Make matrix server storage directory
-  file:
-    path: /var/matrix
-    state: directory
-    owner: matrix
-    group: matrix
-    mode: '700'
+    owner: "472"
+    group: "472" # Ew, fix this UID/GID
+    mode: "750"
 
 ##############################
 # Turn on Plex
@@ -212,7 +184,7 @@
     state: directory
     owner: idiotbox
     group: idiotbox
-    mode: '2775'
+    mode: "2775"
 
 - name: Make video server work directories
   file:
@@ -220,10 +192,10 @@
     state: directory
     owner: idiotbox
     group: idiotbox
-    mode: '2770'
+    mode: "2770"
   with_items:
-    - 'plex-system'
-    - 'plex-transcode'
+    - "plex-system"
+    - "plex-transcode"
 
 ##############################
 # Create user and storage for Moneydance
@@ -248,7 +220,7 @@
     state: directory
     owner: moneydance
     group: moneydance
-    mode: '2770'
+    mode: "2770"
 
 ##############################
 # Turn on Unifi controller
@@ -273,23 +245,23 @@
     state: directory
     owner: unifi
     group: unifi
-    mode: '2770'
+    mode: "2770"
 
 - name: Make unifi config directory
   file:
-    path: '/var/unifi/data/sites/{{ unifi_site_name }}'
+    path: "/var/unifi/data/sites/{{ unifi_site_name }}"
     state: directory
     owner: unifi
     group: unifi
-    mode: '2770'
+    mode: "2770"
 
 - name: Install unifi gateway config
   copy:
-    src: 'usg-config.json'
-    dest: '/var/unifi/data/sites/{{ unifi_site_name}}/config.gateway.json'
+    src: "usg-config.json"
+    dest: "/var/unifi/data/sites/{{ unifi_site_name}}/config.gateway.json"
     owner: unifi
     group: unifi
-    mode: '640'
+    mode: "640"
 
 ##############################
 # Set up Home Assistant storage
@@ -301,7 +273,7 @@
     state: directory
     owner: root
     group: adm
-    mode: '750'
+    mode: "750"
 
 ##############################
 # Set up Google Cloud Storage backup
@@ -310,38 +282,38 @@
 - name: Install rclone
   apt:
     pkg:
-      - 'rclone'
+      - "rclone"
 
 - name: Install rclone GCS config
   copy:
-    src: 'backup/rclone.conf'
-    dest: '/etc/rclone-gcs.conf'
-    mode: '644'
+    src: "backup/rclone.conf"
+    dest: "/etc/rclone-gcs.conf"
+    mode: "644"
 
 - name: Install rclone service account credentials file
   copy:
-    src: 'backup/creds.json'
-    dest: '/etc/rclone-gcs-creds.json'
-    mode: '600'
+    src: "backup/creds.json"
+    dest: "/etc/rclone-gcs-creds.json"
+    mode: "600"
 
 - name: Install Consul backup script
   copy:
-    src: 'backup/consulbackup'
-    dest: '/usr/local/sbin/'
-    mode: '755'
+    src: "backup/consulbackup"
+    dest: "/usr/local/sbin/"
+    mode: "755"
 
 - name: Install Consul backup systemd service
   copy:
-    src: 'backup/consulbackup.service'
+    src: "backup/consulbackup.service"
     dest: /etc/systemd/system
-    mode: '644'
+    mode: "644"
   notify:
-    - 'enable consulbackup'
+    - "enable consulbackup"
 
 - name: Install Consul backup systemd timer
   copy:
-    src: 'backup/consulbackup.timer'
+    src: "backup/consulbackup.timer"
     dest: /etc/systemd/system
-    mode: '644'
+    mode: "644"
   notify:
-    - 'enable consulbackup timer'
+    - "enable consulbackup timer"
