@@ -1,0 +1,77 @@
+---
+- name: Get Synapse APT key
+  ansible.builtin.get_url:
+    url: https://packages.matrix.org/debian/matrix-org-archive-keyring.asc
+    dest: /etc/apt/trusted.gpg.d/synapse.asc
+    checksum: sha256:0f96b61792615ac823494e41ba2eb00126bc16cc55cfc5e83c9065237c03cfca
+
+- name: Configure Synapse APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/synapse.asc] https://packages.matrix.org/debian/ {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: yes
+
+- name: Install Matrix server certificate deployment hook
+  ansible.builtin.template:
+    src: tls-deploy-hook.sh
+    dest: /etc/letsencrypt/renewal-hooks/deploy/matrix-server.sh
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Create Matrix server data directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: matrix-synapse
+    group: matrix-synapse
+    mode: "0750"
+    state: directory
+  loop:
+    - "{{ matrix_server_state_directory }}"
+    - "{{ matrix_server_state_directory }}/media"
+
+- name: Install Matrix server
+  ansible.builtin.apt:
+    pkg:
+      - matrix-synapse-py3
+    state: present
+
+- name: Fix Matrix server config directory permissions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: matrix-synapse
+    group: matrix-synapse
+    mode: "0750"
+    state: directory
+  loop:
+    - /etc/matrix-synapse
+    - /etc/matrix-synapse/conf.d
+
+- name: Install Matrix server config files
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/matrix-synapse/{{ item }}"
+    owner: root
+    group: matrix-synapse
+    mode: "0640"
+  loop:
+    - homeserver.yaml
+    - log.yaml
+    - conf.d/server_name.yaml
+  notify: Restart Matrix server
+
+- name: Install Matrix server nginx config file
+  ansible.builtin.template:
+    src: nginx.conf
+    dest: /etc/nginx/sites-available/matrix-synapse
+    owner: root
+    group: root
+    mode: "0640"
+  notify: Reload nginx
+
+- name: Enable Matrix server nginx config
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/matrix-synapse
+    src: ../sites-available/matrix-synapse
+    state: link
+  notify: Reload nginx

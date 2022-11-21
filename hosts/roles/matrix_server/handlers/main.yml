@@ -1,0 +1,10 @@
+---
+- name: Restart Matrix server
+  ansible.builtin.systemd:
+    name: matrix-synapse.service
+    state: restarted
+
+- name: Reload nginx
+  ansible.builtin.systemd:
+    name: nginx.service
+    state: reloaded

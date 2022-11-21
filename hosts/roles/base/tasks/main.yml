@@ -47,6 +47,7 @@
   ansible.builtin.apt:
     pkg:
       - fluent-bit
+      - nginx
       - prometheus-node-exporter
       - restic
     state: present

@@ -1,0 +1,26 @@
+pid_file: /var/run/matrix-synapse.pid
+log_config: /etc/matrix-synapse/log.yaml
+enable_registration: false
+trusted_key_servers:
+  - server_name: matrix.org
+
+media_store_path: "{{ matrix_server_state_directory }}/media"
+#max_upload_size: 50M
+#max_image_pixels: 32M
+
+# Set up one non-secure listener meant to be on the other side of a reverse
+# proxy that handles TLS
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ["::1", "127.0.0.1"]
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: sqlite3
+  args:
+    database: "{{ matrix_server_state_directory }}/homeserver.db"
