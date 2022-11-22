@@ -1,4 +1,11 @@
 ---
+- name: Install Mumble server
+  ansible.builtin.apt:
+    pkg:
+      - acl
+      - mumble-server
+    state: present
+
 - name: Install Mumble server certificate deployment hook
   ansible.builtin.template:
     src: tls-deploy-hook.sh
@@ -10,18 +17,13 @@
 
 - name: Create Mumble server data directory
   ansible.builtin.file:
-    path: "{{ mumble_server_state_directory }}"
-    owner: root
+    dest: "{{ mumble_server_state_directory }}"
+    owner: mumble-server
     group: mumble-server
-    mode: "0770"
+    mode: u=rwX,g=rX,o=
+    recurse: yes
     state: directory
-
-- name: Install Mumble server
-  ansible.builtin.apt:
-    pkg:
-      - acl
-      - mumble-server
-    state: present
+  notify: Restart Mumble server
 
 - name: Install Mumble server config file
   ansible.builtin.template:
