@@ -19,3 +19,8 @@
   ansible.builtin.systemd:
     name: fluent-bit.service
     state: restarted
+
+- name: Restart rsyslog
+  ansible.builtin.systemd:
+    name: rsyslog.service
+    state: restarted

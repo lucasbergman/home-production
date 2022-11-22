@@ -97,3 +97,12 @@
     group: root
     mode: "0644"
   notify: Restart Fluent Bit
+
+- name: Configure rsyslog to forward to Fluent Bit
+  ansible.builtin.template:
+    src: rsyslog.conf
+    dest: /etc/rsyslog.d/60-fluent-bit.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart rsyslog
