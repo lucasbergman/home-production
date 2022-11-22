@@ -60,6 +60,7 @@ resource "linode_instance_config" "snowball" {
   linode_id = linode_instance.snowball.id
   label     = "ubuntu"
   booted    = true
+  kernel    = "linode/grub2" # use the distro kernel, not Linode's
 
   devices {
     sda {
