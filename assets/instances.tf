@@ -27,8 +27,8 @@ resource "google_service_account_key" "instance_snowball" {
 
 resource "linode_instance" "snowball" {
   label  = "snowball"
-  type   = "g6-standard-2"
-  region = "us-central"
+  type   = var.linode_type
+  region = var.linode_region
 }
 
 resource "linode_instance_disk" "snowball_swap" {
@@ -42,7 +42,7 @@ resource "linode_instance_disk" "snowball_boot" {
   label           = "boot"
   linode_id       = linode_instance.snowball.id
   size            = linode_instance.snowball.specs.0.disk - linode_instance_disk.snowball_swap.size
-  image           = "linode/ubuntu22.04"
+  image           = var.linode_image
   authorized_keys = [chomp(file("ssh/home-desktop.pub"))]
   stackscript_id  = linode_stackscript.write_gcp_creds.id
   stackscript_data = {
@@ -52,7 +52,7 @@ resource "linode_instance_disk" "snowball_boot" {
 
 resource "linode_volume" "snowball_data" {
   label  = "snowball-data"
-  region = "us-central"
+  region = var.linode_region
   size   = 10 # GB
 }
 

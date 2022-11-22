@@ -3,3 +3,21 @@ variable "gcp_project" {
   type        = string
   default     = "bergmans-services"
 }
+
+variable "linode_region" {
+  description = "Region to place instances; see https://api.linode.com/v4/regions"
+  type        = string
+  default     = "us-central"
+}
+
+variable "linode_image" {
+  description = "Base image ID for instance boot disks; see https://www.linode.com/docs/api/images"
+  type        = string
+  default     = "linode/ubuntu22.04"
+}
+
+variable "linode_type" {
+  description = "Instance type; see https://api.linode.com/v4/linode/types"
+  type        = string
+  default     = "g6-standard-2"
+}
