@@ -19,22 +19,24 @@
     group: root
     mode: "0750"
 
-- name: Create Matrix server data directory
-  ansible.builtin.file:
-    path: "{{ item }}"
-    owner: matrix-synapse
-    group: matrix-synapse
-    mode: "0750"
-    state: directory
-  loop:
-    - "{{ matrix_server_state_directory }}"
-    - "{{ matrix_server_state_directory }}/media"
-
 - name: Install Matrix server
   ansible.builtin.apt:
     pkg:
       - matrix-synapse-py3
     state: present
+
+- name: Create Matrix server data directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: matrix-synapse
+    group: matrix-synapse
+    mode: u=rwX,g=rX,o=
+    recurse: yes
+    state: directory
+  loop:
+    - "{{ matrix_server_state_directory }}"
+    - "{{ matrix_server_state_directory }}/media"
+  notify: Restart Matrix server
 
 - name: Fix Matrix server config directory permissions
   ansible.builtin.file:
@@ -46,6 +48,7 @@
   loop:
     - /etc/matrix-synapse
     - /etc/matrix-synapse/conf.d
+  notify: Restart Matrix server
 
 - name: Install Matrix server config files
   ansible.builtin.template:
