@@ -1,3 +1,4 @@
 letsencrypt_domains: []
 letsencrypt_email: lucas@bergmans.us
+letsencrypt_config_path: /etc/letsencrypt
 letsencrypt_gcp_creds_path: /etc/gcp-instance-creds.json

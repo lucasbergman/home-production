@@ -5,6 +5,7 @@ all:
       data_volume_mount_path: /data
       data_volume_blkdev: /dev/sdc
       logging_gcp_location: linode:us-central
+      letsencrypt_config_path: /data/tls
       letsencrypt_domains:
         - bergman.house
         - matrix.bergman.house

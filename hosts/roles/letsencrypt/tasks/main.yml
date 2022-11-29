@@ -1,4 +1,29 @@
 ---
+- name: Create certbot config directory
+  ansible.builtin.file:
+    dest: "{{ letsencrypt_config_path }}"
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+
+- name: Install certbot config file
+  ansible.builtin.template:
+    src: letsencrypt_cli.ini
+    dest: "{{ letsencrypt_config_path }}/cli.ini"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Link /etc/letsencrypt to certbot config directory
+  ansible.builtin.file:
+    src: "{{ letsencrypt_config_path }}"
+    dest: /etc/letsencrypt
+    owner: root
+    group: root
+    state: link
+  when: letsencrypt_config_path != '/etc/letsencrypt'
+
 - name: Install certbot
   ansible.builtin.apt:
     pkg:
@@ -13,14 +38,6 @@
     name: certbot.service
     enabled: yes
 
-- name: Install certbot config file
-  ansible.builtin.template:
-    src: letsencrypt_cli.ini
-    dest: /etc/letsencrypt/cli.ini
-    owner: root
-    group: root
-    mode: "0644"
-
 - name: Install initial certificates
   ansible.builtin.command:
     argv:
@@ -29,5 +46,5 @@
       - --non-interactive
       - --domain
       - "{{ item }}"
-    creates: "/etc/letsencrypt/live/{{ item }}/fullchain.pem"
+    creates: "{{ letsencrypt_config_path }}/live/{{ item }}/fullchain.pem"
   loop: "{{ letsencrypt_domains }}"
