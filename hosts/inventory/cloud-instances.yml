@@ -10,6 +10,8 @@ all:
         - bergman.house
         - matrix.bergman.house
         - mumble.bergmans.us
+        - pop.bergmans.us
+        - smtp.bergmans.us
         - snowball.bergmans.us
       restic_password: !vault |
         $ANSIBLE_VAULT;1.1;AES256
@@ -28,9 +30,14 @@ all:
         6663
       mumble_server_tls_host: mumble.bergmans.us
       mumble_server_state_directory: /data/mumble-server
+
       matrix_server_name: bergman.house
       matrix_server_tls_host: matrix.bergman.house
       matrix_server_state_directory: /data/matrix-synapse
+
+      mail_server_data_directory: /data/mail
+      mail_server_smtp_host_name: smtp.bergmans.us
+      mail_server_pop_host_name: pop.bergmans.us
 
   children:
     cloud_all_purpose:

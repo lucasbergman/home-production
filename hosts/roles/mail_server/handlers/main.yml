@@ -1,0 +1,26 @@
+---
+- name: Prepare Postfix directories
+  ansible.builtin.command:
+    argv:
+      - /etc/postfix/post-install
+      - config_directory=/etc/postfix
+      - meta_directory=/etc/postfix
+      - set-permissions
+
+- name: Restart Postfix
+  ansible.builtin.systemd:
+    name: postfix.service
+    state: restarted
+
+- name: Rebuild Postfix aliases
+  ansible.builtin.command: newaliases
+
+- name: Rebuild Postfix maps
+  ansible.builtin.command: bmake
+  args:
+    chdir: /etc/postfix
+
+- name: Restart Dovecot
+  ansible.builtin.systemd:
+    name: dovecot.service
+    state: restarted

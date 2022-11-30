@@ -1,0 +1,119 @@
+---
+- name: Create system group for virtual mailbox delivery
+  ansible.builtin.group:
+    name: vmail
+    system: yes
+
+- name: Create system user for virtual mailbox delivery
+  ansible.builtin.user:
+    name: vmail
+    system: yes
+    group: vmail
+    password_lock: yes
+    create_home: no
+    home: "{{ mail_server_data_directory }}"
+
+- name: Install mail server packages
+  ansible.builtin.apt:
+    pkg:
+      - bmake
+      - ca-certificates
+      - dovecot-pop3d
+      - postfix
+      - postfix-pcre
+    state: present
+
+- name: Create mail server data directory
+  ansible.builtin.file:
+    path: "{{ mail_server_data_directory }}"
+    owner: root
+    group: vmail
+    mode: u=rwx,g=rx,o=
+    state: directory
+
+- name: Create virtual mailbox delivery directory
+  ansible.builtin.file:
+    path: "{{ mail_server_data_directory }}/users"
+    owner: vmail
+    group: vmail
+    mode: u=rwX,g=rX,o=
+    recurse: yes
+    state: directory
+  notify:
+    - Restart Postfix
+    - Restart Dovecot
+
+- name: Get vmail user info
+  ansible.builtin.getent:
+    database: passwd
+    key: vmail
+
+- name: Get vmail group info
+  ansible.builtin.getent:
+    database: group
+    key: vmail
+
+- name: Install Postfix main configuration
+  ansible.builtin.template:
+    src: postfix/main.cf
+    dest: /etc/postfix/main.cf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Prepare Postfix directories
+    - Restart Postfix
+
+- name: Install Postfix aliases file
+  ansible.builtin.copy:
+    src: postfix/aliases
+    dest: /etc/aliases
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Rebuild Postfix aliases
+
+- name: Install Postfix map files
+  ansible.builtin.copy:
+    src: "postfix/{{ item }}"
+    dest: /etc/postfix/
+    owner: root
+    group: postfix
+    mode: "0640"
+  loop:
+    - Makefile
+    - sasl_passwd
+    - valias
+    - vmailbox
+  notify: Rebuild Postfix maps
+
+- name: Install Dovecot configuration
+  ansible.builtin.template:
+    src: dovecot/{{ item }}
+    dest: /etc/dovecot/conf.d/
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - 10-auth.conf
+    - 10-mail.conf
+    - 10-master.conf
+    - 10-ssl.conf
+  notify: Restart Dovecot
+
+- name: Install Dovecot users file
+  ansible.builtin.copy:
+    src: dovecot/users
+    dest: /etc/dovecot/users
+    owner: root
+    group: dovecot
+    mode: "0640"
+  notify: Restart Dovecot
+
+- name: Install mail server certificate deployment hook
+  ansible.builtin.template:
+    src: tls-deploy-hook.sh
+    dest: /etc/letsencrypt/renewal-hooks/deploy/mail-server.sh
+    owner: root
+    group: root
+    mode: "0750"

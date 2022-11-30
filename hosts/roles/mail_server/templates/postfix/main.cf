@@ -1,0 +1,79 @@
+compatibility_level = 3.6
+mail_spool_directory = {{ mail_server_data_directory }}/incoming
+queue_directory = {{ mail_server_data_directory }}/queue
+alias_database = hash:/etc/aliases
+alias_maps = hash:/etc/aliases
+
+# 64 MiB (default is about 10)
+message_size_limit = 67108864
+virtual_mailbox_limit = $message_size_limit
+
+mydestination = localhost $myhostname localhost.$mydomain
+mydomain = bergmans.us
+myhostname = {{ mail_server_smtp_host_name }}
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+myorigin = $myhostname
+
+# Virtual mailbox domains are for when Postfix does "final delivery for
+# hosted domains where each recipient address can have its own mailbox."
+virtual_mailbox_domains = bergmans.us
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_mailbox_base = {{ mail_server_data_directory }}/users
+virtual_gid_maps = static:{{ getent_group['vmail'][1] }}
+virtual_uid_maps = static:{{ getent_passwd['vmail'][1] }}
+
+# Virtual alias domains are for when Postfix delivers to "hosted domains where
+# each recipient address is aliased to an address in a different domain."
+virtual_alias_domains =
+    bergman.house
+    blurt.chat
+    boozyprofessor.com
+    maunder.chat
+    smartgirltravel.com
+    smartmousetravel.com
+virtual_alias_maps = hash:/etc/postfix/valias
+
+smtpd_banner = $myhostname ESMTP
+smtpd_helo_required = yes
+smtpd_recipient_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    reject_rbl_client zen.spamhaus.org=127.0.0.[2..11]
+    reject_rhsbl_sender dbl.spamhaus.org=127.0.1.[2..99]
+    reject_rhsbl_helo dbl.spamhaus.org=127.0.1.[2..99]
+    reject_rhsbl_reverse_client dbl.spamhaus.org=127.0.1.[2..99]
+    warn_if_reject reject_rbl_client zen.spamhaus.org=127.255.255.[1..255]
+    reject_non_fqdn_recipient
+    reject_unknown_recipient_domain
+    reject_unauth_destination
+smtpd_relay_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    reject_unauth_destination
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_local_domain = $mydomain
+smtpd_sasl_path = private/auth
+smtpd_sasl_type = dovecot
+smtpd_sender_restrictions = reject_unknown_sender_domain
+smtpd_tls_auth_only = yes
+smtpd_tls_cert_file = /etc/letsencrypt/live/{{ mail_server_smtp_host_name }}/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/{{ mail_server_smtp_host_name }}/privkey.pem
+smtpd_use_tls = yes
+
+# Pretend that this is the next-hop MX for all non-local mail delivery (this
+# overrides the recipient domain)
+relayhost = [smtp.sendgrid.net]:587
+
+# Postfix should never act as an SMTP client except to our relay host, so it's
+# safe to set these values to require very high security
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_tls_cert_file = $smtpd_tls_cert_file
+smtp_tls_key_file = $smtpd_tls_key_file
+smtp_tls_loglevel = 1
+smtp_tls_security_level = secure
+smtp_tls_mandatory_ciphers = high
+smtp_tls_mandatory_protocols = >=TLSv1.2
+smtp_tls_secure_cert_match = nexthop, dot-nexthop
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt

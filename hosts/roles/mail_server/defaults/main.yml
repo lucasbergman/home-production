@@ -1,0 +1,4 @@
+---
+mail_server_data_directory: ""
+mail_server_smtp_host_name: smtp.example.com
+mail_server_pop_host_name: pop.example.com

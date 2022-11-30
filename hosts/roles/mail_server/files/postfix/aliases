@@ -1,0 +1,8 @@
+root: lucas@bergmans.us
+
+mailer-daemon: postmaster
+postmaster: root
+nobody: root
+abuse: root
+noc: root
+security: root

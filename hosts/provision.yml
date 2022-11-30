@@ -8,5 +8,6 @@
 - name: Provision all-purpose cloud server
   hosts: cloud_all_purpose
   roles:
+    - mail_server
     - matrix_server
     - mumble_server
