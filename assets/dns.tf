@@ -105,9 +105,9 @@ resource "google_dns_record_set" "bergmans_domainkey_sendgrid2" {
   ttl          = 3600
 }
 
-resource "google_dns_record_set" "bergmans_domainkey_sendgrid3" {
+resource "google_dns_record_set" "bergmans_sendgrid_domain" {
   managed_zone = google_dns_managed_zone.bergmans.name
-  name         = "em2468.bergmans.us."
+  name         = "em4574.bergmans.us."
   type         = "CNAME"
   rrdatas      = ["u13710287.wl038.sendgrid.net."]
   ttl          = 3600
