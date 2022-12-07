@@ -4,6 +4,11 @@ variable "gcp_project" {
   default     = "bergmans-services"
 }
 
+variable "linode_token" {
+  description = "Linode API token"
+  type        = string
+}
+
 variable "linode_region" {
   description = "Region to place instances; see https://api.linode.com/v4/regions"
   type        = string

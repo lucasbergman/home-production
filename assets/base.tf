@@ -16,6 +16,10 @@ provider "google" {
   project = var.gcp_project
 }
 
+provider "linode" {
+  token = var.linode_token
+}
+
 terraform {
   backend "gcs" {
     bucket = "bergmans-services-assets"

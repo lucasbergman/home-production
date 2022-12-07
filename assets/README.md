@@ -10,6 +10,12 @@ the `gcloud` and `gsutil` commands from the [Google Cloud SDK command-line
 tools](https://cloud.google.com/sdk). I'm likely to add the
 [Bazel](https://bazel.build/) build system later.
 
+## Local Secrets
+
+Secret values, notably cloud API tokens, are stored in a `private.auto.tfvars`
+file that gets ignored by Git and automatically read by Terraform. Run the
+`gensecrets.sh` script to generate the file by slurping values from BitWarden.
+
 ## Initial Setup
 
 Terraform has to store its state in Google Cloud Storage. If you're starting
