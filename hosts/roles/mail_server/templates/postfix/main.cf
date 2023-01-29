@@ -62,13 +62,15 @@ smtpd_use_tls = yes
 
 # Pretend that this is the next-hop MX for all non-local mail delivery (this
 # overrides the recipient domain)
-relayhost = [smtp.sendgrid.net]:587
+relayhost = [email-smtp.us-east-2.amazonaws.com]:587
 
 # Postfix should never act as an SMTP client except to our relay host, so it's
 # safe to set these values to require very high security
 smtp_sasl_auth_enable = yes
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_sasl_security_options = noanonymous
+smtp_use_tls = yes
+smtp_tls_note_starttls_offer = yes
 smtp_tls_cert_file = $smtpd_tls_cert_file
 smtp_tls_key_file = $smtpd_tls_key_file
 smtp_tls_loglevel = 1
