@@ -8,26 +8,15 @@ resource "aws_ses_domain_identity" "bergmanhouse" {
   domain = "bergman.house"
 }
 
-resource "google_dns_record_set" "bergmanhouse_ses_dkim1" {
-  managed_zone = google_dns_managed_zone.bergmanhouse.name
-  name         = "yxm7hu67gktysuirrw3hunu36wxdqz4z._domainkey.bergman.house."
-  type         = "CNAME"
-  rrdatas      = ["yxm7hu67gktysuirrw3hunu36wxdqz4z.dkim.amazonses.com."]
-  ttl          = 3600
+resource "aws_ses_domain_dkim" "bergmanhouse" {
+  domain = aws_ses_domain_identity.bergmanhouse.domain
 }
 
-resource "google_dns_record_set" "bergmanhouse_ses_dkim2" {
+resource "google_dns_record_set" "bergmanhouse_ses_dkim" {
+  count        = 3
   managed_zone = google_dns_managed_zone.bergmanhouse.name
-  name         = "e6cvp6jh526bwbemns3obiyexos4mqpl._domainkey.bergman.house."
+  name         = "${aws_ses_domain_dkim.bergmanhouse.dkim_tokens[count.index]}._domainkey.bergman.house."
   type         = "CNAME"
-  rrdatas      = ["e6cvp6jh526bwbemns3obiyexos4mqpl.dkim.amazonses.com."]
-  ttl          = 3600
-}
-
-resource "google_dns_record_set" "bergmanhouse_ses_dkim3" {
-  managed_zone = google_dns_managed_zone.bergmanhouse.name
-  name         = "deiupgq5gemqwi22la47agp55klxy6j6._domainkey.bergman.house."
-  type         = "CNAME"
-  rrdatas      = ["deiupgq5gemqwi22la47agp55klxy6j6.dkim.amazonses.com."]
+  rrdatas      = ["${aws_ses_domain_dkim.bergmanhouse.dkim_tokens[count.index]}.dkim.amazonses.com."]
   ttl          = 3600
 }
