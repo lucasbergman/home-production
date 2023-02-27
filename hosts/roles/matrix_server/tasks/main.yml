@@ -25,13 +25,30 @@
       - matrix-synapse-py3
     state: present
 
+# Ensure the base directories exist, and recursively set ownership
 - name: Create Matrix server data directory
   ansible.builtin.file:
     path: "{{ item }}"
     owner: matrix-synapse
     group: matrix-synapse
-    mode: u=rwX,g=rX,o=
     recurse: yes
+    state: directory
+  loop:
+    - "{{ matrix_server_state_directory }}"
+    - "{{ matrix_server_state_directory }}/media"
+  notify: Restart Matrix server
+
+# Make sure the base directories have the right permissions
+# (Note that this is a separate step from above, since Synapse randomly
+# sets some media directories to mode 0755 and others to 0750. So if the two
+# steps are combined, you get spurious diffs.)
+- name: Clean Matrix server data directory permissions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: matrix-synapse
+    group: matrix-synapse
+    mode: u=rwX,g=rX,o=
+    recurse: no
     state: directory
   loop:
     - "{{ matrix_server_state_directory }}"
