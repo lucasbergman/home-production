@@ -8,6 +8,9 @@ alias_maps = hash:/etc/aliases
 message_size_limit = 67108864
 virtual_mailbox_limit = $message_size_limit
 
+# Allow users to have infinite '+'-separated addresses
+recipient_delimiter = +
+
 mydestination = localhost $myhostname localhost.$mydomain
 mydomain = bergmans.us
 myhostname = {{ mail_server_smtp_host_name }}
