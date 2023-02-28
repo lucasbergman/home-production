@@ -15,6 +15,11 @@
     enabled: yes
     daemon_reload: yes
 
+- name: Restart Prometheus node exporter
+  ansible.builtin.systemd:
+    name: prometheus-node-exporter.service
+    state: restarted
+
 - name: Restart Fluent Bit
   ansible.builtin.systemd:
     name: fluent-bit.service

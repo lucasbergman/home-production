@@ -52,6 +52,15 @@
       - restic
     state: present
 
+- name: Install Prometheus node exporter defaults file
+  ansible.builtin.template:
+    src: prometheus-node-exporter-defaults
+    dest: /etc/default/prometheus-node-exporter
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Prometheus node exporter
+
 - name: Install Restic backup wrapper script
   ansible.builtin.template:
     src: backup/run-restic.sh
