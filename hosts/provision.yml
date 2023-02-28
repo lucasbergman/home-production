@@ -10,4 +10,5 @@
   roles:
     - mail_server
     - matrix_server
+    - monitoring
     - mumble_server

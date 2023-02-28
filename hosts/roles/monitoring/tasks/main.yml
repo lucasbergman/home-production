@@ -1,0 +1,57 @@
+---
+- name: Install Prometheus monitoring system
+  ansible.builtin.apt:
+    pkg:
+      - prometheus
+      - prometheus-alertmanager
+    state: present
+
+- name: Create Prometheus data directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: prometheus
+    group: prometheus
+    recurse: yes
+    state: directory
+    mode: u=rwX,g=rX,o=rX
+  loop:
+    - "{{ prometheus_data_directory }}"
+    - "{{ prometheus_data_directory }}/alertmanager"
+    - "{{ prometheus_data_directory }}/metrics"
+  notify: Restart Prometheus
+
+- name: Install Prometheus defaults file
+  ansible.builtin.template:
+    src: prometheus-defaults
+    dest: /etc/default/prometheus
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Prometheus
+
+- name: Install Prometheus config
+  ansible.builtin.template:
+    src: prometheus.yml
+    dest: /etc/prometheus/
+    owner: root
+    group: prometheus
+    mode: "0640"
+  notify: Restart Prometheus
+
+- name: Install Prometheus alert manager defaults file
+  ansible.builtin.template:
+    src: prometheus-alertmanager-defaults
+    dest: /etc/default/prometheus-alertmanager
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Prometheus alert manager
+
+- name: Install Prometheus alert manager config
+  ansible.builtin.template:
+    src: alertmanager.yml
+    dest: /etc/prometheus/
+    owner: root
+    group: prometheus
+    mode: "0640"
+  notify: Restart Prometheus alert manager

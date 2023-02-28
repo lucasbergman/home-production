@@ -1,0 +1,5 @@
+---
+prometheus_data_directory: "/var/lib/prometheus"
+alertmanager_smtp_relayhost: "localhost:25"
+alertmanager_smtp_from: "alertmanager@example.com"
+alertmanager_pagerduty_key: ""
