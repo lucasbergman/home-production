@@ -4,6 +4,7 @@
     pkg:
       - prometheus
       - prometheus-alertmanager
+      - prometheus-blackbox-exporter
     state: present
 
 - name: Create Prometheus data directory
@@ -28,6 +29,24 @@
     group: root
     mode: "0644"
   notify: Restart Prometheus
+
+- name: Install Prometheus blackbox exporter config
+  ansible.builtin.template:
+    src: blackbox.yml
+    dest: /etc/prometheus/
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Prometheus blackbox exporter
+
+- name: Install Prometheus blackbox exporter defaults file
+  ansible.builtin.template:
+    src: prometheus-blackbox-exporter-defaults
+    dest: /etc/default/prometheus-blackbox-exporter
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Prometheus blackbox exporter
 
 - name: Install Prometheus config
   ansible.builtin.template:
