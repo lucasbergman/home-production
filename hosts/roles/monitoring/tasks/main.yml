@@ -55,3 +55,77 @@
     group: prometheus
     mode: "0640"
   notify: Restart Prometheus alert manager
+
+- name: Get Grafana APT key
+  ansible.builtin.get_url:
+    url: https://apt.grafana.com/gpg.key
+    dest: /etc/apt/trusted.gpg.d/grafana.key
+    checksum: sha256:ecb3d77aa13d94e1e1abc6b77f6af96665bd62a8255c774ffa0c330fcee8eed4
+
+- name: Configure Grafana APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/grafana.key] https://apt.grafana.com stable main"
+    state: present
+    update_cache: yes
+
+- name: Install Grafana certificate deployment hook
+  ansible.builtin.template:
+    src: tls-deploy-hook.sh
+    dest: /etc/letsencrypt/renewal-hooks/deploy/grafana.sh
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Install Grafana
+  ansible.builtin.apt:
+    pkg: [ grafana ]
+    state: present
+
+- name: Create Grafana data directory
+  ansible.builtin.file:
+    path: "{{ grafana_data_directory }}"
+    owner: grafana
+    group: grafana
+    recurse: yes
+    state: directory
+  notify: Restart Grafana
+
+- name: Set Grafana data directory mode
+  ansible.builtin.file:
+    path: "{{ grafana_data_directory }}"
+    recurse: no
+    mode: u=rwX,g=rX,o=rX
+
+- name: Install Grafana defaults file
+  ansible.builtin.template:
+    src: grafana-defaults
+    dest: /etc/default/grafana-server
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Grafana
+
+- name: Install Grafana config
+  ansible.builtin.template:
+    src: grafana.ini
+    dest: /etc/grafana/
+    owner: root
+    group: grafana
+    mode: "0640"
+  notify: Restart Grafana
+
+- name: Install Grafana nginx config file
+  ansible.builtin.template:
+    src: nginx.conf
+    dest: /etc/nginx/sites-available/grafana
+    owner: root
+    group: root
+    mode: "0640"
+  notify: Reload nginx
+
+- name: Enable Grafana nginx config
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/grafana
+    src: ../sites-available/grafana
+    state: link
+  notify: Reload nginx
