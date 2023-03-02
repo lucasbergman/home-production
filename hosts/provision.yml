@@ -12,3 +12,14 @@
     - matrix_server
     - monitoring
     - mumble_server
+
+- name: Special tasks for snowball
+  hosts: snowball.bergmans.us
+  handlers:
+    - name: Restart Prometheus
+      ansible.builtin.systemd:
+        name: prometheus.service
+        state: restarted
+  tasks:
+    - name: Run special tasks for snowball
+      import_tasks: tasks/snowball/main.yml

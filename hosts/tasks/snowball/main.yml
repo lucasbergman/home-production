@@ -1,0 +1,11 @@
+- name: Install snowball Prometheus config
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: /etc/prometheus/
+    owner: root
+    group: prometheus
+    mode: "0640"
+  loop:
+    - prometheus.yml
+    - prober_smartmouse.rules
+  notify: Restart Prometheus

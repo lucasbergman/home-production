@@ -24,10 +24,6 @@ images = {
     name    = "prom/alertmanager"
     version = "v0.24.0"
   }
-  prom_blackbox = {
-    name    = "prom/blackbox-exporter"
-    version = "v0.22.0"
-  }
   prom_prometheus = {
     name    = "prom/prometheus"
     version = "v2.40.1"

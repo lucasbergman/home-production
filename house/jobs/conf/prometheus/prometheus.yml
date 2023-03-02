@@ -9,7 +9,6 @@ global:
 rule_files:
   - '/etc/prometheus/house.rules'
   - '/etc/prometheus/node.rules'
-  - '/etc/prometheus/prober.rules'
   - '/etc/prometheus/ups.rules'
 
 alerting:
@@ -57,17 +56,6 @@ scrape_configs:
     static_configs:
       - targets:
           {{- range service "homeassistant" }}
-          - '{{ .Address }}:{{ .Port }}'
-          {{- end }}
-
-  - job_name: 'smartmouse'
-    metrics_path: '/probe'
-    params:
-      module: ['http_head']
-      target: ['https://smartmousetravel.com/']
-    static_configs:
-      - targets:
-          {{- range service "prometheus-prober-blackbox-exporter" }}
           - '{{ .Address }}:{{ .Port }}'
           {{- end }}
 

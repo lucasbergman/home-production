@@ -57,60 +57,9 @@ EOF
             }
             template {
                 data = <<EOF
-${config_rules_prober}
-EOF
-                destination = "local/prometheus/prober.rules"
-                change_mode = "signal"
-                change_signal = "SIGHUP"
-            }
-            template {
-                data = <<EOF
 ${config_rules_ups}
 EOF
                 destination = "local/prometheus/ups.rules"
-                change_mode = "signal"
-                change_signal = "SIGHUP"
-            }
-            service {
-                port = "http"
-                check {
-                    type = "http"
-                    path = "/-/healthy"
-                    interval = "10s"
-                    timeout = "2s"
-                }
-            }
-            resources {
-                network {
-                    port "http" {}
-                }
-            }
-        }
-    }
-
-    group "prober" {
-        task "blackbox-exporter" {
-            driver = "docker"
-            config {
-                image = "${image_blackbox.name}:${image_blackbox.version}"
-                mounts = [
-                    {
-                        type = "bind"
-                        target = "/etc/blackbox_exporter/config.yml"
-                        source = "local/blackbox.yml"
-                        readonly = true
-                    },
-                ]
-                args = [
-                    "--web.listen-address=0.0.0.0:$${NOMAD_PORT_http}",
-                    "--config.file=/etc/blackbox_exporter/config.yml",
-                ]
-            }
-            template {
-                data = <<EOF
-${config_blackbox}
-EOF
-                destination = "local/blackbox.yml"
                 change_mode = "signal"
                 change_signal = "SIGHUP"
             }

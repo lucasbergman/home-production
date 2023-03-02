@@ -40,15 +40,12 @@ resource "nomad_job" "plex" {
 resource "nomad_job" "prometheus" {
     jobspec = templatefile("nomad/prometheus.nomad", {
         image_alertmanager = var.images.prom_alertmanager
-        image_blackbox = var.images.prom_blackbox
         image_prometheus = var.images.prom_prometheus
         config_prometheus = file("conf/prometheus/prometheus.yml")
         config_rules_house = file("conf/prometheus/house.rules")
         config_rules_node = file("conf/prometheus/node.rules")
-        config_rules_prober = file("conf/prometheus/prober.rules")
         config_rules_ups = file("conf/prometheus/ups.rules")
         config_alertmanager = file("conf/prometheus/alertmanager.yml")
-        config_blackbox = file("conf/prometheus/blackbox.yml")
     })
 }
 

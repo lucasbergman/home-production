@@ -126,7 +126,6 @@ if __name__ == "__main__":
         ),
         Config("plex", "linuxserver", "plex", "latest", r"^\d+\.\d+\."),
         Config("prom_alertmanager", "prom", "alertmanager", "latest", r"^v[\d\.]+$"),
-        Config("prom_blackbox", "prom", "blackbox-exporter", "latest", r"^v[\d\.]+$"),
         Config("prom_prometheus", "prom", "prometheus", "latest", r"^v[\d\.]+$"),
         Config("unifi", "linuxserver", "unifi-controller", "latest", r"^\d+\.\d+\."),
     ]

@@ -11,5 +11,5 @@ trim_trailing_whitespace = true
 [*.{hcl,tf}]
 indent_size = 2
 
-[*.{yml,yaml}]
+[*.{rules,yml,yaml}]
 indent_size = 2
