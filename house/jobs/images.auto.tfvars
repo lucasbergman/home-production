@@ -2,7 +2,7 @@
 images = {
   nginx = {
     name    = "nginx"
-    version = "1.23.2"
+    version = "1.23.3"
   }
   apcupsd_exporter = {
     name    = "gcr.io/bergmans-services/apcupsd_exporter"
@@ -10,26 +10,26 @@ images = {
   }
   grafana = {
     name    = "grafana/grafana"
-    version = "9.2.4"
+    version = "9.4.3"
   }
   homeassistant = {
     name    = "homeassistant/home-assistant"
-    version = "2022.11.2"
+    version = "2023.3.1"
   }
   plex = {
     name    = "linuxserver/plex"
-    version = "1.29.2"
+    version = "1.31.1"
   }
   prom_alertmanager = {
     name    = "prom/alertmanager"
-    version = "v0.24.0"
+    version = "v0.25.0"
   }
   prom_prometheus = {
     name    = "prom/prometheus"
-    version = "v2.40.1"
+    version = "v2.42.0"
   }
   unifi = {
     name    = "linuxserver/unifi-controller"
-    version = "7.2.95"
+    version = "7.3.83"
   }
 }
