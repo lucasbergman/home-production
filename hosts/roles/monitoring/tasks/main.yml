@@ -142,6 +142,11 @@
     mode: "0640"
   notify: Reload nginx
 
+- name: Enable Grafana service
+  ansible.builtin.systemd:
+    enabled: yes
+    name: grafana-server.service
+
 - name: Enable Grafana nginx config
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/grafana
