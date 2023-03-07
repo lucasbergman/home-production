@@ -11,6 +11,19 @@ groups:
       - record: node:transmit_bytes:rate5m
         expr: rate(node:transmit_bytes[5m])
 
+  - name: node_disk
+    rules:
+      - record: node:disk:reallocated_sector_ct
+        expr: smartmon_reallocated_sector_ct_raw_value
+      - record: node:disk:reported_uncorrect
+        expr: smartmon_reported_uncorrect_raw_value
+      - record: node:disk:command_timeout
+        expr: smartmon_command_timeout_raw_value
+      - record: node:disk:current_pending_sector
+        expr: smartmon_current_pending_sector_raw_value
+      - record: node:disk:offline_uncorrectable
+        expr: smartmon_offline_uncorrectable_raw_value
+
   - name: node_fs
     rules:
       - record: node:filesystem_avail_bytes
