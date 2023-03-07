@@ -27,6 +27,9 @@ scrape_configs:
           host: router
 
   - job_name: 'node'
+    relabel_configs:
+      - target_label: instance
+        replacement: hedwig_node
     static_configs:
       - targets:
           {{- range nodes }}
@@ -39,6 +42,9 @@ scrape_configs:
     metrics_path: '/v1/metrics'
     params:
       format: ['prometheus']
+    relabel_configs:
+      - target_label: instance
+        replacement: hedwig_nomad
     static_configs:
       - targets:
           {{- range nodes }}
@@ -61,10 +67,11 @@ scrape_configs:
 
   - job_name: 'apcupsd'
     metrics_path: '/metrics'
+    relabel_configs:
+      - target_label: instance
+        replacement: hedwig_ups
     static_configs:
       - targets:
           {{- range service "apcupsd-exporter" }}
           - '{{ .Address }}:{{ .Port }}'
           {{- end }}
-        labels:
-          instance: hedwig
