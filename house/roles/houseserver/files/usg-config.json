@@ -1,30 +1,19 @@
 {
-  "interfaces": {
-    "ethernet": {
-      "eth0": {
-        "address": [
-          "192.168.100.2/24"
-        ],
-        "description": "WAN",
-        "duplex": "auto",
-        "speed": "auto"
-      }
-    }
+  "port-forward": {
+    "hairpin-nat": "enable",
+    "lan-interface": ["eth2", "eth1"],
+    "wan-interface": "eth0"
   },
   "service": {
     "dhcp-server": {
-      "disabled": "false",
-      "hostfile-update": "enable",
       "shared-network-name": {
-        "net_LAN_eth1_192.168.101.0-24": {
+        "net_Default_eth1_192.168.101.0-24": {
           "authoritative": "enable",
           "description": "vlan1",
           "subnet": {
             "192.168.101.0/24": {
               "default-router": "192.168.101.1",
-              "dns-server": [
-                "192.168.101.1"
-              ],
+              "dns-server": ["192.168.101.1"],
               "domain-name": "bergman.house",
               "lease": "86400",
               "start": {
@@ -48,9 +37,7 @@
           "subnet": {
             "192.168.102.0/24": {
               "default-router": "192.168.102.1",
-              "dns-server": [
-                "192.168.102.1"
-              ],
+              "dns-server": ["192.168.102.1"],
               "lease": "86400",
               "start": {
                 "192.168.102.6": {
