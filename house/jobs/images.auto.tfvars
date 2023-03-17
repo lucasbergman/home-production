@@ -14,11 +14,11 @@ images = {
   }
   homeassistant = {
     name    = "homeassistant/home-assistant"
-    version = "2023.3.1"
+    version = "2023.3.5"
   }
   plex = {
     name    = "linuxserver/plex"
-    version = "1.31.1"
+    version = "1.31.2"
   }
   prom_alertmanager = {
     name    = "prom/alertmanager"
