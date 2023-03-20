@@ -1,13 +1,13 @@
 ---
 - name: Get Synapse APT key
   ansible.builtin.get_url:
-    url: https://packages.matrix.org/debian/matrix-org-archive-keyring.asc
-    dest: /etc/apt/trusted.gpg.d/synapse.asc
-    checksum: sha256:0f96b61792615ac823494e41ba2eb00126bc16cc55cfc5e83c9065237c03cfca
+    url: https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+    dest: /etc/apt/trusted.gpg.d/synapse.gpg
+    checksum: sha256:83ed46f74ab9971ddc7f4512514ff8f638d3e3ebf489c72f0127ca7220e32d49
 
 - name: Configure Synapse APT repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/synapse.asc] https://packages.matrix.org/debian/ {{ ansible_distribution_release }} main"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/synapse.gpg] https://packages.matrix.org/debian/ {{ ansible_distribution_release }} main"
     state: present
     update_cache: yes
 
