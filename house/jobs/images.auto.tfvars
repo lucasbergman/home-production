@@ -10,11 +10,11 @@ images = {
   }
   grafana = {
     name    = "grafana/grafana"
-    version = "9.4.3"
+    version = "9.4.7"
   }
   homeassistant = {
     name    = "homeassistant/home-assistant"
-    version = "2023.3.5"
+    version = "2023.3.6"
   }
   plex = {
     name    = "linuxserver/plex"
@@ -26,7 +26,7 @@ images = {
   }
   prom_prometheus = {
     name    = "prom/prometheus"
-    version = "v2.42.0"
+    version = "v2.43.0"
   }
   unifi = {
     name    = "linuxserver/unifi-controller"
