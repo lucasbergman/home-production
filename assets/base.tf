@@ -9,6 +9,9 @@ terraform {
     linode = {
       source = "linode/linode"
     }
+    vultr = {
+      source = "vultr/vultr"
+    }
     local = {
       source = "hashicorp/local"
     }
@@ -27,6 +30,10 @@ provider "google" {
 
 provider "linode" {
   token = var.linode_token
+}
+
+provider "vultr" {
+  api_key = var.vultr_token
 }
 
 terraform {

@@ -42,3 +42,8 @@ variable "linode_type" {
   type        = string
   default     = "g6-standard-2"
 }
+
+variable "vultr_token" {
+  description = "Vultr API token"
+  type        = string
+}
