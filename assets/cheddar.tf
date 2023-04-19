@@ -16,6 +16,14 @@ resource "vultr_instance" "cheddar" {
   activation_email = true
 }
 
+resource "vultr_block_storage" "cheddar_data" {
+  size_gb              = 40
+  region               = "ord"
+  attached_to_instance = vultr_instance.cheddar.id
+  block_type           = "storage_opt"
+  live                 = true
+}
+
 resource "google_dns_record_set" "bergmans_a_cheddar" {
   managed_zone = google_dns_managed_zone.bergmans.name
   name         = "${vultr_instance.cheddar.hostname}."

@@ -28,6 +28,11 @@ in
       device = "/dev/vda";
     };
 
+    fileSystems."/data" = {
+      device = "/dev/vdb";
+      fsType = "ext4";
+    };
+
     networking = {
       networkmanager.enable = true;
 
