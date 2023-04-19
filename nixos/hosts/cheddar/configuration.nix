@@ -35,6 +35,7 @@ in
 
     networking = {
       networkmanager.enable = true;
+      firewall.enable = false;
 
       hostName = "cheddar";
       domain = "bergmans.us";
@@ -42,44 +43,23 @@ in
 
     time.timeZone = "Etc/UTC";
 
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.lucas = {
-      isNormalUser = true;
-      extraGroups = ["wheel"];
-      openssh.authorizedKeys.keys = slb.sshPubKeys;
+    users = {
+      # Users can only be made declaratively
+      mutableUsers = false;
+
+      users.root.openssh.authorizedKeys.keys = slb.sshPubKeys;
+
+      users.lucas = {
+        isNormalUser = true;
+        extraGroups = ["wheel"];
+        openssh.authorizedKeys.keys = slb.sshPubKeys;
+      };
     };
 
-    users.users.root = {
-      openssh.authorizedKeys.keys = slb.sshPubKeys;
+    services.openssh = {
+      enable = true;
+      passwordAuthentication = false;
     };
-
-    # List packages installed in system profile. To search, run:
-    # $ nix search wget
-    # environment.systemPackages = with pkgs; [
-    #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #   wget
-    # ];
-
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-    # programs.mtr.enable = true;
-    # programs.gnupg.agent = {
-    #   enable = true;
-    #   enableSSHSupport = true;
-    # };
-
-    # List services that you want to enable:
-
-    # Enable the OpenSSH daemon.
-    services.openssh.enable = true;
-    services.openssh.passwordAuthentication = false;
-    users.mutableUsers = false;
-
-    # Open ports in the firewall.
-    # networking.firewall.allowedTCPPorts = [ ... ];
-    # networking.firewall.allowedUDPPorts = [ ... ];
-    # Or disable the firewall altogether.
-    # networking.firewall.enable = false;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
