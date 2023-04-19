@@ -33,6 +33,11 @@ in
       fsType = "ext4";
     };
 
+    environment.etc."gcp-instance-creds.json" = {
+      source = ./gcp-instance-creds.json;
+      mode = "0440";
+    };
+
     networking = {
       networkmanager.enable = true;
       firewall.enable = false;

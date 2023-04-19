@@ -1,0 +1,10 @@
+keys:
+  - &lucas age12l9q8qh3283ywr2dcyj9avxmc2phrjnkz6m4hfqk3mgh3rkt8ecskdj0gc
+  - &host_cheddar age1h8mr3pr6akmpej8fqcql9nh830emhp9s253v2ddg7sucr7yyl96srpah2m
+creation_rules:
+  - path_regex: /cheddar/.*gcp.*
+    encrypted_regex: private.*
+    key_groups:
+      - age:
+          - *lucas
+          - *host_cheddar

@@ -1,0 +1,33 @@
+{
+	"type": "service_account",
+	"project_id": "bergmans-services",
+	"private_key_id": "ENC[AES256_GCM,data:4VNy+nPen6WFiLrbrf9Ja1RXZXwiyE4+TuLMOWyfGOpib8RfXiRyDw==,iv:0/o7zVT7171dozzNBMNerXMTUK0HnIye+7c/WvHS1b0=,tag:OfH1oVCjo3+LSDCt0YDVeQ==,type:str]",
+	"private_key": "ENC[AES256_GCM,data:IcbALySQs9XLWobc+2kZJHiqmE4OAK5uVtaYzkp339+I5pAFxw/AHOqvpuuS1WifVYxpmzqYXPsKkIusN4gbHEOIp5ap1ExwK2WAySqJvzO9LOqTBdIBI+ciyP9pRJbzCWMypOkcV/3OZgUS37r5+MzTm4KS7AXtj/o3mjuEiSXx+iA7R/1Wel9z0ouTB5o0PheAnDzC7JsPwEpAl6PGs0I8VYUz6CGupxnsD+Aa9L7ZxCNz84ntXicIOcXy7L6c5otsc2fxXQfaPXpe9y2Oz7DUY+ooT3HWP6/XQsUbxyD2DUxUtTJNv+5VRFCGFRxFqqvS+ek3UuNRA2TS4gLw3G7BM3Nip+X+0Vz4v6xixnZwYcNJbLWiFNMMqgKOi7DBeSeYXmtZZ7lufwLi9Q8zB7Rm08ceI6vHAl/dkU6vZjoBbFv6VlmOn9hn90YTzFeWxUael6x3BMpsJU8yTy7EL8dXqf1+j2byYZ8ttIOtC88H0AMTg83Wxa3/h3eQTGTzvbEMFnPCqe7kHsf3fSUA4bRvQ4pQVNZgQeHZfR10Er3rg5QEBRCsnxYb+TalVhZswAVkPkZdJshLBEa99634KY+tqe6jI0mIUTml2bZi9jZXZdxtjrRKQ+UGsIvGoWaSH8fYCOi2FX91ToLXzk7pCkVMcBFJmeJ41vr55ZLiMTB48RreVC7W86Wye6CM8L1UC7jiezUhjL0R27G40YdPP55oecyYszU4KSHTAhY7nhColKtqsyr+AByagC+HEjZk2FsodOV3sM3kT/nU+fV6gn+78pr2d4uvkBib+klRXGvpF8mC/mvxzfRew8Bi7vdx3KvHFHwpu3MDCfh9mVtM+JjoZwweu8zGDs0dP6pk5SDjWyOUIUa3kCTaF61kXtoQmY87cIixJ3VumXhAllkr4EAsY4eGtrrePoeXwERBSf+eOT0Oszq4SaJ8ndi6iSDlTDQqJI6pZzkMz0Z0Yn2TMqz5CbAigbQWwiMMRKryi86hgiG4iRAtm93MTk5CiGhhw3dnV+4cmuY7Xm1De1aUDFR1T/BfSzMZQxJBw8TZugafJRUhWj4S++k1XtCHZjUymmWWculuCF0qxSjz/rO6wdoqkC7FFPRR3o14JOHsK+PStPmRL23d4z4fV1QajKPgJFgLfMaG5X22JApAVoWeyaKeR0z7+PARGexZokHBfH2/eJwh6VEb3Tp97aUIlQz9eU1NBG9JKs1C9+tE94M+ikISRSYFu3htvtqI0uHxWy5a0JqqlSBHph7gEHJTyuYRt+ZEFncmitbF1Szf/GAE31eZrtRB7Mdoo5pPYTC7uiHR6jHTcXkvdDnqV7FhGBgTnRrEUiYP+/hPIIsiyPMkbbTJ1Ab8gwPBoijrHgjecY18S4MVIUfRNCeBA1Vm+7tOfCG8olNqUNJqIZUNOaUEpYNCR87/aJJ4BkJISUrV9ddTG9+zFrX5vFgpKqV8rsJsAfanlL7cuJXaU23+BzRx6i1nP1kQNMqhtIoEMUfj7ljE+PLWyGN/cyaLNDO65Fz5XP+1yOVh16GJBcu0BP3ASJ5L8wLZET1PE+sNc1Thc1OKEcafHggjDo3rv/1nsPIjBHxpRuteYHNZlnxayrq74zDZRxWcEloEC5AuSoOZ3Cw5IyWp+MNq1cY1KTcw3MXYSgyGsFfr9YWy8R5XJosHsPirzTwlgyHd7Tk3pTdjd7jjFPvNBA55I7hRmtCqUJqAgCRfK1Vt64O71g8EaiH0d3BQs5m9l20UDle2JEE9nEjfZaRE6Hox9I3+8wwaj+Yyg+09bjkvmrilKrlM6V+9Db9n9K7IGUGrBGoNlcDDfEbMEzQbsOo02o6RbtjAaWUfdAk/8RlG7zTBN9QoRgWL8Y/aKRKYou9VC9FhcDBkiA16ChCEXjeDlFwhXitYmWrLl2BhMcVTzgq9i5R7rDhsrvdylztj2tr53AHkdWkjNxXK3eUuyvn6VxdgkZq88vTcQJxfyBoBWRT/bq30j3DcGXnAh0GCa/IOhNEXpEub8WabxAGLczH4rC7mNIFcEqVsOQcvtb1kvknLV2c8nXZYpMy6tQWxlmD+X39mVCE0OBWinecvkI4e3fH7yDwvZtJ9fonOO2Y5mBToQeHGkdTlnGKMySj9mVOqvhRGqCwkTMGXIgwyR1EIllLnDzm0ZWDiE7jtyOFNZuljZSx6ZrWh+HznwsXT4a+bl09gpb66okIJAR/w7hpcK0Cag4pX1b7srMiKZFnb32p1cqUD9ipfM44qgF8lx2+Z,iv:ks6pEE5nU4d2YTKkMN+ZV5B84i2E3M2gVB3WrLA+Xs0=,tag:yeK9vpdNlOhxeNfyiqUTOQ==,type:str]",
+	"client_email": "instance-cheddar@bergmans-services.iam.gserviceaccount.com",
+	"client_id": "112572951692372299988",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/instance-cheddar%40bergmans-services.iam.gserviceaccount.com",
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": [
+			{
+				"recipient": "age12l9q8qh3283ywr2dcyj9avxmc2phrjnkz6m4hfqk3mgh3rkt8ecskdj0gc",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3ZHVVQVp6NXZYVXhUamNQ\nRWY0UjFVdU03SjRGOVk0a1dHMmtEUGdURWo4CkRUQXpBMTA4bEQrK2oxUlFWcGNr\nWjR2TVRxa2RWekxJaUwzQjB1TkxuSHMKLS0tIEVBUmhNajZUMEVhTXZGR29MdExh\ncmhxQ2Z2WGxqR3NwaVh3REhyMnN6SVkKHhhJf8yasAdFO6vN8x95gkxErV0y4j9P\nogLw+nor44tMvpaqqPgP2/XmnzOOteHhEFlLTrTlvTQY4WQpRZ+bIQ==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "age1h8mr3pr6akmpej8fqcql9nh830emhp9s253v2ddg7sucr7yyl96srpah2m",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBOa1l5MllHZDdDWlB2NFcy\nMllDU2xXUDM0REx3MGQ3NEFpTG1LWTFtd1Q0CktkODRJdE5FY2dWeHFqTlpST3BP\nc3Vqb21DbElNbU93b0hlRy9ubXp3Q0UKLS0tIFZTTGpFNGpyVFpSeXoxMUk0MXdi\neEFET3VTa2NUNU0xakRTMEZsK2RkeW8KEt2trhjaqnvaf5Pgk9UaCdmhKfFpTYN0\nWO5++j4uFAn7ybMMK1J0UIUTcrAf3UuivfReSsdypM2rPZWiuf/RmA==\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"lastmodified": "2023-04-19T14:17:10Z",
+		"mac": "ENC[AES256_GCM,data:htnkNo6ttd5USrVeJyUVS35ap/tbY6kpATyapJg48ETtqaylZG54hDEeoMno2YtaY2oYaoj6OZj8n85DyRg8kCRpjcyUyAxqNDcBspTHzstAuQvGGDFBNAe1fkoaMUrqMir/tVXDMrBhgHKXbTY5FEJat+hcJaa+2GuDilJJySU=,iv:2wTHtRfq7u2TZYb5pZ/pe+PxO71EN+ZI7p1YbFiGLo8=,tag:hwnzfYr1j4nI/Frssn4yaw==,type:str]",
+		"pgp": null,
+		"encrypted_regex": "private.*",
+		"version": "3.7.3"
+	}
+}
