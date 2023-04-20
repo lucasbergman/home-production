@@ -66,6 +66,47 @@ in
       passwordAuthentication = false;
     };
 
+    systemd.services."instance-key" = {
+      description = "decrypt instance key";
+      wantedBy = ["multi-user.target"];
+      before = ["acme-cheddar.bergmans.us.service"];
+      serviceConfig = {
+        Type = "oneshot";
+        UMask = 0337;
+      };
+      path = [
+        pkgs.jq
+        pkgs.ssh-to-age
+        pkgs.sops
+      ];
+
+      script = ''
+        install -m 0440 -g ${config.security.acme.defaults.group} \
+          /dev/null /run/gcp-instance-creds.json
+        env SOPS_AGE_KEY=$(ssh-to-age -private-key < /etc/ssh/ssh_host_ed25519_key) \
+          sops -d /etc/gcp-instance-creds.json > /run/gcp-instance-creds.json
+
+        install -m 0444 /dev/null /run/gcp-creds.env
+        cat >/run/gcp-creds.env <<EOF
+        GCE_PROJECT=$(jq -r .project_id </run/gcp-instance-creds.json)
+        GCE_SERVICE_ACCOUNT_FILE=/run/gcp-instance-creds.json
+        EOF
+      '';
+    };
+
+    security.acme = {
+      acceptTerms = true;
+      defaults = {
+        email = "lucas@bergmans.us";
+        dnsProvider = "gcloud";
+        credentialsFile = "/run/gcp-creds.env";
+      };
+
+      certs."cheddar.bergmans.us" = {
+        domain = "cheddar.bergmans.us";
+      };
+    };
+
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
     # on your system were taken. It‘s perfectly fine and recommended to leave

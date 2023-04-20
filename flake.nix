@@ -28,7 +28,7 @@
         import ./shell.nix {pkgs = pkgsFor.${system};});
 
     nixosConfigurations = {
-      "cheddar.bergmans.us" = nixpkgs.lib.nixosSystem {
+      cheddar = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
           ./nixos/hosts/cheddar/configuration.nix
