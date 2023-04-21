@@ -8,3 +8,8 @@ creation_rules:
       - age:
           - *lucas
           - *host_cheddar
+  - path_regex: /cheddar/.*
+    key_groups:
+      - age:
+          - *lucas
+          - *host_cheddar

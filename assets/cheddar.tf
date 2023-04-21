@@ -70,3 +70,19 @@ resource "google_dns_record_set" "bergmans_aaaa_cheddar" {
   rrdatas      = [vultr_instance.cheddar.v6_main_ip]
   ttl          = 300
 }
+
+resource "google_dns_record_set" "bergmans_a_mumble" {
+  managed_zone = google_dns_managed_zone.bergmans.name
+  name         = "mumble.bergmans.us."
+  type         = "A"
+  rrdatas      = [vultr_instance.cheddar.main_ip]
+  ttl          = 300
+}
+
+resource "google_dns_record_set" "bergmans_aaaa_mumble" {
+  managed_zone = google_dns_managed_zone.bergmans.name
+  name         = "mumble.bergmans.us."
+  type         = "AAAA"
+  rrdatas      = [vultr_instance.cheddar.v6_main_ip]
+  ttl          = 300
+}

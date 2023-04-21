@@ -12,6 +12,7 @@ in
   }: {
     imports = [
       ./hardware-configuration.nix
+      ./services/mumble.nix
     ];
 
     nix = {
@@ -102,9 +103,7 @@ in
         credentialsFile = "/run/gcp-creds.env";
       };
 
-      certs."cheddar.bergmans.us" = {
-        domain = "cheddar.bergmans.us";
-      };
+      certs."cheddar.bergmans.us" = {};
     };
 
     # This value determines the NixOS release from which the default
